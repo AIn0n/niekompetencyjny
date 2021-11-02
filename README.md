@@ -1,0 +1,2 @@
+# niekompetencyjny
+bla bla bla
