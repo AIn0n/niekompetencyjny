@@ -18,13 +18,19 @@ class Rectangle:
         self.a = a
         self.calcCoords()
 
-    def calcCoords(self):
+    def calcCoords(self) -> None:
         #   d-----c
         #   |     |
         #   a-----b
         self.b = Point(self.a.x + self.width, self.a.y)
         self.c = Point(self.a.x + self.width, self.a.y + self.height)
         self.d = Point(self.a.x, self.a.y + self.height)
+
+    def collides(self, other):
+        return (self.a.x < other.c.x) and (self.c.x > other.a.y) and (self.a.y < other.c.y) and (self.c.x > other.a.y)
+
+    def containsRectangle(self, other):
+        return (other.a.x <= self.a.x) and (other.a.y <= self.a.y) and (self.c.x <= self.c.x) and (self.c.y <= other.c.y)
 
     def __str__(self):
         return f"A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}"
@@ -41,11 +47,15 @@ class Rectangle:
 # For testing purposes
 if __name__ == '__main__':
     # Testing rect construction
-    pnt = Point(1, 3)
+    pnt = Point(0, 0)
     rect = Rectangle(pnt, 5, 10)
     print(rect)
 
     # Testing rect movement
-    rect.moveX(-5)
+    rect.moveX(0)
     rect.moveY(100)
     print(rect)
+
+    rect2 = Rectangle(pnt, 10, 10)
+    print(rect2)
+    print(rect.collides(rect2))
