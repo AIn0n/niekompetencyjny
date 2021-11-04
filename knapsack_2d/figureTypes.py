@@ -11,7 +11,7 @@ class Point:
         return f"({self.x}, {self.y})"
 
 
-class Rectangle:
+class Rect:
     def __init__(self, a: Point, width: int, height: int) -> None:
         self.width = width
         self.height = height
@@ -32,7 +32,7 @@ class Rectangle:
 
     def containsRectangle(self, other):
         return (other.a.x <= self.a.x) and (other.a.y <= self.a.y) and (self.c.x <= self.c.x) and (
-                    self.c.y <= other.c.y)
+                self.c.y <= other.c.y)
 
     def __str__(self):
         return f"A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}"
@@ -43,18 +43,17 @@ class Rectangle:
 
     def cloneOffset(self, offset: Point):
         newCoords = Point(self.a.x + offset.x, self.a.y + offset.y)
-        return Rectangle(newCoords, self.width, self.height)
+        return Rect(newCoords, self.width, self.height)
 
 
 # For testing purposes
 if __name__ == '__main__':
     # Testing rect construction
     pnt = Point(0, 0)
-    rect = Rectangle(pnt, 5, 10)
+    rect = Rect(pnt, 5, 10)
     print(rect)
 
-
-    rect2 = Rectangle(pnt, 5, 10)
+    rect2 = Rect(pnt, 5, 10)
     rect2.move(Point(5, 0))
     print(rect2)
     print(rect.collides(rect2))
