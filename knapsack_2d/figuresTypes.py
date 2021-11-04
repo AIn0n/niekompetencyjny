@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
     rect2 = Rectangle(pnt, 10, 10)
     print(rect2)
-    print(rect.checkCollision(rect2))
+    print(rect.collides(rect2))
