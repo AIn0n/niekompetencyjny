@@ -1,5 +1,5 @@
 from random import randint, random
-from figuresTypes import *
+from figureTypes import *
 import random
 
 class Specimen:
