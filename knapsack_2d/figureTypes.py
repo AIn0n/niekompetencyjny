@@ -1,5 +1,6 @@
 import dataclasses
 from dataclasses import dataclass
+import random
 
 
 @dataclass(frozen=True, order=True)
@@ -10,8 +11,14 @@ class Point:
     def __str__(self):
         return f"({self.x}, {self.y})"
 
+    def isValid(self):
+        return self.x != -1 and self.y != -1
 
-class Rectangle:
+    @classmethod
+    def rand(self, rangeX, rangeY):
+        return Point(random.randint(*rangeX), random.randint(*rangeY))
+
+class Rect:
     def __init__(self, a: Point, width: int, height: int) -> None:
         self.width = width
         self.height = height
@@ -43,18 +50,18 @@ class Rectangle:
 
     def cloneOffset(self, offset: Point):
         newCoords = Point(self.a.x + offset.x, self.a.y + offset.y)
-        return Rectangle(newCoords, self.width, self.height)
+        return Rect(newCoords, self.width, self.height)
 
 
 # For testing purposes
 if __name__ == '__main__':
     # Testing rect construction
     pnt = Point(0, 0)
-    rect = Rectangle(pnt, 5, 10)
+    rect = Rect(pnt, 5, 10)
     print(rect)
 
 
-    rect2 = Rectangle(pnt, 5, 10)
+    rect2 = Rect(pnt, 5, 10)
     rect2.move(Point(5, 0))
     print(rect2)
     print(rect.collides(rect2))
