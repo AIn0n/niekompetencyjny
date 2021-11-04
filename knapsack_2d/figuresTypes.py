@@ -15,6 +15,7 @@ class Rectangle:
     def __init__(self, a: Point, width: int, height: int) -> None:
         self.width = width
         self.height = height
+        self.field = width * height
         self.a = a
         self.calcCoords()
 
