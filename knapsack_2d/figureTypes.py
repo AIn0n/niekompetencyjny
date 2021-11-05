@@ -38,8 +38,8 @@ class Rect:
         return (self.a.x < other.c.x) and (self.c.x > other.a.x) and (self.a.y < other.c.y) and (self.c.y > other.a.y)
 
     def containsRectangle(self, other):
-        return (other.a.x <= self.a.x) and (other.a.y <= self.a.y) and (self.c.x <= self.c.x) and (
-                    self.c.y <= other.c.y)
+        return (other.a.x >= self.a.x) and (other.a.y >= self.a.y) and (other.c.x <= self.c.x) and (
+                other.c.y <= self.c.y)
 
     def __str__(self):
         return f"A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}"
