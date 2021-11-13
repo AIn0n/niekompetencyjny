@@ -5,8 +5,7 @@ import random
 class Specimen:
     def __init__(self, genes :int, rangeX, rangeY) -> None:
         self.chrsom = [Point.rand(rangeX, rangeY) for x in range(genes)]
-        self.rangeX = rangeX
-        self.rangeY = rangeY
+        self.rangeX, self.rangeY = rangeX, rangeY
         self.fitness = 0
 
     def randomizeChrsom(self) -> None:
@@ -22,7 +21,7 @@ class Specimen:
 
     def replacement(self) -> None:
         self.chrsom[self.randGenes(1)[0]] = Point.rand(self.rangeX, self.rangeY)
-    
+
     def inversion(self) -> None:
         (min_idx, max_idx) = sorted(self.randGenes(2))
         self.chrsom = \
@@ -63,21 +62,19 @@ class GeneticAlgorithm:
     mutProb: float, 
     elitarism: float, 
     fitnessClass: FitnessClass)->None:
-        self.rangeX = [-1, fitnessClass.area.width]
-        self.rangeY = [-1, fitnessClass.area.height]
+        self.rangeX, self.rangeY = [-1, fitnessClass.area.width], [-1, fitnessClass.area.height]
         self.generation = [Specimen(len(fitnessClass.rooms), self.rangeX, self.rangeY) for x in range(generationSize)]
         self.mutProb = mutProb
         self.elitarism = elitarism
         self.fitnessClass = fitnessClass
 
     def getChildren(self, p1: Specimen, p2 :Specimen) -> list:
-        n = p1.randGenes(1)[0]
-        params = len(self.fitnessClass.rooms), self.rangeX, self.rangeY
-        childs = [Specimen(*params), Specimen(*params)]
-        childs[0].chrsom = p1.chrsom[0:n] + p2.chrsom[n:]
-        childs[1].chrsom = p1.chrsom[0:n] + p2.chrsom[n:]
-        self.fitnessClass.countFitness(childs[0])
-        self.fitnessClass.countFitness(childs[1])
+        n, childs = *p1.randGenes(1), []
+        for chrsom in [p1.chrsom[0:n] + p2.chrsom[n:], p2.chrsom[0:n] + p1.chrsom[n:]]:
+            childs.append(Specimen(0, self.rangeX, self.rangeY))
+            childs[-1].chrsom = chrsom
+            childs[-1].mutate(self.mutProb)
+            self.fitnessClass.countFitness(childs[-1])
         return childs
 
     def buildNewGeneration(self) -> None:
@@ -93,16 +90,9 @@ class GeneticAlgorithm:
         new = [*self.generation[:int(len(self.generation) * self.elitarism)]]
 
         fitnessArray = [x.fitness for x in self.generation]
-        if len(tuple(filter(lambda x : x > 0, fitnessArray))) < 2:
-            for specimen in self.generation:
-                specimen.mutate(1.0)
-        
         while len(new) < len(self.generation):
             parents = random.choices(self.generation, weights=fitnessArray, k=2)
-            children = self.getChildren(*parents)
-            for child in children:
-                child.mutate(self.mutProb)
-            new.extend(children)
+            new.extend(self.getChildren(*parents))
         self.generation = new
 
     def repeat(self, n: int) -> None:
@@ -118,8 +108,8 @@ if __name__ == '__main__':
         Rect(Point(0, 0), 8, 6),
         Rect(Point(0, 0), 5, 3)])
     fitCls = FitnessClass(Rect(Point(0, 0), 15, 15),squares)
-    genAlg = GeneticAlgorithm(100, 0.1, 0.2, fitCls)
-    genAlg.repeat(1000)
+    genAlg = GeneticAlgorithm(150, 0.1, 0.2, fitCls)
+    genAlg.repeat(3000)
     bestSpieceMan = max(genAlg.generation, key = lambda x : x.fitness)
     print(bestSpieceMan.chrsom)
     print(bestSpieceMan.fitness)
