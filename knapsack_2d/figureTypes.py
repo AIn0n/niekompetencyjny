@@ -82,8 +82,8 @@ class Rect:
         return (self.a.x < other.c.x) and (self.c.x > other.a.x) and (self.a.y < other.c.y) and (self.c.y > other.a.y)
 
     def containsRectangle(self, other):
-        return (other.a.x <= self.a.x) and (other.a.y <= self.a.y) and (self.c.x <= other.c.x) and (
-                self.c.y <= other.c.y)
+        return (other.a.x <= self.a.x) and (other.a.y <= self.a.y) and (other.c.x >= self.c.x) and (
+                other.c.y >= self.c.y)
 
     def __str__(self) -> str:
         return f"A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}"
@@ -100,9 +100,7 @@ class Rect:
 # For testing purposes
 if __name__ == '__main__':
     l1 = Line(Point(4, 5), Point(8, 5))
-    print(l1.splitAtPoint(Point(6, 5)))
     l2 = Line(Point(6, 5), Point(8, 5))
-
 
     result = l1.splitAtLine(l2)
     for i in range(len(result)):
