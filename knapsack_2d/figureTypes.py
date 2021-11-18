@@ -15,7 +15,7 @@ class Point:
         return self.x != -1 and self.y != -1
 
     @classmethod
-    def rand(self, rangeX, rangeY):
+    def rand(cls, rangeX, rangeY):
         return Point(random.randint(*rangeX), random.randint(*rangeY))
 
 
