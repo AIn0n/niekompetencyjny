@@ -1,28 +1,39 @@
-from matplotlib.pyplot import *
-from matplotlib.patches import Rectangle
-from numpy import *
-import knapsack_2d.figureTypes as figs
+import pygame
+import random
+from knapsack_2d.figureTypes import *
+
+pygame.init()
+
+display_width = 800
+display_height = 600
+
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+plot_display = pygame.display.set_mode((display_width, display_height))
+plot_display.fill(white)
 
 
-class Drawing:
-
-    def __init__(self, field: figs.Rect):
-        self.field = field
-        fig, self.temp = subplots()
-        self.temp.add_patch(matplotlib.patches.Rectangle((field.a.x, field.a.y), field.width, field.height, color = "red"))
-        draw()
-        #show()
-
-    def add_rectangle(self, rectangle: figs.Rect):
-        self.temp.add_patch(matplotlib.patches.Rectangle(rectangle.a.x, rectangle.a.y, rectangle.width, rectangle.height))
-        draw()
-        show()
+r1 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
+r2 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
+r3 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
+r4 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
+r5 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
 
 
-if __name__ == '__main__':
+rooms = [r1, r2, r3, r4, r5]
 
-    point = figs.Point(0, 0)
-    temp = figs.Rect(point, 100, 100)
-    tempd = Drawing(temp)
-    show()
-    Drawing.add_rectangle(tempd, figs.Rect(figs.Point(10, 10), 5, 6))
+for x in rooms:
+    pygame.draw.rect(plot_display, (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256)), (x.a.x, x.a.y, x.width, x.height))
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+    pygame.display.update()
+
+
+
+
+
