@@ -15,7 +15,7 @@ class Point:
         return self.x != -1 and self.y != -1
 
     @classmethod
-    def rand(self, rangeX, rangeY):
+    def rand(cls, rangeX, rangeY):
         return Point(random.randint(*rangeX), random.randint(*rangeY))
 
 
@@ -50,14 +50,11 @@ class Line:
         if not self.containsLine(line):
             raise ValueError
         if self.a == line.a:
-            print("Kruci")
             return self.splitAtPoint(line.b)
         if self.b == line.b:
-            print("Jeny")
             return self.splitAtPoint(line.a)
 
         split = self.splitAtPoint(line.a)
-
         # Splits the remaining segment, will fall into one of the above if clauses
         secondHalf = split.pop().splitAtLine(line)
         split.append(secondHalf[0])
