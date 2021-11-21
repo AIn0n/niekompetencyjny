@@ -6,7 +6,7 @@ from unittest.case import skip
 
 class TestRectClass(unittest.TestCase):
 
-    def testConctructorVariables(self):
+    def testConstructorVariables(self):
         w, h = randint(1, 127) * 2, randint(1, 127) * 2
         p = Point(0, 0)
         r = Rect(p, w, h)
