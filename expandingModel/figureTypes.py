@@ -41,6 +41,10 @@ class Rect:
         self.d = Point(self.p.x - self.width_l, self.p.y + self.height_u)
 
     def calcVecs(self) -> None:
+        ''' end
+            ^
+            |
+            start-->end   '''
         self.horUp = Vec(self.d, self.c)
         self.horDown = Vec(self.a, self.b)
         self.verLeft = Vec(self.a, self.d)
@@ -72,7 +76,7 @@ class Rect:
 
     def expandLeft(self, vecs) -> None:
         if len(vecs) == 0: return
-        new_x = max(v.start.x for v in vecs)
+        new_x = max(v.start.x for v in filter(vecs, )
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x) + abs(new_x)
