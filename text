@@ -1,0 +1,45 @@
+
+    def testExpandLeft(self):
+        x1, x2 = randint(4, 16), randint(17, 32)
+        r = Rect(Point(0, 0), 2, 6)
+        v1 = Vec(Point(-x1, 5), Point(-x1, -1))
+        v2 = Vec(Point(-x2, 5), Point(-x2, -1))
+        r.expandLeft([v1, v2])
+        self.assertEqual(r.width_l, x1)
+        self.assertEqual(r.field, (x1 + 1) * 6)
+        self.assertEqual(r.a.x, -x1)
+        self.assertEqual(r.d.x, -x1)
+
+    def testExpandLeft(self):
+        x1, x2 = randint(128, 256), randint(257, 512)
+        pos = randint(-64, 0), randint(-64, 0)
+        print(pos)
+        r = Rect(Point(*pos), 2, 6)
+        v1 = Vec(Point(-x1, 5), Point(-x1, -1))
+        v2 = Vec(Point(-x2, 5), Point(-x2, -1))
+        r.expandLeft([v1, v2])
+        self.assertEqual(r.width_l, abs(x1) + abs(pos[0]))
+        self.assertEqual(r.field, (x1 + 1) * 6)
+        self.assertEqual(r.a.x, -(abs(pos[0]) + abs(x1)))
+        self.assertEqual(r.d.x, -(abs(pos[0]) + abs(x1)))
+
+    def testExpandLeft(self):
+        x1, x2 = randint(4, 16), randint(17, 32)
+        r = Rect(Point(0, 0), 2, 6)
+        v1 = Vec(Point(-x1, -10), Point(-x1, -11))
+        v2 = Vec(Point(-x2, 5), Point(-x2, -1))
+        r.expandLeft([v1, v2])
+        self.assertEqual(r.width_l, x2)
+        self.assertEqual(r.field, (x2 + 1) * 6)
+        self.assertEqual(r.a.x, x2)
+        self.assertEqual(r.d.x, x2)        
+    
+    @skip
+    def testExpandRight(self):
+        x1, x2 = randint(4, 16), randint(17, 32)
+        r = Rect(Point(0, 0), 2, 6)
+        v1 = Vec(Point(x1, 5), Point(x1, -1))
+        v2 = Vec(Point(x2, 5), Point(x2, -1))
+        r.expandLeft([v1, v2])
+        self.assertEqual(r.width_l, x1)
+        self.assertEqual(r)
