@@ -65,10 +65,10 @@ class Rect:
         return Rect(p, self.width_l + self.width_r, self.height_u + self.height_d)
 
     def getHorVecs(self) -> Iterable:
-        return [Vec(self.a, self.b), Vec(self.d, self.c)]
+        return [self.verLeft, self.verRight]
 
     def getVerVecs(self) -> Iterable:
-        return [Vec(self.a, self.d), Vec(self.b, self.c)]
+        return [self.horUp, self.horDown]
 
     def expandLeft(self, vecs) -> None:
         if len(vecs) == 0: return
