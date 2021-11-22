@@ -78,11 +78,11 @@ class TestRectClass(unittest.TestCase):
         self.assertEqual(r.getVerVecs(), [Vec(r.a, r.d), Vec(r.b, r.c)])
 
     def testExpandLeft(self):
-        x1, x2 = randint(4, 16), randint(17, 32)
+        x1, x2 = randint(2, 8)*2, randint(9, 16)*2
         r = Rect(Point(0, 0), 2, 6)
-        v1 = Vec(Point(-x1, 5), Point(-x1, -1))
-        v2 = Vec(Point(-x2, 5), Point(-x2, -1))
-        r.expandLeft([v1, v2])
+        r1 = Rect(Point(-x1-1, -1), 2, 6)
+        r2 = Rect(Point(-x2-1, -1), 2, 6)
+        r.expandLeft([r1, r2])
         self.assertEqual(r.width_l, x1)
         self.assertEqual(r.field, (x1 + 1) * 6)
         self.assertEqual(r.a.x, -x1)
