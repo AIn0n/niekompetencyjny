@@ -27,6 +27,7 @@ class Vec:
             return True
         elif self.isHorizontal() and other.isVertical and other.start.y <= self.start.y <= other.end.y:
             return True
+        return False
 
 
 class Rect:
@@ -92,7 +93,7 @@ class Rect:
 
     def expandLeft(self, rects) -> None:
         if len(rects) == 0: return
-        new_x = max(r.b.x for r in filter(self.isAlignedLeft, rects))
+        new_x = max(r.b.x for r in rects if self.isAlignedLeft(r))
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x) + abs(new_x)

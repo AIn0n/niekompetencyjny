@@ -1,6 +1,6 @@
 import pygame
 import random
-from knapsack_2d.figureTypes import *
+from figureTypes import *
 
 pygame.init()
 
@@ -19,7 +19,6 @@ r2 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.ran
 r3 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
 r4 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
 r5 = Rect((Point.rand([0, 800], [0, 600])), random.randint(100, 200), random.randint(100, 200))
-
 
 rooms = [r1, r2, r3, r4, r5]
 
