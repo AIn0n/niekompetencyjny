@@ -16,6 +16,18 @@ class Vec:
     start: Point
     end: Point
 
+    def isVertical(self) -> bool:
+        return self.start.x == self.end.x
+
+    def isHorizontal(self) -> bool:
+        return self.start.y == self.end.y
+
+    def isAligned(self, other) -> bool:
+        if self.isVertical() and other.isHorizontal and other.start.x <= self.start.x <= other.end.x:
+            return True
+        elif self.isHorizontal() and other.isVertical and other.start.y <= self.start.y <= other.end.y:
+            return True
+
 
 class Rect:
 
@@ -41,6 +53,10 @@ class Rect:
         self.d = Point(self.p.x - self.width_l, self.p.y + self.height_u)
 
     def calcVecs(self) -> None:
+        ''' end
+            ^
+            |
+            start-->end   '''
         self.horUp = Vec(self.d, self.c)
         self.horDown = Vec(self.a, self.b)
         self.verLeft = Vec(self.a, self.d)
@@ -70,9 +86,13 @@ class Rect:
     def getHorVecs(self) -> Iterable:
         return [self.horDown, self.horUp]
 
-    def expandLeft(self, vecs) -> None:
-        if len(vecs) == 0: return
-        new_x = max(v.start.x for v in vecs)
+    # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
+    def isAlignedLeft(self, rect):
+        return (self.horUp.isAligned(rect.verRight) or self.horDown.isAligned(rect.verRight)) and rect.b.x <= self.a.x
+
+    def expandLeft(self, rects) -> None:
+        if len(rects) == 0: return
+        new_x = max(r.b.x for r in filter(self.isAlignedLeft, rects))
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x) + abs(new_x)
