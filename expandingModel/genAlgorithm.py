@@ -64,7 +64,15 @@ class FitnessClass:
                     specimen.fitness = 0
                     return
             movedRooms.append(movedRect)
-            totalArea += movedRect.field
+        for n in range(len(self.rooms)):
+            curr = movedRooms.pop(0)
+            curr.expandLeft(movedRooms, self.area)
+            curr.expandRight(movedRooms,self.area)
+            curr.expandUp(movedRooms,   self.area)
+            curr.expandDown(movedRooms, self.area)
+            totalArea += curr.field
+            movedRooms.append(curr)
+            
         specimen.fitness = totalArea
 
 class GeneticAlgorithm:

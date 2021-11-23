@@ -99,10 +99,10 @@ class Rect:
     def isToLeftOf(self, rect):
         return self.b.x <= rect.a.x
 
-    def isAbove(self, rect):
+    def isBelow(self, rect):
         return self.d.y <= rect.a.y
 
-    def isBelow(self, rect):
+    def isAbove(self, rect):
         return rect.d.y <= self.a.y
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
@@ -125,23 +125,18 @@ class Rect:
 
     def expandLeft(self, rects, area) -> None:
         if len(rects) == 0: return
-        try:
-            new_x = max(r.b.x for r in rects if self.isAlignedLeft(r))
-        except ValueError:              # If nothing is to the left
-            new_x = area.a.x
+        new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
-        self.width_l = abs(self.p.x) + abs(new_x)
+        self.width_l = abs(self.p.x) - abs(new_x)
         self.calcCoords()
         self.calcField()
         self.calcVecs()
 
     def expandRight(self, rects, area) -> None:
         if len(rects) == 0: return
-        try:
-            new_x = min(r.a.x for r in rects if self.isAlignedRight(r))
-        except ValueError:              # If nothing is to the right
-            new_x = area.b.x
+        new_x = min([r.a.x for r in rects if self.isAlignedRight(r)] + [area.b.x])
+
         self.b = Point(new_x, self.b.y)
         self.c = Point(new_x, self.c.y)
         self.width_r = abs(new_x) - abs(self.p.x)
@@ -151,12 +146,9 @@ class Rect:
 
     def expandUp(self, rects, area) -> None:
         if len(rects) == 0: return
-        try:
-            new_y = min(r.a.y for r in rects if self.isAlignedUp(r))
-        except ValueError:              # If nothing is to the left
-            new_y = area.d.y
-        self.c = Point(self.c.y, new_y)
-        self.d = Point(self.d.y, new_y)
+        new_y = min([r.a.y for r in rects if self.isAlignedUp(r)] + [area.d.y])
+        self.c = Point(self.c.x, new_y)
+        self.d = Point(self.d.x, new_y)
         self.height_u = abs(new_y) - abs(self.p.y)
         self.calcCoords()
         self.calcField()
@@ -164,12 +156,9 @@ class Rect:
 
     def expandDown(self, rects, area) -> None:
         if len(rects) == 0: return
-        try:
-            new_y = max(r.d.y for r in rects if self.isAlignedDown(r))
-        except ValueError:              # If nothing is to the left
-            new_y = area.a.y
-        self.a = Point(self.a.y, new_y)
-        self.b = Point(self.d.y, new_y)
+        new_y = max([r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y])
+        self.a = Point(self.a.x, new_y)
+        self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y) + abs(new_y)
         self.calcCoords()
         self.calcField()

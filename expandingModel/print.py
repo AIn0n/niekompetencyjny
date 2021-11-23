@@ -9,7 +9,7 @@ font = pygame.font.SysFont('Comic Sans MS', 30)
 
 display_width = 800
 display_height = 600
-SCALE = 10
+SCALE = 5
 
 
 black = (0, 0, 0)
@@ -19,7 +19,7 @@ plot_display = pygame.display.set_mode((display_width, display_height))
 plot_display.fill(white)
 
 area = Rect(Point(0, 0), 80, 80)
-squares = tuple([
+rectangles = tuple([
     Rect(Point(0, 0), 2, 4), 
     Rect(Point(0, 0), 4, 6), 
     Rect(Point(0, 0), 12, 2),
@@ -27,8 +27,8 @@ squares = tuple([
     Rect(Point(0, 0), 8, 6),
     Rect(Point(0, 0), 4, 10)])
 
-fitCls = FitnessClass(area, squares)
-genAlg = GeneticAlgorithm(300, 0.2, 0.1, fitCls)
+fitCls = FitnessClass(area, rectangles)
+genAlg = GeneticAlgorithm(250, 0.2, 0.3, fitCls)
 genAlg.repeat(7000)
 bestSpieceMan = max(genAlg.generation, key = lambda x : x.fitness)
 print(bestSpieceMan)
@@ -39,11 +39,34 @@ pygame.draw.rect(plot_display, black,
         (area.width_l + area.width_r) * SCALE, 
         (area.height_u + area.height_d) * SCALE))
 
-for idx, x in enumerate(bestSpieceMan.chrsom):
-    curr = squares[idx].cloneOffset(x)
+rooms = [rectangles[idx].cloneOffset(x) for idx, x in enumerate(bestSpieceMan.chrsom)]
+
+for n in range(len(rooms)):
+    curr = rooms.pop(0)
+    for room in rooms:
+        if curr.collides(room):
+            print("dupa")
+    rooms.append(curr)
+
+for n in range(len(rooms)):
+    curr = rooms.pop(0)
+    curr.expandLeft(rooms, area)
+    curr.expandRight(rooms, area)
+    curr.expandUp(rooms, area)
+    curr.expandDown(rooms, area)
+    rooms.append(curr)
+
+offset = 0
+pygame.draw.rect(plot_display, black, 
+        (area.a.x * SCALE, area.a.y * SCALE, 
+        (area.width_l + area.width_r) * SCALE, 
+        (area.height_u + area.height_d) * SCALE))
+
+for curr in rooms:
     color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     texture = font.render(f'{curr.width_l + curr.width_r}, {curr.height_d + curr.height_u}', False, color)
-    plot_display.blit(texture, (area.c.x * SCALE, (area.c.y * SCALE) + idx * 30))
+    plot_display.blit(texture, (area.c.x * SCALE, (area.c.y * SCALE) + offset))
+    offset += 30
 
     pygame.draw.rect(plot_display, color, 
         (curr.a.x * SCALE, curr.a.y * SCALE, 
