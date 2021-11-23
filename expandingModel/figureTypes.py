@@ -155,7 +155,7 @@ class Rect:
 
     def expandDown(self, rects) -> None:
         if len(rects) == 0: return
-        new_y = max(r.a.y for r in rects if self.isAlignedDown(r))
+        new_y = max(r.d.y for r in rects if self.isAlignedDown(r))
         self.a = Point(self.a.y, new_y)
         self.b = Point(self.d.y, new_y)
         self.height_d = abs(self.p.y) + abs(new_y)
@@ -165,11 +165,16 @@ class Rect:
 
 
 if __name__ == '__main__':
+    rB = Rect(Point(50, 50), 100, 100)
     r = Rect(Point(5, 5), 4, 4)
     r2 = Rect(Point(0, 0), 2, 8)
     r3 = Rect(Point(10, 0), 2, 8)
     r4 = Rect(Point(3, 8), 8, 2)
     print(
-        f"r = {r}, \nr2 = {r2}, {r.isAlignedRight(r2)}, \nr3 = {r3}, {r.isAlignedRight(r3)}, \nr4 = {r4}, {r.isAlignedRight(r4)}")
-    r.expandRight([r2, r3, r4])
+        f"BORDER = {rB}, {r.isAlignedRight(rB)}\n"
+        f"r = {r}, \n"
+        f"r2 = {r2}, {r.isAlignedRight(r2)}, \n"
+        f"r3 = {r3}, {r.isAlignedRight(r3)}, \n"
+        f"r4 = {r4}, {r.isAlignedRight(r4)}")
+    r.expandRight([rB, r2, r3, r4])
     print(f"Expanded r: {r}")
