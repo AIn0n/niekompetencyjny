@@ -123,9 +123,12 @@ class Rect:
 
     # todo: Introduce limits at the borders
 
-    def expandLeft(self, rects) -> None:
+    def expandLeft(self, rects, area) -> None:
         if len(rects) == 0: return
-        new_x = max(r.b.x for r in rects if self.isAlignedLeft(r))
+        try:
+            new_x = max(r.b.x for r in rects if self.isAlignedLeft(r))
+        except ValueError:              # If nothing is to the left
+            new_x = area.a.x
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x) + abs(new_x)
@@ -133,9 +136,12 @@ class Rect:
         self.calcField()
         self.calcVecs()
 
-    def expandRight(self, rects) -> None:
+    def expandRight(self, rects, area) -> None:
         if len(rects) == 0: return
-        new_x = min(r.a.x for r in rects if self.isAlignedRight(r))
+        try:
+            new_x = min(r.a.x for r in rects if self.isAlignedRight(r))
+        except ValueError:              # If nothing is to the right
+            new_x = area.b.x
         self.b = Point(new_x, self.b.y)
         self.c = Point(new_x, self.c.y)
         self.width_r = abs(new_x) - abs(self.p.x)
@@ -143,9 +149,12 @@ class Rect:
         self.calcField()
         self.calcVecs()
 
-    def expandUp(self, rects) -> None:
+    def expandUp(self, rects, area) -> None:
         if len(rects) == 0: return
-        new_y = min(r.a.y for r in rects if self.isAlignedUp(r))
+        try:
+            new_y = min(r.a.y for r in rects if self.isAlignedUp(r))
+        except ValueError:              # If nothing is to the left
+            new_y = area.d.y
         self.c = Point(self.c.y, new_y)
         self.d = Point(self.d.y, new_y)
         self.height_u = abs(new_y) - abs(self.p.y)
@@ -153,9 +162,12 @@ class Rect:
         self.calcField()
         self.calcVecs()
 
-    def expandDown(self, rects) -> None:
+    def expandDown(self, rects, area) -> None:
         if len(rects) == 0: return
-        new_y = max(r.d.y for r in rects if self.isAlignedDown(r))
+        try:
+            new_y = max(r.d.y for r in rects if self.isAlignedDown(r))
+        except ValueError:              # If nothing is to the left
+            new_y = area.a.y
         self.a = Point(self.a.y, new_y)
         self.b = Point(self.d.y, new_y)
         self.height_d = abs(self.p.y) + abs(new_y)
@@ -171,10 +183,10 @@ if __name__ == '__main__':
     r3 = Rect(Point(10, 0), 2, 8)
     r4 = Rect(Point(3, 8), 8, 2)
     print(
-        f"BORDER = {rB}, {r.isAlignedRight(rB)}\n"
+        f"BORDER = {rB}, {r.isAlignedUp(rB)}\n"
         f"r = {r}, \n"
-        f"r2 = {r2}, {r.isAlignedRight(r2)}, \n"
-        f"r3 = {r3}, {r.isAlignedRight(r3)}, \n"
-        f"r4 = {r4}, {r.isAlignedRight(r4)}")
-    r.expandRight([rB, r2, r3, r4])
+        f"r2 = {r2}, {r.isAlignedUp(r2)}, \n"
+        f"r3 = {r3}, {r.isAlignedUp(r3)}, \n"
+        f"r4 = {r4}, {r.isAlignedUp(r4)}")
+    r.expandUp([r2, r3, r4], rB)
     print(f"Expanded r: {r}")
