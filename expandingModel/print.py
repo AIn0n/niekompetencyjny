@@ -7,10 +7,10 @@ pygame.init()
 pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
 
-display_width = 800
+display_width = 1000
 display_height = 600
 SCALE = 10
-
+offset = 100
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -35,18 +35,18 @@ print(bestSpieceMan)
 print(bestSpieceMan.fitness)
 
 pygame.draw.rect(plot_display, black, 
-        (area.a.x * SCALE, area.a.y * SCALE, 
+        ((area.a.x * SCALE)+100, (area.a.y * SCALE)+100,
         (area.width_l + area.width_r) * SCALE, 
         (area.height_u + area.height_d) * SCALE))
 
 for idx, x in enumerate(bestSpieceMan.chrsom):
     curr = squares[idx].cloneOffset(x)
     color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    texture = font.render(f'{curr.width_l + curr.width_r}, {curr.height_d + curr.height_u}', False, color)
-    plot_display.blit(texture, (area.c.x * SCALE, (area.c.y * SCALE) + idx * 30))
+    texture = font.render(f'x:{curr.a.x},y:{curr.a.y} //{curr.width_l + curr.width_r}, {curr.height_d + curr.height_u}', False, color)
+    plot_display.blit(texture, ((area.c.x * SCALE)+offset, 0 + idx * 30))
 
     pygame.draw.rect(plot_display, color, 
-        (curr.a.x * SCALE, curr.a.y * SCALE, 
+        ((curr.a.x * SCALE)+offset, (curr.a.y * SCALE)+offset,
         (curr.width_l + curr.width_r) * SCALE, 
         (curr.height_u + curr.height_d) * SCALE))
 
