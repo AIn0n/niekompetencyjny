@@ -159,7 +159,7 @@ class Rect:
         new_y = max([r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y])
         self.a = Point(self.a.x, new_y)
         self.b = Point(self.b.x, new_y)
-        self.height_d = abs(self.p.y) + abs(new_y)
+        self.height_d = abs(self.p.y) - abs(new_y)
         self.calcCoords()
         self.calcField()
         self.calcVecs()
