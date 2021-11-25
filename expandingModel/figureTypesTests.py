@@ -138,7 +138,7 @@ class TestRectClass(unittest.TestCase):
 class TestPointClass(unittest.TestCase):
 
     def test_str(self):
-        x, y = randint(0, 255), randint(0,255)
+        x, y = randint(0, 255), randint(0, 255)
         p = Point(x=x, y=y)
         self.assertEqual(f'({x}, {y})', str(p))
 
