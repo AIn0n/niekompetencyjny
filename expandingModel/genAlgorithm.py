@@ -47,8 +47,8 @@ class FitnessClass:
         self.rooms = rooms
 
     def getRndSpecimen(self):
-        rX = [0, self.area.width_l + self.area.width_r]
-        rY = [0, self.area.height_d + self.area.height_u]
+        rX = [self.area.a.x, self.area.b.x]
+        rY = [self.area.a.y, self.area.d.y]
         return Specimen(len(self.rooms), rX, rY)
 
     def countFitness(self, specimen: Specimen) -> None:
