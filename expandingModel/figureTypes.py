@@ -35,10 +35,10 @@ class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
         if height % 2 or width % 2 or not height or not width:
             raise ValueError('every dim should be divisible by two')
-        self.width_l = width / 2
-        self.width_r = width / 2
-        self.height_u = height / 2
-        self.height_d = height / 2
+        self.width_l = width // 2
+        self.width_r = width // 2
+        self.height_u = height // 2
+        self.height_d = height // 2
         self.p = p
         self.calcCoords()
         self.calcField()
