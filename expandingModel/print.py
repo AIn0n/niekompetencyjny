@@ -2,16 +2,10 @@ import pygame
 from genAlgorithm import *
 
 
-<<<<<<< HEAD
 class PrintAlg:
     display_width = 720
     display_height = 480
     white = (255, 255, 255)
-=======
-display_width = 800
-display_height = 600
-SCALE = 5
->>>>>>> testing
 
     def __init__(self, offsetX, offsetY) -> None:
         pygame.init()
@@ -59,7 +53,7 @@ bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen)
 print(bestSpecimen.fitness)
 
-printer = PrintAlg(40, 40)
+printer = PrintAlg(40, 40) 
 
 black = (0, 0, 0)
 printer.printRect(area, black)
