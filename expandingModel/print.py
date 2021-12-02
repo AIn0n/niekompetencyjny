@@ -3,8 +3,8 @@ from genAlgorithm import *
 
 
 class PrintAlg:
-    display_width = 1280
-    display_height = 820
+    display_width = 720
+    display_height = 480
     white = (255, 255, 255)
 
     def __init__(self, offsetX, offsetY) -> None:
@@ -48,7 +48,7 @@ squares = tuple([
 
 fitCls = FitnessClass(area, squares)
 genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
-genAlg.repeat(1000)
+genAlg.repeat(7000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen)
 print(bestSpecimen.fitness)
