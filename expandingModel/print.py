@@ -1,6 +1,4 @@
 import pygame
-import random
-from figureTypes import *
 from genAlgorithm import *
 
 
@@ -55,7 +53,7 @@ bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen)
 print(bestSpecimen.fitness)
 
-printer = PrintAlg(40,40)
+printer = PrintAlg(40, 40)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
