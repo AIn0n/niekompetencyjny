@@ -3,20 +3,28 @@ import random
 from figureTypes import *
 from genAlgorithm import *
 
-pygame.init()
-pygame.font.init()
-font = pygame.font.SysFont('Comic Sans MS', 30)
+class PrintAlg:
+    display_width = 1280
+    display_height = 820
+    white = (255, 255, 255)
 
-display_width = 1000
-display_height = 600
-SCALE = 10
-offset = 100
+    def __init__(self, offsetX, offsetY) -> None:
+        pygame.init()
+        pygame.font.init()
+        self.font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.plot_display = pygame.display.set_mode((self.display_width, self.display_height))
+        self.plot_display.fill(self.white)
+        self.offX = offsetX
+        self.offY = offsetY
 
-black = (0, 0, 0)
-white = (255, 255, 255)
+    def getCords(self, x, y):
+        return  (x + self.offX, 
+                self.display_height - self.offY + y)
 
-plot_display = pygame.display.set_mode((display_width, display_height))
-plot_display.fill(white)
+    def printRect(self, r :Rect, color :tuple) -> None:
+        x, y = self.getCords(r.a.x, r.a.y)
+        pygame.draw.rect(self.plot_display, color, 
+            (x, y, r.width_l + r.width_r, r.height_u + r.height_d))
 
 area = Rect(Point(0, 0), 80, 80)
 squares = tuple([
@@ -28,27 +36,21 @@ squares = tuple([
     Rect(Point(0, 0), 4, 10)])
 
 fitCls = FitnessClass(area, squares)
-genAlg = GeneticAlgorithm(300, 0.2, 0.1, fitCls)
-genAlg.repeat(7000)
+genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
+genAlg.repeat(1000)
 bestSpieceMan = max(genAlg.generation, key = lambda x : x.fitness)
 print(bestSpieceMan)
 print(bestSpieceMan.fitness)
 
-pygame.draw.rect(plot_display, black, 
-        ((area.a.x * SCALE)+100, (area.a.y * SCALE)+100,
-        (area.width_l + area.width_r) * SCALE, 
-        (area.height_u + area.height_d) * SCALE))
+printer = PrintAlg(area.width_l, area.height_u)
+
+black = (0, 0, 0)
+printer.printRect(area, black)
 
 for idx, x in enumerate(bestSpieceMan.chrsom):
     curr = squares[idx].cloneOffset(x)
     color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    texture = font.render(f'x:{curr.a.x},y:{curr.a.y} //{curr.width_l + curr.width_r}, {curr.height_d + curr.height_u}', False, color)
-    plot_display.blit(texture, ((area.c.x * SCALE)+offset, 0 + idx * 30))
-
-    pygame.draw.rect(plot_display, color, 
-        ((curr.a.x * SCALE)+offset, (curr.a.y * SCALE)+offset,
-        (curr.width_l + curr.width_r) * SCALE, 
-        (curr.height_u + curr.height_d) * SCALE))
+    printer.printRect(curr, color)
 
 while True:
     for event in pygame.event.get():
