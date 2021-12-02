@@ -2,10 +2,16 @@ import pygame
 from genAlgorithm import *
 
 
+<<<<<<< HEAD
 class PrintAlg:
     display_width = 720
     display_height = 480
     white = (255, 255, 255)
+=======
+display_width = 800
+display_height = 600
+SCALE = 5
+>>>>>>> testing
 
     def __init__(self, offsetX, offsetY) -> None:
         pygame.init()
