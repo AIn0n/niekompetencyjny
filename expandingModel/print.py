@@ -34,7 +34,7 @@ class PrintAlg:
         pygame.display.flip()
 
     def scaleSurface(self) -> None:
-        self.inter_display = pygame.transform.scale(self.inter_display, (self.display_width, self.display_height))
+        self.inter_display = pygame.transform.scale(self.inter_display, (self.display_height, self.display_height))
 
 
 area = Rect(Point(0, 0), 80, 80)
@@ -48,7 +48,7 @@ squares = tuple([
 
 fitCls = FitnessClass(area, squares)
 genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
-genAlg.repeat(7000)
+genAlg.repeat(700)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen)
 print(bestSpecimen.fitness)
