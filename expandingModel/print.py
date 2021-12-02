@@ -15,6 +15,7 @@ class PrintAlg:
         self.plot_display.fill(self.white)
 
         self.inter_display = pygame.Surface((fieldWidth, fieldHeight))
+        self.inter_display.blit(pygame.transform.flip(self.inter_display, False, True), (0, 0))
 
         self.offX = fieldWidth/2
         self.offY = fieldHeight/2
