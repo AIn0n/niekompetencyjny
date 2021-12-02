@@ -57,11 +57,14 @@ printer = PrintAlg(40, 40)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-
-for idx, x in enumerate(bestSpecimen.chrsom):
-    curr = squares[idx].cloneOffset(x)
-    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    printer.printRect(curr, color)
+rooms = [squares[idx].cloneOffset(x) for idx, x in enumerate(bestSpecimen.chrsom)]
+for x in range(len(rooms)):
+    room = rooms.pop(0)
+    room.expandLeft(rooms, area)
+    room.expandRight(rooms,area)
+    room.expandUp(rooms, area)
+    room.expandDown(rooms, area)
+    printer.printRect(room, tuple(random.randint(0, 255) for n in range(3)))
 
 printer.printAll()
 
