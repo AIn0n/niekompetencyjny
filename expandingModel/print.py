@@ -9,7 +9,7 @@ class PrintAlg:
     display_height = 820
     white = (255, 255, 255)
 
-    def __init__(self) -> None:
+    def __init__(self, offsetX, offsetY) -> None:
         pygame.init()
         pygame.font.init()
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
@@ -18,9 +18,12 @@ class PrintAlg:
 
         self.inter_display = pygame.Surface((80, 80))
 
+        self.offX = offsetX
+        self.offY = offsetY
+
     def getCords(self, x, y):
-        return (x,
-                y)
+        return (x + self.offX,
+                y + self.offY)
 
     def printRect(self, r: Rect, color: tuple) -> None:
         x, y = self.getCords(r.a.x, r.a.y)
@@ -52,7 +55,7 @@ bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen)
 print(bestSpecimen.fitness)
 
-printer = PrintAlg()
+printer = PrintAlg(40,40)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
