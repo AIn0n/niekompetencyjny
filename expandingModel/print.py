@@ -38,16 +38,16 @@ squares = tuple([
 fitCls = FitnessClass(area, squares)
 genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
 genAlg.repeat(1000)
-bestSpieceMan = max(genAlg.generation, key = lambda x : x.fitness)
-print(bestSpieceMan)
-print(bestSpieceMan.fitness)
+bestSpecimen = max(genAlg.generation, key = lambda x : x.fitness)
+print(bestSpecimen)
+print(bestSpecimen.fitness)
 
 printer = PrintAlg(area.width_l, area.height_u)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
 
-for idx, x in enumerate(bestSpieceMan.chrsom):
+for idx, x in enumerate(bestSpecimen.chrsom):
     curr = squares[idx].cloneOffset(x)
     color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     printer.printRect(curr, color)
@@ -58,7 +58,6 @@ while True:
             pygame.quit()
             quit()
     pygame.display.update()
-
 
 
 
