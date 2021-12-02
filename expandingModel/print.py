@@ -26,6 +26,10 @@ class PrintAlg:
         pygame.draw.rect(self.plot_display, color, 
             (x, y, r.width_l + r.width_r, r.height_u + r.height_d))
 
+    def scaleSurface(self) -> None:
+        self.plot_display = pygame.transform.smoothscale(self.plot_display, )
+
+
 area = Rect(Point(0, 0), 80, 80)
 squares = tuple([
     Rect(Point(0, 0), 2, 4), 
@@ -58,7 +62,3 @@ while True:
             pygame.quit()
             quit()
     pygame.display.update()
-
-
-
-
