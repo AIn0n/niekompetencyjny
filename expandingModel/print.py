@@ -60,14 +60,13 @@ printer = PrintAlg(80, 80)
 black = (0, 0, 0)
 printer.printRect(area, black)
 
-with open("example.pickle", "rb") as f:
+with open("C:\\Users\\Panzer\\Desktop\\PK\\NK2\\example.pickle", "rb") as f:
     rooms = pickle.load(f)
 
-for x in range(1):
-    room = rooms.pop(5)
-    #room.expandLeft(rooms, area)
-    
-    #room.expandUp(rooms, area)
+for x in range(5):
+    room = rooms.pop(0)
+    room.expandLeft(rooms, area)
+    room.expandUp(rooms, area)
     room.expandDown(rooms, area)
     room.expandRight(rooms,area)
     rooms.append(room)
