@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import dataclasses
 from typing import Iterable
 
 
@@ -16,20 +17,6 @@ class Vec:
     start: Point
     end: Point
 
-    def isVertical(self) -> bool:
-        return self.start.x == self.end.x
-
-    def isHorizontal(self) -> bool:
-        return self.start.y == self.end.y
-
-    def isAligned(self, other) -> bool:
-        if self.isVertical() and other.isHorizontal and other.start.x <= self.start.x <= other.end.x:
-            return True
-        elif self.isHorizontal() and other.isVertical and other.start.y <= self.start.y <= other.end.y:
-            return True
-        return False
-
-
 class Rect:
 
     def __init__(self, p: Point, width: int, height: int) -> None:
@@ -40,9 +27,7 @@ class Rect:
         self.height_u = height // 2
         self.height_d = height // 2
         self.p = p
-        self.calcCoords()
-        self.calcField()
-        self.calcVecs()
+        self.calcEverything()
 
     def calcCoords(self) -> None:
         ''' d-------c
@@ -86,14 +71,6 @@ class Rect:
 
     def getHorVecs(self) -> Iterable:
         return [self.horDown, self.horUp]
-
-    def isAlignedHorizontally(self, rect):
-        return self.horUp.isAligned(rect.verRight) or self.horDown.isAligned(rect.verRight) \
-               or rect.horUp.isAligned(self.verLeft) or rect.horDown.isAligned(self.verLeft)
-
-    def isAlignedVertically(self, rect):
-        return self.verLeft.isAligned(rect.horDown) or self.verRight.isAligned(rect.horDown) \
-               or rect.verLeft.isAligned(self.horUp) or rect.verRight.isAligned(self.horUp)
 
     def isToRightOf(self, rect):
         return rect.b.x <= self.a.x
@@ -162,6 +139,7 @@ class Rect:
         self.height_d = abs(self.p.y - new_y)
         self.calcEverything()
 
+#TODO: move this into unit tests
 if __name__ == '__main__':
     rB = Rect(Point(50, 50), 100, 100)
     r = Rect(Point(5, 5), 4, 4)

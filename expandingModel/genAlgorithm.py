@@ -1,5 +1,6 @@
+from typing import Tuple
 from figureTypes import *
-import random
+from random import getrandbits, randint, choice, choices, uniform
 
 class Specimen:
     def __init__(self, genes :int, rangeX, rangeY) -> None:
@@ -12,13 +13,13 @@ class Specimen:
             self.chrsom[n] = [self.getRndPoint(), self.getRndFuncNr()]
 
     def getRndFuncNr(self) -> int:
-        return [random.randint(0, 1) for n in range(4)]
+        return [getrandbits(1) for n in range(4)]
 
     def getRndPoint(self):
-        return Point(random.randint(*self.rangeX), random.randint(*self.rangeY))
+        return Point(randint(*self.rangeX), randint(*self.rangeY))
 
     def randGenes(self, num) -> int:
-        return random.choices(range(len(self.chrsom)), k = num)
+        return choices(range(len(self.chrsom)), k = num)
 
     def newChild(self, chrsom, prob):
         child = Specimen(0, self.rangeX, self.rangeY)
@@ -37,12 +38,12 @@ class Specimen:
         (min_idx, max_idx) = sorted(self.randGenes(2))
         self.chrsom = \
             self.chrsom[:min_idx] + \
-            list(reversed(self.chrsom[min_idx:max_idx])) + \
+            self.chrsom[min_idx:max_idx][::-1] + \
             self.chrsom[max_idx:]
 
     def mutate(self, prob) -> None:
-        if random.uniform(0, 1) < prob:
-            random.choice([self.swap, self.replacement, self.inversion])()
+        if uniform(0, 1) < prob:
+            choice([self.swap, self.replacement, self.inversion])()
 
 class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
@@ -50,32 +51,26 @@ class FitnessClass:
         self.rooms = rooms
 
     def getRndSpecimen(self):
-        rX = [self.area.a.x, self.area.b.x]
-        rY = [self.area.a.y, self.area.d.y]
+        rX = (self.area.a.x, self.area.b.x)
+        rY = (self.area.a.y, self.area.d.y)
         return Specimen(len(self.rooms), rX, rY)
 
     def countFitness(self, specimen: Specimen) -> None:
-        totalArea = 0
-        movedRooms = []
+        totalArea, rooms = 0, []
         for idx, gene in enumerate(specimen.chrsom):
-            movedRect = self.rooms[idx].cloneOffset(gene[0])
-            if not self.area.containsRectangle(movedRect):
+            new = self.rooms[idx].cloneOffset(gene[0])
+            if not self.area.containsRectangle(new) or\
+               any(map(lambda room : room.collides(new), rooms)):
                 specimen.fitness = 0
                 return
-            for room in movedRooms:
-                if movedRect.collides(room):
-                    specimen.fitness = 0
-                    return
-            movedRooms.append(movedRect)
-        for n in range(len(self.rooms)):
-            curr = movedRooms.pop(0)
-            if gene[1][0]:curr.expandLeft(movedRooms, self.area),
-            if gene[1][1]:curr.expandRight(movedRooms, self.area),
-            if gene[1][2]:curr.expandUp(movedRooms, self.area),
-            if gene[1][3]:curr.expandDown(movedRooms, self.area)
-            totalArea += curr.field
-            movedRooms.append(curr)
-            
+            rooms.append(new)
+        for _ in range(len(self.rooms)):
+            r = rooms.pop(0)
+            for i, func in enumerate([r.expandLeft, r.expandRight, r.expandUp, r.expandDown]):
+                if gene[1][i]: func(rooms, self.area)
+            totalArea += r.field
+            rooms.append(r)
+
         specimen.fitness = totalArea
 
 class GeneticAlgorithm:
@@ -109,27 +104,12 @@ class GeneticAlgorithm:
         self.generation.sort(key = lambda x : x.fitness, reverse= True)
         new = [*self.generation[:int(len(self.generation) * self.elitarism)]]
 
-        fitnessArray = [x.fitness for x in self.generation]
+        fitnessArr = [x.fitness for x in self.generation]
         while len(new) < len(self.generation):
-            parents = random.choices(self.generation, weights=fitnessArray, k=2)
+            parents = choices(self.generation, weights=fitnessArr, k=2)
             new.extend(self.getChildren(*parents))
         self.generation = new
 
     def repeat(self, n: int) -> None:
         for x in range(n):
             self.buildNewGeneration()
-
-if __name__ == '__main__':
-    squares = tuple([
-        Rect(Point(0, 0), 2, 4), 
-        Rect(Point(0, 0), 4, 6), 
-        Rect(Point(0, 0), 12, 2),
-        Rect(Point(0, 0), 8, 4),
-        Rect(Point(0, 0), 8, 6),
-        Rect(Point(0, 0), 4, 10)])
-    fitCls = FitnessClass(Rect(Point(0, 0), 80, 80),squares)
-    genAlg = GeneticAlgorithm(200, 0.1, 0.2, fitCls)
-    genAlg.repeat(5000)
-    bestSpecimen = max(genAlg.generation, key = lambda x : x.fitness)
-    print(bestSpecimen.chrsom)
-    print(bestSpecimen.fitness)
