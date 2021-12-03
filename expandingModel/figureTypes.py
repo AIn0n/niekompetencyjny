@@ -88,10 +88,12 @@ class Rect:
         return [self.horDown, self.horUp]
 
     def isAlignedHorizontally(self, rect):
-        return self.horUp.isAligned(rect.verRight) or self.horDown.isAligned(rect.verRight)
+        return self.horUp.isAligned(rect.verRight) or self.horDown.isAligned(rect.verRight) \
+               or rect.horUp.isAligned(self.verLeft) or rect.horDown.isAligned(self.verRight)
 
     def isAlignedVertically(self, rect):
-        return self.verLeft.isAligned(rect.horDown) or self.verRight.isAligned(rect.horDown)
+        return self.verLeft.isAligned(rect.horDown) or self.verRight.isAligned(rect.horDown) \
+               or rect.verLeft.isAligned(self.horUp) or rect.verRight.isAligned(self.horUp)
 
     def isToRightOf(self, rect):
         return rect.b.x <= self.a.x
@@ -107,34 +109,18 @@ class Rect:
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
-        return self.isAlignedVertically(rect) and self.isAbove(rect) and rect.isAlignedUpAid(self)
-
-    # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
-    def isAlignedUp(self, rect):
-        return self.isAlignedVertically(rect) and self.isBelow(rect) and rect.isAlignedDownAid(self)
-
-    # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
-    def isAlignedLeft(self, rect):
-        return self.isAlignedHorizontally(rect) and self.isToRightOf(rect) and rect.isAlignedRightAid(self)
-
-    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
-    def isAlignedRight(self, rect):
-        return self.isAlignedHorizontally(rect) and self.isToLeftOf(rect) and rect.isAlignedLeftAid(self)
-
-    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
-    def isAlignedDownAid(self, rect):
         return self.isAlignedVertically(rect) and self.isAbove(rect)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
-    def isAlignedUpAid(self, rect):
+    def isAlignedUp(self, rect):
         return self.isAlignedVertically(rect) and self.isBelow(rect)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
-    def isAlignedLeftAid(self, rect):
+    def isAlignedLeft(self, rect):
         return self.isAlignedHorizontally(rect) and self.isToRightOf(rect)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
-    def isAlignedRightAid(self, rect):
+    def isAlignedRight(self, rect):
         return self.isAlignedHorizontally(rect) and self.isToLeftOf(rect)
 
     # todo: Introduce limits at the borders
