@@ -119,7 +119,8 @@ class Rect:
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedRight(self, rect):
-        return self.isAlignedHorizontally(rect) and self.isToLeftOf(rect)
+        return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
+            or (rect.a.y >= self.b.y and rect.d.y >= self.c.y and self.b.x <= rect.a.x))
 
     # todo: Introduce limits at the borders
 
