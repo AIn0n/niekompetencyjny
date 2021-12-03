@@ -4,12 +4,15 @@ import random
 class Specimen:
     def __init__(self, genes :int, rangeX, rangeY) -> None:
         self.rangeX, self.rangeY = rangeX, rangeY
-        self.chrsom = [self.getRndPoint() for x in range(genes)]
+        self.chrsom = [[self.getRndPoint(), self.getRndFuncNr()] for x in range(genes)]
         self.fitness = 0
 
     def randomizeChrsom(self) -> None:
         for n in range(len(self.chrsom)):
-            self.chrsom[n] = self.getRndPoint()
+            self.chrsom[n] = [self.getRndPoint(), self.getRndFuncNr()]
+
+    def getRndFuncNr(self) -> int:
+        return [random.randint(0, 1) for n in range(4)]
 
     def getRndPoint(self):
         return Point(random.randint(*self.rangeX), random.randint(*self.rangeY))
@@ -28,7 +31,7 @@ class Specimen:
         self.chrsom[i1], self.chrsom[i2] = self.chrsom[i2], self.chrsom[i1]
 
     def replacement(self) -> None:
-        self.chrsom[self.randGenes(1)[0]] = self.getRndPoint()
+        self.chrsom[self.randGenes(1)[0]] = [self.getRndPoint(), self.getRndFuncNr()]
 
     def inversion(self) -> None:
         (min_idx, max_idx) = sorted(self.randGenes(2))
@@ -55,7 +58,7 @@ class FitnessClass:
         totalArea = 0
         movedRooms = []
         for idx, gene in enumerate(specimen.chrsom):
-            movedRect = self.rooms[idx].cloneOffset(gene)
+            movedRect = self.rooms[idx].cloneOffset(gene[0])
             if not self.area.containsRectangle(movedRect):
                 specimen.fitness = 0
                 return
@@ -66,10 +69,10 @@ class FitnessClass:
             movedRooms.append(movedRect)
         for n in range(len(self.rooms)):
             curr = movedRooms.pop(0)
-            curr.expandLeft(movedRooms, self.area)
-            curr.expandRight(movedRooms,self.area)
-            curr.expandUp(movedRooms,   self.area)
-            curr.expandDown(movedRooms, self.area)
+            if gene[1][0]:curr.expandLeft(movedRooms, self.area),
+            if gene[1][1]:curr.expandRight(movedRooms, self.area),
+            if gene[1][2]:curr.expandUp(movedRooms, self.area),
+            if gene[1][3]:curr.expandDown(movedRooms, self.area)
             totalArea += curr.field
             movedRooms.append(curr)
             

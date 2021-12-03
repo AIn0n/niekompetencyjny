@@ -1,7 +1,6 @@
-from random import Random
+import random
 import pygame
 from genAlgorithm import *
-import pickle
 
 class PrintAlg:
     display_width = 720
@@ -49,25 +48,26 @@ squares = tuple([
     Rect(Point(0, 0), 4, 10)])
 
 fitCls = FitnessClass(area, squares)
-genAlg = GeneticAlgorithm(100, 0.2, 0.1, fitCls)
-genAlg.repeat(1)
+genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
+genAlg.repeat(1000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
-print(bestSpecimen)
 print(bestSpecimen.fitness)
 
-area = Rect(Point(0, 0), 100, 100)
-r = [Rect(Point(5, 5), 4, 4), Rect(Point(0, 0), 2, 8), Rect(Point(10, 0), 2, 8), Rect(Point(3, 8), 8, 2)]
+printer = PrintAlg(80, 80)
 
-for n in range(len(r)):
-    curr = r.pop(0)
-    curr.expandUp(r, area)
-    curr.expandLeft(r, area)
-    curr.expandRight(r, area)
-    curr.expandDown(r, area)
-    r.append(curr)
-
-printer = PrintAlg(area.width_l, area.height_d)
-[printer.printRect(n, [random.randint(0, 255) for n in range(3)]) for n in r]
+black = (0, 0, 0)
+printer.printRect(area, black)
+rooms = [[squares[idx].cloneOffset(x[0]), x[1]] for idx, x in enumerate(bestSpecimen.chrsom)]
+for x in range(len(rooms)):
+    room = rooms.pop(0)
+    movedRooms = [x[0] for x in rooms]
+    print(room[1])
+    if room[1][0]:room[0].expandLeft   (movedRooms, area),
+    if room[1][1]:room[0].expandRight  (movedRooms, area),
+    if room[1][2]:room[0].expandUp     (movedRooms, area),
+    if room[1][3]:room[0].expandDown   (movedRooms, area)
+    rooms.append(room)
+    printer.printRect(room[0], tuple(random.randint(0, 255) for n in range(3)))
 
 printer.printAll()
 

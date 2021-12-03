@@ -127,49 +127,40 @@ class Rect:
         return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
             or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
 
-    # todo: Introduce limits at the borders
-
-    def expandLeft(self, rects, area) -> None:
-        if len(rects) == 0: return
-        new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
-        self.a = Point(new_x, self.a.y)
-        self.d = Point(new_x, self.d.y)
-        self.width_l = abs(self.p.x - new_x)
+    def calcEverything(self):
         self.calcCoords()
         self.calcField()
         self.calcVecs()
 
+
+    def expandLeft(self, rects, area) -> None:
+        new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
+        self.a = Point(new_x, self.a.y)
+        self.d = Point(new_x, self.d.y)
+        self.width_l = abs(self.p.x - new_x)
+        self.calcEverything()
+
     def expandRight(self, rects, area) -> None:
-        if len(rects) == 0: return
         new_x = min([r.a.x for r in rects if self.isAlignedRight(r)] + [area.b.x])
 
         self.b = Point(new_x, self.b.y)
         self.c = Point(new_x, self.c.y)
         self.width_r = abs(new_x - self.p.x)
-        self.calcCoords()
-        self.calcField()
-        self.calcVecs()
+        self.calcEverything()
 
     def expandUp(self, rects, area) -> None:
-        if len(rects) == 0: return
         new_y = min([r.a.y for r in rects if self.isAlignedUp(r)] + [area.d.y])
         self.c = Point(self.c.x, new_y)
         self.d = Point(self.d.x, new_y)
         self.height_u = abs(new_y - self.p.y)
-        self.calcCoords()
-        self.calcField()
-        self.calcVecs()
+        self.calcEverything()
 
     def expandDown(self, rects, area) -> None:
-        if len(rects) == 0: return
         new_y = max([r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y])
         self.a = Point(self.a.x, new_y)
         self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y - new_y)
-        self.calcCoords()
-        self.calcField()
-        self.calcVecs()
-
+        self.calcEverything()
 
 if __name__ == '__main__':
     rB = Rect(Point(50, 50), 100, 100)
