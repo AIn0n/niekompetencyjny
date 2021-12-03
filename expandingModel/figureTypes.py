@@ -89,7 +89,7 @@ class Rect:
 
     def isAlignedHorizontally(self, rect):
         return self.horUp.isAligned(rect.verRight) or self.horDown.isAligned(rect.verRight) \
-               or rect.horUp.isAligned(self.verLeft) or rect.horDown.isAligned(self.verRight)
+               or rect.horUp.isAligned(self.verLeft) or rect.horDown.isAligned(self.verLeft)
 
     def isAlignedVertically(self, rect):
         return self.verLeft.isAligned(rect.horDown) or self.verRight.isAligned(rect.horDown) \
