@@ -63,11 +63,10 @@ printer.printRect(area, black)
 with open("example.pickle", "rb") as f:
     rooms = pickle.load(f)
 
-for x in range(1):
-    room = rooms.pop(5)
-    #room.expandLeft(rooms, area)
-    
-    #room.expandUp(rooms, area)
+for x in range(3):
+    room = rooms.pop(0)
+    room.expandLeft(rooms, area)
+    room.expandUp(rooms, area)
     room.expandDown(rooms, area)
     room.expandRight(rooms,area)
     rooms.append(room)
