@@ -110,22 +110,22 @@ class Rect:
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
         return self.isAbove(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)\
-            or (rect.a.x >= self.b.x and rect.b.x >= self.b.x))
+            or (rect.a.x <= self.b.x and rect.b.x >= self.b.x))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
     def isAlignedUp(self, rect):
         return self.isBelow(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)\
-            or (rect.a.x >= self.b.x and rect.b.x >= self.b.x))
+            or (rect.a.x <= self.b.x and rect.b.x >= self.b.x))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
     def isAlignedLeft(self, rect):
         return self.isToRightOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
-            or (rect.a.y >= self.b.y and rect.d.y >= self.c.y))
+            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedRight(self, rect):
         return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
-            or (rect.a.y >= self.b.y and rect.d.y >= self.c.y))
+            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
 
     # todo: Introduce limits at the borders
 

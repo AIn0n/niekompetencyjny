@@ -1,3 +1,4 @@
+from mmap import ACCESS_READ
 import unittest
 from random import randint
 from figureTypes import *
@@ -77,62 +78,24 @@ class TestRectClass(unittest.TestCase):
         r = Rect(Point(0, 0),randint(1, 16) * 2, randint(1, 16) * 2)
         self.assertEqual(r.getVerVecs(), [Vec(r.a, r.d), Vec(r.b, r.c)])
 
-    def testExpandLeft(self):
-        x1, x2 = randint(2, 8)*2, randint(9, 16)*2
-        r = Rect(Point(0, 0), 2, 6)
-        r1 = Rect(Point(-x1-1, -1), 2, 6)
-        r2 = Rect(Point(-x2-1, -1), 2, 6)
-        r.expandLeft([r1, r2])
-        self.assertEqual(r.width_l, x1)
-        self.assertEqual(r.field, (x1 + 1) * 6)
-        self.assertEqual(r.a.x, x1)
-        self.assertEqual(r.d.x, x1)
+    def testExpandRightSameX(self):
+        area = Rect(Point(0, 0), 100, 100)
+        r1, r2 = Rect(Point(0,0), 2, 8), Rect(Point(10,0), 2, 8)
+        r1.expandRight([r2], area)
+        self.assertEqual(r1.b.x, 9)
+        self.assertEqual(r1.c.x, 9)
+        self.assertEqual(r1.width_r, 9)
+        self.assertEqual(r1.field, 10 * 8)
 
-    def testExpandLeft(self):
-        x1, x2 = randint(128, 256), randint(257, 512)
-        x1, x2 = -x1, -x2
-        pos = randint(-64, 0), randint(-64, 0)
-        r = Rect(Point(*pos), 2, 6)
-        v1 = Vec(Point(x1, 5), Point(x1, -1))
-        v2 = Vec(Point(x2, 5), Point(x2, -1))
-        r.expandLeft([v1, v2])
-        self.assertEqual(r.width_l, abs(x1) + abs(pos[0]))
-        self.assertEqual(r.field, (x1 + 1) * 6)
-        self.assertEqual(r.a.x, -(abs(pos[0]) + abs(x1)))
-        self.assertEqual(r.d.x, -(abs(pos[0]) + abs(x1)))
+    def testExpandRightLilAbove(self):
+        area = Rect(Point(0, 0), 100, 100)
+        r1, r2 = Rect(Point(0,0), 2, 8), Rect(Point(10,8), 2, 8)
+        r1.expandRight([r2], area)
+        self.assertEqual(r1.b.x, area.width_r)
+        self.assertEqual(r1.c.x, area.width_r)
+        self.assertEqual(r1.width_r, area.width_r)
+        self.assertEqual(r1.field, (area.width_r + r1.width_l) * 8)
 
-    def testExpandLeft(self):
-        x1, x2 = randint(4, 16), randint(17, 32)
-        r = Rect(Point(0, 0), 2, 6)
-        v1 = Vec(Point(-x1, -10), Point(-x1, -11))
-        v2 = Vec(Point(-x2, 5), Point(-x2, -1))
-        r.expandLeft([v1, v2])
-        self.assertEqual(r.width_l, x2)
-        self.assertEqual(r.field, (x2 + 1) * 6)
-        self.assertEqual(r.a.x, x2)
-        self.assertEqual(r.d.x, x2)        
-
-    def testExpandLeft(self):
-        x1, x2 = randint(4, 16), randint(17, 32)
-        x1 = -x1
-        r = Rect(Point(0, 0), 2, 6)
-        v1 = Vec(Point(x1, 5), Point(x1, -1))
-        v2 = Vec(Point(x2, 5), Point(x2, -1))
-        r.expandLeft([v1, v2])
-        self.assertEqual(r.width_l, x1)
-        self.assertEqual(r.field, (x2 + 1) * 6)
-        self.assertEqual(r.a.x, x1)
-        self.assertEqual(r.d.x, x1)
-
-    @skip
-    def testExpandRight(self):
-        x1, x2 = randint(4, 16), randint(17, 32)
-        r = Rect(Point(0, 0), 2, 6)
-        v1 = Vec(Point(x1, 5), Point(x1, -1))
-        v2 = Vec(Point(x2, 5), Point(x2, -1))
-        r.expandLeft([v1, v2])
-        self.assertEqual(r.width_l, x1)
-        self.assertEqual(r)
    
 
 class TestPointClass(unittest.TestCase):
@@ -141,14 +104,6 @@ class TestPointClass(unittest.TestCase):
         x, y = randint(0, 255), randint(0, 255)
         p = Point(x=x, y=y)
         self.assertEqual(f'({x}, {y})', str(p))
-
-class TestVecClass(unittest.TestCase):
-    @skip
-    def testGetLen(self):
-        start, end = [Point(randint(0, 16), randint(0, 16)) for n in [0, 1]]
-        vec = Vec(start, end)
-        self.assertEqual(vec.getDistance(), 
-            math.sqrt(abs(start.x - end.x) ** 2 + abs(start.y - end.y)))
 
 if __name__ == '__main__':
     unittest.main()

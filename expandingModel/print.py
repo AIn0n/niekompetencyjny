@@ -40,54 +40,34 @@ class PrintAlg:
 
 
 area = Rect(Point(0, 0), 80, 80)
-#squares = tuple([
-#    Rect(Point(0, 0), 2, 4),
-#    Rect(Point(0, 0), 4, 6),
-#    Rect(Point(0, 0), 12, 2),
-#    Rect(Point(0, 0), 8, 4),
-#    Rect(Point(0, 0), 8, 6),
-#    Rect(Point(0, 0), 4, 10)])
-#
-#fitCls = FitnessClass(area, squares)
-#genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
-#genAlg.repeat(700)
-#bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
-#print(bestSpecimen)
-#print(bestSpecimen.fitness)
+squares = tuple([
+    Rect(Point(0, 0), 2, 4),
+    Rect(Point(0, 0), 4, 6),
+    Rect(Point(0, 0), 12, 2),
+    Rect(Point(0, 0), 8, 4),
+    Rect(Point(0, 0), 8, 6),
+    Rect(Point(0, 0), 4, 10)])
 
-printer = PrintAlg(80, 80)
+fitCls = FitnessClass(area, squares)
+genAlg = GeneticAlgorithm(100, 0.2, 0.1, fitCls)
+genAlg.repeat(1)
+bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
+print(bestSpecimen)
+print(bestSpecimen.fitness)
 
-black = (0, 0, 0)
-printer.printRect(area, black)
+area = Rect(Point(0, 0), 100, 100)
+r = [Rect(Point(5, 5), 4, 4), Rect(Point(0, 0), 2, 8), Rect(Point(10, 0), 2, 8), Rect(Point(3, 8), 8, 2)]
 
-with open("example.pickle", "rb") as f:
-    rooms = pickle.load(f)
+for n in range(len(r)):
+    curr = r.pop(0)
+    curr.expandUp(r, area)
+    curr.expandLeft(r, area)
+    curr.expandRight(r, area)
+    curr.expandDown(r, area)
+    r.append(curr)
 
-for x in range(3):
-    room = rooms.pop(0)
-    room.expandLeft(rooms, area)
-    room.expandUp(rooms, area)
-    room.expandDown(rooms, area)
-    room.expandRight(rooms,area)
-    rooms.append(room)
-
-for room in rooms:
-    printer.printRect(room, tuple(random.randint(0, 255) for n in range(3)))
-
-
-#area = Rect(Point(0, 0), 100, 100)
-#r = [Rect(Point(5, 5), 4, 4), Rect(Point(0, 0), 2, 8), Rect(Point(10, 0), 2, 8), Rect(Point(3, 8), 8, 2)]
-#
-#for n in range(len(r)):
-#    curr = r.pop(0)
-#    curr.expandUp(r, area)
-#    curr.expandLeft(r, area)
-#    curr.expandRight(r, area)
-#    curr.expandDown(r, area)
-#    r.append(curr)
-#
-#printer = PrintAlg(area.width_l, area.height_d)
-#[printer.printRect(n, [random.randint(0, 255) for n in range(3)]) for n in r]
+printer = PrintAlg(area.width_l, area.height_d)
+[printer.printRect(n, [random.randint(0, 255) for n in range(3)]) for n in r]
 
 printer.printAll()
 
