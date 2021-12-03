@@ -107,18 +107,34 @@ class Rect:
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
-        return self.isAlignedVertically(rect) and self.isAbove(rect)
+        return self.isAlignedVertically(rect) and self.isAbove(rect) and rect.isAlignedUpAid(self)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
     def isAlignedUp(self, rect):
-        return self.isAlignedVertically(rect) and self.isBelow(rect)
+        return self.isAlignedVertically(rect) and self.isBelow(rect) and rect.isAlignedDownAid(self)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
     def isAlignedLeft(self, rect):
-        return self.isAlignedHorizontally(rect) and self.isToRightOf(rect)
+        return self.isAlignedHorizontally(rect) and self.isToRightOf(rect) and rect.isAlignedRightAid(self)
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedRight(self, rect):
+        return self.isAlignedHorizontally(rect) and self.isToLeftOf(rect) and rect.isAlignedLeftAid(self)
+
+    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
+    def isAlignedDownAid(self, rect):
+        return self.isAlignedVertically(rect) and self.isAbove(rect)
+
+    # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
+    def isAlignedUpAid(self, rect):
+        return self.isAlignedVertically(rect) and self.isBelow(rect)
+
+    # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
+    def isAlignedLeftAid(self, rect):
+        return self.isAlignedHorizontally(rect) and self.isToRightOf(rect)
+
+    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
+    def isAlignedRightAid(self, rect):
         return self.isAlignedHorizontally(rect) and self.isToLeftOf(rect)
 
     # todo: Introduce limits at the borders
