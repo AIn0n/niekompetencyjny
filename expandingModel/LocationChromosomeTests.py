@@ -1,6 +1,6 @@
 import unittest
 from random import randint
-from .LocationChromosome import LocationChromosome as lChrsom
+from LocationChromosome import LocationChromosome as lChrsom
 
 class TestLocationChromosome(unittest.TestCase):
 
