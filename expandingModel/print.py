@@ -17,17 +17,15 @@ class PrintAlg:
         self.inter_display = pygame.Surface((fieldWidth, fieldHeight))
         self.inter_display.blit(pygame.transform.flip(self.inter_display, False, True), (0, 0))
 
-        self.offX = fieldWidth/2
-        self.offY = fieldHeight/2
+        self.offX = self.offY = fieldHeight/2
 
     def getCords(self, x, y):
-        return (x + self.offX,
-                y + self.offY)
+        return (x + self.offX, y + self.offY)
 
     def printRect(self, r: Rect, color: tuple) -> None:
         x, y = self.getCords(r.a.x, r.a.y)
         pygame.draw.rect(self.inter_display, color,
-                         (x, y, r.width_l + r.width_r, r.height_u + r.height_d))
+            (x, y, r.width_l + r.width_r, r.height_u + r.height_d))
 
     def printAll(self) -> None:
         self.scaleSurface()

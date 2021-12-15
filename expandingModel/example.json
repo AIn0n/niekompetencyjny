@@ -1,0 +1,20 @@
+[
+    {
+        "name": "hall",
+        "minSize": [2, 2],
+        "expandable": true,
+        "neighbors": ["kitchen", "elevator"]
+    },
+    {
+        "name": "kitchen",
+        "minSize": [10, 10],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "elevator",
+        "minSize": [4, 4],
+        "expandable": false,
+        "neighbors": ["hall"]
+    }
+]
