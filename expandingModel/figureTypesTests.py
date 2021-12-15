@@ -1,4 +1,3 @@
-from mmap import ACCESS_READ
 import unittest
 from random import randint
 from figureTypes import *
