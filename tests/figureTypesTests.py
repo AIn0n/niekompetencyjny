@@ -1,7 +1,7 @@
 from mmap import ACCESS_READ
 import unittest
 from random import randint
-from figureTypes import *
+from expandingModel.figureTypes import *
 import math
 from unittest.case import skip
 
