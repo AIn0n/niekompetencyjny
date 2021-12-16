@@ -7,7 +7,7 @@ from expandingModel.Room import *
 
 class TestLocationChromosome(unittest.TestCase):
     def setUp(self) -> None:
-        self.size = randint(1, 20)
+        self.size = randint(3, 20)
         self.rooms = Room.generateRooms(self.size)
         print("\nGenerated rooms:")
         for room in self.rooms:
