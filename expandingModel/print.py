@@ -20,7 +20,7 @@ class PrintAlg:
         self.offX = self.offY = fieldHeight/2
 
     def getCords(self, x, y):
-        return (x + self.offX, y + self.offY)
+        return x + self.offX, y + self.offY
 
     def printRect(self, r: Rect, color: tuple) -> None:
         x, y = self.getCords(r.a.x, r.a.y)
