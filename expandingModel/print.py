@@ -38,20 +38,12 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 squares = tuple([
+    Rect(Point(0, 0), 2, 4),
+    Rect(Point(0, 0), 4, 6),
     Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 12, 2)])
-
-
-#    Rect(Point(0, 0), 2, 4),
-#    Rect(Point(0, 0), 4, 6),
-#    Rect(Point(0, 0), 12, 2),
-#    Rect(Point(0, 0), 8, 4),
-#    Rect(Point(0, 0), 8, 6),
-#    Rect(Point(0, 0), 4, 10)])
+    Rect(Point(0, 0), 8, 4),
+    Rect(Point(0, 0), 8, 6),
+    Rect(Point(0, 0), 4, 10)])
 
 fitCls = FitnessClass(area, squares)
 genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
@@ -63,18 +55,26 @@ printer = PrintAlg(80, 80)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-print(bestSpecimen.chrsoms[0].genes)
-for i in range(len(bestSpecimen.chrsoms[0].genes)):
+print(bestSpecimen.chrsoms['location'].genes)
+rooms = []
+for i in range(len(squares)):
     r = 0
-    if  bestSpecimen.chrsoms[1].genes[i]:
+    if  bestSpecimen.chrsoms['rotation'].genes[i]:
         r = Rect(
          Point(0,0),
          squares[i].height_d + squares[i].height_u, 
          squares[i].width_r + squares[i].width_l)
     else:
         r = squares[i]
-    r = r.cloneOffset(bestSpecimen.chrsoms[0].genes[i])
+    rooms.append(r.cloneOffset(bestSpecimen.chrsoms['location'].genes[i]))
+for i in range(len(squares)):
+    r = rooms.pop(0)
+    if bestSpecimen.chrsoms['expansion'].genes[i*4]: r.expandLeft(rooms, area)
+    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 1]: r.expandRight(rooms, area)
+    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 2]: r.expandUp(rooms, area)
+    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 3]: r.expandDown(rooms, area)
     printer.printRect(r, tuple(random.randint(0, 255) for n in range(3)))
+    rooms.append(r)
 
 printer.printAll()
 
