@@ -8,11 +8,12 @@ class Room:
         self.minWidth = minWidth
         self.minHeight = minHeight
         self.expandable = expandable
-        self.neighbours = list()
+        self.neighbours = set()
 
-    def addNeighbour(self, name):
+    def addNeighbour(self, neighbour):
         # Implement neighbour validation
-        self.neighbours.append(name)
+        self.neighbours.add(neighbour.name)
+        neighbour.neighbours.add(self.name)
 
     def __str__(self):
         return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
@@ -39,9 +40,9 @@ class Room:
             otherRooms = rooms.copy()
             otherRooms.remove(room)
 
-            for i in range(randint(0, count - 1)):
+            for i in range(randint(0, 2)):
                 # Selecting a random valid neighbour
                 randomRoom = random.choice(otherRooms)
                 otherRooms.remove(randomRoom)
-                room.addNeighbour(randomRoom.name)
+                room.addNeighbour(randomRoom)
         return rooms
