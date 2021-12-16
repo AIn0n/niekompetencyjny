@@ -12,12 +12,14 @@ class Specimen:
             'expansion': BinaryChromosome(size * 4)}
         self.fitness = 0
 
-    def getChild(self, o):
+    def getChild(self, o, mut):
         c1, c2 = copy.copy(self), copy.copy(o)
         for k in self.chrsoms.keys():
             p = choice(range(len(self.chrsoms[k].genes)))
             c1.chrsoms[k].genes[:p] = o.chrsoms[k].genes[:p]
+            c1.chrsoms[k].mutate(mut)
             c2.chrsoms[k].genes[p:] = self.chrsoms[k].genes[p:]
+            c2.chrsoms[k].mutate(mut)
         return c1, c2
 
 class FitnessClass:
@@ -68,9 +70,7 @@ class GeneticAlgorithm:
         self.fitnessClass = fitnessClass
 
     def getChildren(self, p1: Specimen, p2 :Specimen) -> list:
-        childs = p1.getChild(p2)
-        for child in childs:
-            self.fitnessClass.countFitness(child)
+        childs = p1.getChild(p2, self.mutProb)
         return childs
 
     def buildNewGeneration(self) -> None:
