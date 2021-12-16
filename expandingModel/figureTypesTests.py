@@ -95,7 +95,42 @@ class TestRectClass(unittest.TestCase):
         self.assertEqual(r1.width_r, area.width_r)
         self.assertEqual(r1.field, (area.width_r + r1.width_l) * 8)
 
-   
+    def testGetHeightWidthSquare(self):
+        length = randint(1, 50) * 2
+        square = Rect(Point(0, 0), length, length)
+        self.assertEqual(square.getWidth(), length)
+        self.assertEqual(square.getHeight(), length)
+
+    def testGetHeightWidthRectangle(self):
+        width = randint(1, 50) * 2
+        height = randint(1, 50) * 2
+        rectangle = Rect(Point(0, 0), width, height)
+        self.assertEqual(rectangle.getWidth(), width)
+        self.assertEqual(rectangle.getHeight(), height)
+
+    def testGetHeightWidthExpandLeftRight(self):
+        area = Rect(Point(0, 0), randint(50, 100) * 2, randint(50, 100) * 2)
+        width = randint(1, 50) * 2
+        height = randint(1, 50) * 2
+        rectangle = Rect(Point(0, 0), width, height)
+        print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
+        print(f"{rectangle}, width = {rectangle.getWidth()}")
+        rectangle.expandLeft([], area)
+        rectangle.expandRight([], area)
+        print(f"{rectangle}, width = {rectangle.getWidth()}")
+        self.assertEqual(rectangle.getWidth(), area.getWidth())
+
+    def testGetHeightWidthExpandUpDown(self):
+        area = Rect(Point(0, 0), randint(50, 100) * 2, randint(50, 100) * 2)
+        offsetX = randint(0, 50)
+        offsetY = randint(0, 50)
+        width = randint(1, 20) * 2
+        height = randint(1, 20) * 2
+        rectangle = Rect(Point(offsetX, offsetY), width, height)
+        rectangle.expandUp([], area)
+        rectangle.expandDown([], area)
+        self.assertEqual(rectangle.getHeight(), area.getHeight())
+
 
 class TestPointClass(unittest.TestCase):
 
