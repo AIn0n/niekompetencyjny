@@ -17,6 +17,11 @@ class Vec:
     start: Point
     end: Point
 
+    def getLength(self):
+        # A Vec object can only be vertical or horizontal, therefore one of these is always 0
+        return abs(self.start.x - self.end.x) or abs(self.start.y - self.end.y)
+
+
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
         if height % 2 or width % 2 or not height or not width:
@@ -49,6 +54,12 @@ class Rect:
 
     def calcField(self) -> None:
         self.field = (self.width_l + self.width_r) * (self.height_u + self.height_d)
+
+    def getHeight(self) -> int:
+        return self.verLeft.getLength()
+
+    def getWidth(self) -> int:
+        return self.horUp.getLength()
 
     def collides(self, other) -> bool:
         return (self.a.x < other.c.x) and (self.c.x > other.a.x) and \
