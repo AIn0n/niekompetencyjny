@@ -71,6 +71,7 @@ class TestRectClass(unittest.TestCase):
 
     def testGetHorizontalVectors(self):
         r = Rect(Point(0, 0),randint(1, 16) * 2, randint(1, 16) * 2)
+        (vec1, vec2) = r.getHorVecs()
         self.assertEqual(r.getHorVecs(), [Vec(r.a, r.b), Vec(r.d, r.c)])
     
     def testGetVerticalVectors(self):
@@ -113,23 +114,61 @@ class TestRectClass(unittest.TestCase):
         width = randint(1, 50) * 2
         height = randint(1, 50) * 2
         rectangle = Rect(Point(0, 0), width, height)
-        print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
-        print(f"{rectangle}, width = {rectangle.getWidth()}")
+        #print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
+        #print(f"{rectangle}, width = {rectangle.getWidth()}")
         rectangle.expandLeft([], area)
         rectangle.expandRight([], area)
-        print(f"{rectangle}, width = {rectangle.getWidth()}")
+        #print(f"{rectangle}, width = {rectangle.getWidth()}")
         self.assertEqual(rectangle.getWidth(), area.getWidth())
+        self.assertEqual(rectangle.getWidth(), rectangle.width_l + rectangle.width_r)
+        self.assertEqual(rectangle.getHeight(), rectangle.height_d + rectangle.height_u)
 
-    def testGetHeightWidthExpandUpDown(self):
-        area = Rect(Point(0, 0), randint(50, 100) * 2, randint(50, 100) * 2)
-        offsetX = randint(0, 50)
-        offsetY = randint(0, 50)
-        width = randint(1, 20) * 2
-        height = randint(1, 20) * 2
-        rectangle = Rect(Point(offsetX, offsetY), width, height)
-        rectangle.expandUp([], area)
-        rectangle.expandDown([], area)
-        self.assertEqual(rectangle.getHeight(), area.getHeight())
+    def testCollidesSameOrient1(self):
+        vec1 = Vec(Point(0, 0), Point(0, randint(5, 10)))
+        vec2 = Vec(Point(0, 0), Point(0, randint(1, vec1.end.y)))
+        self.assertTrue(vec1.collidesSameOrient(vec2))
+        self.assertTrue(vec2.collidesSameOrient(vec1))
+
+    def testCollidesSameOrient2(self):
+        vec1 = Vec(Point(0, 0), Point(randint(5, 10), 0))
+        vec2 = Vec(Point(0, 0), Point(randint(1, vec1.end.x), 0))
+        self.assertTrue(vec1.collidesSameOrient(vec2))
+        self.assertTrue(vec2.collidesSameOrient(vec1))
+
+    def testCollidesSameOrient3(self):
+        vec1 = Vec(Point(0, 0), Point(randint(5, 10), 0))
+        vec2 = Vec(Point(vec1.end.x, 0), Point(randint(1, randint(1, 5)), 0))
+        self.assertFalse(vec1.collidesSameOrient(vec2))
+        self.assertFalse(vec2.collidesSameOrient(vec1))
+
+    def testCollidesSameOrient4(self):
+        vec1 = Vec(Point(randint(0, 5), 0), Point(randint(5, 10), 0))
+        vec2 = Vec(Point(vec1.start.x, 0), Point(vec1.end.x, 0))
+        self.assertTrue(vec1.collidesSameOrient(vec2))
+        self.assertTrue(vec2.collidesSameOrient(vec1))
+
+    def testCollidesSameOrient5(self):
+        vec1 = Vec(Point(randint(0, 5), 0), Point(randint(5, 10), 0))
+        vec2 = Vec(Point(vec1.start.x - 1, 0), Point(vec1.end.x + 1, 0))
+        self.assertTrue(vec1.collidesSameOrient(vec2))
+        self.assertTrue(vec2.collidesSameOrient(vec1))
+
+    def testNeighbours1(self):
+        rect1 = Rect(Point(2, 2), 2, 2)
+        rect2 = Rect(Point(0, 2), 2, 2)
+        self.assertTrue(rect1.neighbours(rect2))
+
+    def testNeighbours2(self):
+        rect1 = Rect(Point(2, 2), 2, 2)
+        rect2 = Rect(Point(-1, 2), 2, 2)
+        self.assertFalse(rect1.neighbours(rect2))
+
+
+    def testNeighbours3(self):
+        rect1 = Rect(Point(2, 2), 2, 2)
+        rect2 = Rect(Point(0, 0), 2, 2)
+        self.assertFalse(rect1.neighbours(rect2))
+
 
 
 class TestPointClass(unittest.TestCase):

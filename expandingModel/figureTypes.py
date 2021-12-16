@@ -12,15 +12,50 @@ class Point:
         return f'({self.x}, {self.y})'
 
 
-@dataclass(frozen=True, order=True)
 class Vec:
     start: Point
     end: Point
+
+    def __init__(self, p1: Point, p2: Point):
+        # Ensures the leftmost or uppermost point is start
+        if p1.x < p2.x or p1.y < p2.y:
+            self.start = p1
+            self.end = p2
+        else:
+            self.start = p1
+            self.end = p2
+
+    def __str__(self):
+        return f"[{self.start}, {self.end}]"
+
+    def __eq__(self, other):
+        return self.start == other.start and self.end == other.end
 
     def getLength(self):
         # A Vec object can only be vertical or horizontal, therefore one of these is always 0
         return abs(self.start.x - self.end.x) or abs(self.start.y - self.end.y)
 
+    def isVertical(self):
+        return self.start.x == self.end.x
+
+    def isHorizontal(self):
+        return self.start.y == self.end.y
+
+    def containsPoint(self, point) -> bool:
+        if self.isHorizontal():
+            return point.y == self.start.y and self.start.x <= point.x <= self.end.x
+        if self.isVertical():
+            return point.x == self.start.x and self.start.y <= point.y <= self.end.y
+
+    def sameOrientation(self, other):
+        return (self.isVertical() and other.isVertical()) or (self.isHorizontal() and other.isHorizontal)
+
+    def collidesSameOrient(self, other) -> bool:
+        if self.sameOrientation(other):
+            return (self.containsPoint(other.start) or self.containsPoint(other.end)
+                    or other.containsPoint(self.start) or other.containsPoint(self.end)) \
+                    and self.start != other.end and self.end != other.start
+        return False
 
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
@@ -93,6 +128,19 @@ class Rect:
 
     def isAbove(self, rect):
         return rect.d.y <= self.a.y
+
+    # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
+    # applies and the appropriate vector is at the same x/y
+    def neighbours(self, rect) -> bool:
+        if rect.isAbove(self):
+            return self.horUp.collidesSameOrient(rect.horDown)
+        if rect.isBelow(self):
+            return self.horDown.collidesSameOrient(rect.horUp)
+        if rect.isToLeftOf(self):
+            return self.verLeft.collidesSameOrient(rect.verRight)
+        if rect.isToRightOf(self):
+            return self.verRight.collidesSameOrient(rect.verLeft)
+        return False
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
