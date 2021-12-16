@@ -1,17 +1,15 @@
-from typing import Tuple
 from figureTypes import *
 from LocationChromosome import LocationChromosome
 from BinaryChromosome import BinaryChromosome
 import copy
-from random import getrandbits, randint, choice, choices, uniform
+from random import choice, choices
 
 class Specimen:
     def __init__(self, size, rX, rY) -> None:
         self.chrsoms = {
             'location' : LocationChromosome(size, rY, rX),
             'rotation' : BinaryChromosome(size),
-            'expansion': BinaryChromosome(size * 4)
-        }
+            'expansion': BinaryChromosome(size * 4)}
         self.fitness = 0
 
     def getChild(self, o):
@@ -61,9 +59,9 @@ class GeneticAlgorithm:
     def __init__(
     self, 
     generationSize: int, 
-    mutProb: float, 
-    elitarism: float, 
-    fitnessClass: FitnessClass) -> None:
+    mutProb:        float, 
+    elitarism:      float, 
+    fitnessClass:   FitnessClass) -> None:
         self.generation = [fitnessClass.getRndSpecimen() for x in range(generationSize)]
         self.mutProb = mutProb
         self.elitarism = elitarism
@@ -92,6 +90,10 @@ class GeneticAlgorithm:
         while len(new) < len(self.generation):
             parents = choices(self.generation, weights=fitnessArr, k=2)
             new.extend(self.getChildren(*parents))
+
+        #HOTFIX
+        for elem in new:
+            self.fitnessClass.countFitness(elem)
         self.generation = new
 
     def repeat(self, n: int) -> None:
