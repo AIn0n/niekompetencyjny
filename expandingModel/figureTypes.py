@@ -170,32 +170,40 @@ class Rect:
 
     def expandLeft(self, rects, area) -> None:
         new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
+        #print(f"EXPANDING {self} LEFT")
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x - new_x)
         self.calcEverything()
+        #print(f"NOW {self}")
 
     def expandRight(self, rects, area) -> None:
         new_x = min([r.a.x for r in rects if self.isAlignedRight(r)] + [area.b.x])
+        #print(f"EXPANDING {self} RIGHT")
 
         self.b = Point(new_x, self.b.y)
         self.c = Point(new_x, self.c.y)
         self.width_r = abs(new_x - self.p.x)
         self.calcEverything()
+        #print(f"NOW {self}")
 
     def expandUp(self, rects, area) -> None:
         new_y = min([r.a.y for r in rects if self.isAlignedUp(r)] + [area.d.y])
+        #print(f"EXPANDING {self} UP")
         self.c = Point(self.c.x, new_y)
         self.d = Point(self.d.x, new_y)
         self.height_u = abs(new_y - self.p.y)
         self.calcEverything()
+        #print(f"NOW {self}")
 
     def expandDown(self, rects, area) -> None:
+        #print(f"EXPANDING {self} DOWN")
         new_y = max([r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y])
         self.a = Point(self.a.x, new_y)
         self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y - new_y)
         self.calcEverything()
+        #print(f"NOW {self}")
 
 #TODO: move this into unit tests
 if __name__ == '__main__':
