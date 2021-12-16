@@ -18,11 +18,11 @@ class Chromosome:
         self.genes[random.choice(range(len(self.genes)))] = self.randGene()
 
     def inverse(self) -> None:
-        (minI, maxI) = sorted(random.choices(range(len(self.genes))))
+        (minI, maxI) = sorted(random.choices(range(len(self.genes)), k = 2))
         self.genes = \
             self.genes[:minI] + \
             self.genes[minI:maxI][::-1] + \
-            self.genes[maxI]
+            self.genes[maxI:]
 
     def mutate(self, p) -> None:
         if random.uniform(0, 1) < p:

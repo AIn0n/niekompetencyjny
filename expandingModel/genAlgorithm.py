@@ -1,77 +1,51 @@
 from typing import Tuple
 from figureTypes import *
+from LocationChromosome import LocationChromosome
+from BinaryChromosome import BinaryChromosome
+import copy
 from random import getrandbits, randint, choice, choices, uniform
 
 class Specimen:
-    def __init__(self, genes :int, rangeX, rangeY) -> None:
-        self.rangeX, self.rangeY = rangeX, rangeY
-        self.chrsom = [[self.getRndPoint(), self.getRndFuncNr()] for x in range(genes)]
+    def __init__(self, *kwargs) -> None:
+        self.chrsoms = [*kwargs]
         self.fitness = 0
 
-    def randomizeChrsom(self) -> None:
-        for n in range(len(self.chrsom)):
-            self.chrsom[n] = [self.getRndPoint(), self.getRndFuncNr()]
-
-    def getRndFuncNr(self) -> int:
-        return [getrandbits(1) for n in range(4)]
-
-    def getRndPoint(self):
-        return Point(randint(*self.rangeX), randint(*self.rangeY))
-
-    def randGenes(self, num) -> int:
-        return choices(range(len(self.chrsom)), k = num)
-
-    def newChild(self, chrsom, prob):
-        child = Specimen(0, self.rangeX, self.rangeY)
-        child.chrsom = chrsom
-        child.mutate(prob)
-        return child
-
-    def swap(self) -> None:
-        (i1, i2) = self.randGenes(2)
-        self.chrsom[i1], self.chrsom[i2] = self.chrsom[i2], self.chrsom[i1]
-
-    def replacement(self) -> None:
-        self.chrsom[self.randGenes(1)[0]] = [self.getRndPoint(), self.getRndFuncNr()]
-
-    def inversion(self) -> None:
-        (min_idx, max_idx) = sorted(self.randGenes(2))
-        self.chrsom = \
-            self.chrsom[:min_idx] + \
-            self.chrsom[min_idx:max_idx][::-1] + \
-            self.chrsom[max_idx:]
-
-    def mutate(self, prob) -> None:
-        if uniform(0, 1) < prob:
-            choice([self.swap, self.replacement, self.inversion])()
+    def getChild(self, o):
+        c1, c2 = copy.copy(self), copy.copy(o)
+        for i in range(len(self.chrsoms)):
+            p = choice(range(len(self.chrsoms[i].genes)))
+            c1.chrsoms[i].genes[:p] = o.chrsoms[i].genes[:p]
+            c2.chrsoms[i].genes[p:] = self.chrsoms[i].genes[p:]
+        return c1, c2
 
 class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
+        self.rX = (self.area.a.x, self.area.b.x)
+        self.rY = (self.area.a.y, self.area.d.y)
 
     def getRndSpecimen(self):
-        rX = (self.area.a.x, self.area.b.x)
-        rY = (self.area.a.y, self.area.d.y)
-        return Specimen(len(self.rooms), rX, rY)
-
-    def countFitness(self, specimen: Specimen) -> None:
-        totalArea, rooms = 0, []
-        for idx, gene in enumerate(specimen.chrsom):
-            new = self.rooms[idx].cloneOffset(gene[0])
+        return Specimen(
+            LocationChromosome(len(self.rooms), self.rY, self.rX), 
+            BinaryChromosome(len(self.rooms)))
+        
+    def countFitness(self, s: Specimen) -> None:
+        rooms, total_field = [], 0
+        for idx, pos in enumerate(s.chrsoms[0].genes):
+            new = Rect(Point(0, 0), 
+             self.rooms[idx].height_u + self.rooms[idx].height_d,
+             self.rooms[idx].width_l + self.rooms[idx].width_r) \
+              if s.chrsoms[1].genes[idx] else self.rooms[idx]
+                
+            new = new.cloneOffset(pos)
             if not self.area.containsRectangle(new) or\
                any(map(lambda room : room.collides(new), rooms)):
-                specimen.fitness = 0
+                s.fitness = 0
                 return
             rooms.append(new)
-        for _ in range(len(self.rooms)):
-            r = rooms.pop(0)
-            for i, func in enumerate([r.expandLeft, r.expandRight, r.expandUp, r.expandDown]):
-                if gene[1][i]: func(rooms, self.area)
-            totalArea += r.field
-            rooms.append(r)
-
-        specimen.fitness = totalArea
+            total_field += new.field
+        s.fitness = total_field
 
 class GeneticAlgorithm:
     def __init__(
@@ -86,18 +60,18 @@ class GeneticAlgorithm:
         self.fitnessClass = fitnessClass
 
     def getChildren(self, p1: Specimen, p2 :Specimen) -> list:
-        n, childs = *p1.randGenes(1), []
-        for chrsom in [p1.chrsom[0:n] + p2.chrsom[n:], p2.chrsom[0:n] + p1.chrsom[n:]]:
-            childs.append(p1.newChild(chrsom, self.mutProb))
-            self.fitnessClass.countFitness(childs[-1])
+        childs = p1.getChild(p2)
+        for child in childs:
+            self.fitnessClass.countFitness(child)
         return childs
 
     def buildNewGeneration(self) -> None:
         #not valuable parents case
         if len(tuple(filter(lambda x : x.fitness > 0, self.generation))) < 2:
-            for elem in self.generation:
-                elem.mutate(1.0)
-                self.fitnessClass.countFitness(elem)
+            for specimen in self.generation:
+                for chromosome in specimen.chrsoms:
+                    chromosome.mutate(1.0)
+                self.fitnessClass.countFitness(specimen)
             return
 
         #elitarism

@@ -38,12 +38,20 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 squares = tuple([
-    Rect(Point(0, 0), 2, 4),
-    Rect(Point(0, 0), 4, 6),
     Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 8, 4),
-    Rect(Point(0, 0), 8, 6),
-    Rect(Point(0, 0), 4, 10)])
+    Rect(Point(0, 0), 12, 2),
+    Rect(Point(0, 0), 12, 2),
+    Rect(Point(0, 0), 12, 2),
+    Rect(Point(0, 0), 12, 2),
+    Rect(Point(0, 0), 12, 2)])
+
+
+#    Rect(Point(0, 0), 2, 4),
+#    Rect(Point(0, 0), 4, 6),
+#    Rect(Point(0, 0), 12, 2),
+#    Rect(Point(0, 0), 8, 4),
+#    Rect(Point(0, 0), 8, 6),
+#    Rect(Point(0, 0), 4, 10)])
 
 fitCls = FitnessClass(area, squares)
 genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
@@ -55,17 +63,18 @@ printer = PrintAlg(80, 80)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-rooms = [[squares[idx].cloneOffset(x[0]), x[1]] for idx, x in enumerate(bestSpecimen.chrsom)]
-for x in range(len(rooms)):
-    room = rooms.pop(0)
-    movedRooms = [x[0] for x in rooms]
-    print(room[1])
-    if room[1][0]:room[0].expandLeft   (movedRooms, area),
-    if room[1][1]:room[0].expandRight  (movedRooms, area),
-    if room[1][2]:room[0].expandUp     (movedRooms, area),
-    if room[1][3]:room[0].expandDown   (movedRooms, area)
-    rooms.append(room)
-    printer.printRect(room[0], tuple(random.randint(0, 255) for n in range(3)))
+print(bestSpecimen.chrsoms[0].genes)
+for i in range(len(bestSpecimen.chrsoms[0].genes)):
+    r = 0
+    if  bestSpecimen.chrsoms[1].genes[i]:
+        r = Rect(
+         Point(0,0),
+         squares[i].height_d + squares[i].height_u, 
+         squares[i].width_r + squares[i].width_l)
+    else:
+        r = squares[i]
+    r = r.cloneOffset(bestSpecimen.chrsoms[0].genes[i])
+    printer.printRect(r, tuple(random.randint(0, 255) for n in range(3)))
 
 printer.printAll()
 
