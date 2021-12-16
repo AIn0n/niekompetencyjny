@@ -6,16 +6,20 @@ import copy
 from random import getrandbits, randint, choice, choices, uniform
 
 class Specimen:
-    def __init__(self, *kwargs) -> None:
-        self.chrsoms = [*kwargs]
+    def __init__(self, size, rX, rY) -> None:
+        self.chrsoms = {
+            'location' : LocationChromosome(size, rY, rX),
+            'rotation' : BinaryChromosome(size),
+            'expansion': BinaryChromosome(size * 4)
+        }
         self.fitness = 0
 
     def getChild(self, o):
         c1, c2 = copy.copy(self), copy.copy(o)
-        for i in range(len(self.chrsoms)):
-            p = choice(range(len(self.chrsoms[i].genes)))
-            c1.chrsoms[i].genes[:p] = o.chrsoms[i].genes[:p]
-            c2.chrsoms[i].genes[p:] = self.chrsoms[i].genes[p:]
+        for k in self.chrsoms.keys():
+            p = choice(range(len(self.chrsoms[k].genes)))
+            c1.chrsoms[k].genes[:p] = o.chrsoms[k].genes[:p]
+            c2.chrsoms[k].genes[p:] = self.chrsoms[k].genes[p:]
         return c1, c2
 
 class FitnessClass:
@@ -26,25 +30,31 @@ class FitnessClass:
         self.rY = (self.area.a.y, self.area.d.y)
 
     def getRndSpecimen(self):
-        return Specimen(
-            LocationChromosome(len(self.rooms), self.rY, self.rX), 
-            BinaryChromosome(len(self.rooms)))
+        return Specimen(len(self.rooms), self.rX, self.rY)
         
     def countFitness(self, s: Specimen) -> None:
-        rooms, total_field = [], 0
-        for idx, pos in enumerate(s.chrsoms[0].genes):
-            new = Rect(Point(0, 0), 
-             self.rooms[idx].height_u + self.rooms[idx].height_d,
-             self.rooms[idx].width_l + self.rooms[idx].width_r) \
-              if s.chrsoms[1].genes[idx] else self.rooms[idx]
-                
-            new = new.cloneOffset(pos)
+        rooms = []
+        for i in range(len(s.chrsoms['location'].genes)):
+            #rotation section
+            new = Rect(Point(0, 0), self.rooms[i].getHeight(), self.rooms[i].getWidth()) \
+                if s.chrsoms['rotation'].genes[i] else self.rooms[i]
+            #location section
+            new = new.cloneOffset(s.chrsoms['location'].genes[i])
             if not self.area.containsRectangle(new) or\
                any(map(lambda room : room.collides(new), rooms)):
                 s.fitness = 0
-                return
+                return    
             rooms.append(new)
-            total_field += new.field
+        #expansion section
+        total_field = 0
+        for n in range(len(self.rooms)):
+            r = rooms.pop(0)
+            for i, func in enumerate([r.expandLeft, r.expandRight, r.expandUp, r.expandDown]):
+                if s.chrsoms['expansion'].genes[n*4 + i]:
+                    func(rooms, self.area)
+            total_field += r.field
+            rooms.append(r)
+        
         s.fitness = total_field
 
 class GeneticAlgorithm:
@@ -69,7 +79,7 @@ class GeneticAlgorithm:
         #not valuable parents case
         if len(tuple(filter(lambda x : x.fitness > 0, self.generation))) < 2:
             for specimen in self.generation:
-                for chromosome in specimen.chrsoms:
+                for chromosome in specimen.chrsoms.values():
                     chromosome.mutate(1.0)
                 self.fitnessClass.countFitness(specimen)
             return
