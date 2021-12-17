@@ -26,35 +26,44 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
+        self.rcts = [Rect(Point(0,0), x.minWidth, x.minHeight) for x in rooms]
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
 
     def getRndSpecimen(self):
-        return Specimen(len(self.rooms), self.rX, self.rY)
+        return Specimen(len(self.rcts), self.rX, self.rY)
         
     def countFitness(self, s: Specimen) -> None:
-        rooms = []
+        rcts = []
         for i in range(len(s.chrsoms['location'].genes)):
             #rotation section
-            new = Rect(Point(0, 0), self.rooms[i].getHeight(), self.rooms[i].getWidth()) \
-                if s.chrsoms['rotation'].genes[i] else self.rooms[i]
+            new = Rect(Point(0, 0), self.rcts[i].getHeight(), self.rcts[i].getWidth()) \
+                if s.chrsoms['rotation'].genes[i] else self.rcts[i]
             #location section
             new = new.cloneOffset(s.chrsoms['location'].genes[i])
             if not self.area.containsRectangle(new) or\
-               any(map(lambda room : room.collides(new), rooms)):
+               any(map(lambda r : r.collides(new), rcts)):
                 s.fitness = 0
-                return    
-            rooms.append(new)
+                return None
+
+            rcts.append(new)
         #expansion section
         total_field = 0
-        for n in range(len(self.rooms)):
-            r = rooms.pop(0)
+        for n in range(len(self.rcts)):
+            r = rcts.pop(0)
             for i, func in enumerate([r.expandLeft, r.expandRight, r.expandUp, r.expandDown]):
                 if s.chrsoms['expansion'].genes[n*4 + i]:
-                    func(rooms, self.area)
+                    func(rcts, self.area)
             total_field += r.field
-            rooms.append(r)
-        
+            rcts.append(r)
+        #neighbours section
+        for i in range(len(self.rooms)):
+            for n in range(len(self.rooms)):
+                if self.rooms[n].name in self.rooms[i].neighbours and \
+                   not rcts[n].neighbours(rcts[i]):
+                    s.fitness = 0
+                    return None
+
         s.fitness = total_field
 
 class GeneticAlgorithm:
@@ -74,22 +83,17 @@ class GeneticAlgorithm:
         return childs
 
     def buildNewGeneration(self) -> None:
-        #not valuable parents case
-        if len(tuple(filter(lambda x : x.fitness > 0, self.generation))) < 2:
-            for specimen in self.generation:
-                for chromosome in specimen.chrsoms.values():
-                    chromosome.mutate(1.0)
-                self.fitnessClass.countFitness(specimen)
-            return
-
         #elitarism
         self.generation.sort(key = lambda x : x.fitness, reverse= True)
         new = [*self.generation[:int(len(self.generation) * self.elitarism)]]
-
-        fitnessArr = [x.fitness for x in self.generation]
-        while len(new) < len(self.generation):
-            parents = choices(self.generation, weights=fitnessArr, k=2)
-            new.extend(self.getChildren(*parents))
+        if len(tuple(filter(lambda x : x.fitness > 0, self.generation))) < 2:
+            while len(new) < len(self.generation):
+                new.append(self.fitnessClass.getRndSpecimen())
+        else:
+            fitnessArr = [x.fitness for x in self.generation]
+            while len(new) < len(self.generation):
+                parents = choices(self.generation, weights=fitnessArr, k=2)
+                new.extend(self.getChildren(*parents))
 
         #HOTFIX
         for elem in new:
