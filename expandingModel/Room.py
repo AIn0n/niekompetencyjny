@@ -8,6 +8,7 @@ class Room:
         self.minWidth = minWidth
         self.minHeight = minHeight
         self.expandable = expandable
+        # Replace with a dict?
         self.neighbours = set()
 
     def addNeighbour(self, neighbour):

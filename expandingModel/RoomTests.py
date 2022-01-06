@@ -14,7 +14,7 @@ class TestLocationChromosome(unittest.TestCase):
             print(room)
 
     def testRoomCount(self):
-        self.assertEquals(self.size, len(self.rooms))
+        self.assertEqual(self.size, len(self.rooms))
 
 
 
