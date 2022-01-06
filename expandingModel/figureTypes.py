@@ -54,8 +54,9 @@ class Vec:
         if self.sameOrientation(other):
             return (self.containsPoint(other.start) or self.containsPoint(other.end)
                     or other.containsPoint(self.start) or other.containsPoint(self.end)) \
-                    and self.start != other.end and self.end != other.start
+                   and self.start != other.end and self.end != other.start
         return False
+
 
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
@@ -144,29 +145,28 @@ class Rect:
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
-        return self.isAbove(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)\
-            or (rect.a.x <= self.b.x and rect.b.x >= self.b.x))
+        return self.isAbove(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+                                       or (rect.a.x <= self.b.x <= rect.b.x))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
     def isAlignedUp(self, rect):
-        return self.isBelow(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)\
-            or (rect.a.x <= self.b.x and rect.b.x >= self.b.x))
+        return self.isBelow(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+                                       or (rect.a.x <= self.b.x <= rect.b.x))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
     def isAlignedLeft(self, rect):
-        return self.isToRightOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
-            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
+        return self.isToRightOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+                                           or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedRight(self, rect):
-        return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)\
-            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
+        return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+                                          or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
 
     def calcEverything(self):
         self.calcCoords()
         self.calcField()
         self.calcVecs()
-
 
     def expandLeft(self, rects, area) -> None:
         new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
@@ -196,7 +196,8 @@ class Rect:
         self.height_d = abs(self.p.y - new_y)
         self.calcEverything()
 
-#TODO: move this into unit tests
+
+# TODO: move this into unit tests
 if __name__ == '__main__':
     rB = Rect(Point(50, 50), 100, 100)
     r = Rect(Point(5, 5), 4, 4)
