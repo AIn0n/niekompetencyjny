@@ -1,5 +1,6 @@
 import random
 import pygame
+from Room import Room
 from genAlgorithm import *
 
 class PrintAlg:
@@ -37,17 +38,24 @@ class PrintAlg:
 
 
 area = Rect(Point(0, 0), 80, 80)
-squares = tuple([
-    Rect(Point(0, 0), 2, 4),
-    Rect(Point(0, 0), 4, 6),
-    Rect(Point(0, 0), 12, 2),
-    Rect(Point(0, 0), 8, 4),
-    Rect(Point(0, 0), 8, 6),
-    Rect(Point(0, 0), 4, 10)])
 
-fitCls = FitnessClass(area, squares)
-genAlg = GeneticAlgorithm(150, 0.2, 0.1, fitCls)
-genAlg.repeat(1000)
+smth = tuple([
+    Room("kitchen", 4, 6, True),
+    Room("toilet", 2, 4, False),
+    Room("bedroom0", 8, 4, True),
+    Room("bedroom1", 8, 6, True),
+    Room("bedroom2", 4, 10, True),
+    Room("hall", 2, 2, True)
+])
+
+for s in smth[:-1]:
+    smth[-1].addNeighbour(s)
+
+squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
+
+fitCls = FitnessClass(area, smth)
+genAlg = GeneticAlgorithm(200, 0.3, 0.1, fitCls)
+genAlg.repeat(4000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)
 
