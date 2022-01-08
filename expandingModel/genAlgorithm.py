@@ -2,6 +2,7 @@ from figureTypes import *
 from LocationChromosome import LocationChromosome
 from BinaryChromosome import BinaryChromosome
 from random import choice, choices
+import copy
 
 class Specimen:
     def __init__(self, size: int, rX: tuple, rY: tuple) -> None:
@@ -30,10 +31,12 @@ class FitnessClass:
         chrsoms1, chrsoms2 = {}, {}
         for k in p1.chrsoms.keys():
             p = choice(range(len(p1.chrsoms[k])))
-            chrsoms1[k] = p1.chrsoms[k][:p] + p2.chrsoms[k][p:]
-            chrsoms2[k] = p2.chrsoms[k][:p] + p1.chrsoms[k][p:]
-            chrsoms1.mutate(mut)
-            chrsoms2.mutate(mut)
+            chrsoms1[k] = copy.copy(p1.chrsoms[k])
+            chrsoms2[k] = copy.copy(p2.chrsoms[k])
+            chrsoms1[k].genes = p1.chrsoms[k][:p] + p2.chrsoms[k][p:]
+            chrsoms2[k].genes = p2.chrsoms[k][:p] + p1.chrsoms[k][p:]
+            chrsoms1[k].mutate(mut)
+            chrsoms2[k].mutate(mut)
         return  p1.getChild(chrsoms1, self.rX, self.rY),\
                 p1.getChild(chrsoms2, self.rX, self.rY)
 
@@ -58,17 +61,15 @@ class FitnessClass:
                 return None
             rcts.append(rect)
         #expansion section
-        total_field = 0
         for n in range(len(self.rooms)):
             r = rcts.pop(0)
             funcs = [r.expandLeft, r.expandRight, r.expandUp, r.expandDown]
             for i, func in enumerate(funcs):
                 if s.chrsoms['expansion'][n * 4 + i]:
                     func(rcts, self.area)
-            total_field += r.field
             rcts.append(r)
 
-        s.fitness = total_field if self.validNeighbors(rcts) else 0
+        s.fitness = sum(x.field for x in rcts) if self.validNeighbors(rcts) else 0
 
 class GeneticAlgorithm:
     def __init__(
@@ -95,6 +96,7 @@ class GeneticAlgorithm:
             while len(new) < len(self.generation):
                 new.extend(self.fitnessClass.getChildren(
                     *choices(self.generation, weights=fitnessArr, k=2), self.mutProb))
+        print([x.fitness for x in new[:10]])
         self.generation = new
 
     def repeat(self, n: int) -> None:
