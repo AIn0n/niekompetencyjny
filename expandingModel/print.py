@@ -74,14 +74,11 @@ for i in range(len(squares)):
     else:
         r = squares[i]
     rooms.append(r.cloneOffset(bestSpecimen.chrsoms['location'][i]))
-for i in range(len(squares)):
-    r = rooms.pop(0)
-    if bestSpecimen.chrsoms['expansion'][i*4]: r.expandLeft(rooms, area)
-    if bestSpecimen.chrsoms['expansion'][i*4 + 1]: r.expandRight(rooms, area)
-    if bestSpecimen.chrsoms['expansion'][i*4 + 2]: r.expandUp(rooms, area)
-    if bestSpecimen.chrsoms['expansion'][i*4 + 3]: r.expandDown(rooms, area)
-    printer.printRect(r, tuple(random.randint(0, 255) for n in range(3)))
-    rooms.append(r)
+
+expandRects(rooms, area, bestSpecimen.chrsoms['expansion'])
+
+for rect in rooms:
+    printer.printRect(rect, tuple(random.randint(0, 255) for n in range(3)))
 
 printer.printAll()
 

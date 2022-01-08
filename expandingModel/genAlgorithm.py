@@ -27,7 +27,7 @@ class FitnessClass:
     def getRndSpecimen(self):
         return Specimen(len(self.rooms), self.rX, self.rY)
 
-    def getChildren(self, p1 :Specimen, p2: Specimen, mut: float) -> list:
+    def getChildren(self, p1: Specimen, p2: Specimen, mut: float) -> list:
         chrsoms1, chrsoms2 = {}, {}
         for k in p1.chrsoms.keys():
             p = choice(range(len(p1.chrsoms[k])))
@@ -48,7 +48,6 @@ class FitnessClass:
                     return False
         return True
 
-
     def countFitness(self, s: Specimen) -> None:
         rcts = []
         for i in range(len(self.rooms)):
@@ -60,16 +59,17 @@ class FitnessClass:
                 s.fitness = 0
                 return None
             rcts.append(rect)
-        #expansion section
-        for n in range(len(self.rooms)):
-            r = rcts.pop(0)
-            funcs = [r.expandLeft, r.expandRight, r.expandUp, r.expandDown]
-            for i, func in enumerate(funcs):
-                if s.chrsoms['expansion'][n * 4 + i]:
-                    func(rcts, self.area)
-            rcts.append(r)
-
+        expandRects(rcts, self.area, s.chrsoms['expansion']) #expansion section
         s.fitness = sum(x.field for x in rcts) if self.validNeighbors(rcts) else 0
+
+def expandRects(rects: list, area: Rect, expansion) -> None:
+    for n in range(len(rects)):
+        r = rects.pop(0) 
+        funcs = [r.expandLeft, r.expandRight, r.expandUp, r.expandDown]
+        for i, func in enumerate(funcs):
+            if expansion[n * 4 + i]:
+                func(rects, area)
+        rects.append(r)
 
 class GeneticAlgorithm:
     def __init__(
@@ -96,7 +96,6 @@ class GeneticAlgorithm:
             while len(new) < len(self.generation):
                 new.extend(self.fitnessClass.getChildren(
                     *choices(self.generation, weights=fitnessArr, k=2), self.mutProb))
-        print([x.fitness for x in new[:10]])
         self.generation = new
 
     def repeat(self, n: int) -> None:
