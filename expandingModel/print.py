@@ -54,8 +54,8 @@ for s in smth[:-1]:
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(200, 0.3, 0.1, fitCls)
-genAlg.repeat(4000)
+genAlg = GeneticAlgorithm(100, 0.3, 0.1, fitCls)
+genAlg.repeat(1000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)
 
@@ -63,26 +63,22 @@ printer = PrintAlg(80, 80)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-print(bestSpecimen.chrsoms['location'].genes)
 rooms = []
 for i in range(len(squares)):
     r = 0
-    if  bestSpecimen.chrsoms['rotation'].genes[i]:
+    if  bestSpecimen.chrsoms['rotation'][i]:
         r = Rect(
          Point(0,0),
          squares[i].height_d + squares[i].height_u, 
          squares[i].width_r + squares[i].width_l)
     else:
         r = squares[i]
-    rooms.append(r.cloneOffset(bestSpecimen.chrsoms['location'].genes[i]))
-for i in range(len(squares)):
-    r = rooms.pop(0)
-    if bestSpecimen.chrsoms['expansion'].genes[i*4]: r.expandLeft(rooms, area)
-    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 1]: r.expandRight(rooms, area)
-    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 2]: r.expandUp(rooms, area)
-    if bestSpecimen.chrsoms['expansion'].genes[i*4 + 3]: r.expandDown(rooms, area)
-    printer.printRect(r, tuple(random.randint(0, 255) for n in range(3)))
-    rooms.append(r)
+    rooms.append(r.cloneOffset(bestSpecimen.chrsoms['location'][i]))
+
+expandRects(rooms, area, bestSpecimen.chrsoms['expansion'])
+
+for rect in rooms:
+    printer.printRect(rect, tuple(random.randint(0, 255) for n in range(3)))
 
 printer.printAll()
 

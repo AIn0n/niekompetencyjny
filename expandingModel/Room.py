@@ -1,6 +1,7 @@
 import random
 from random import randint
 
+from figureTypes import Point, Rect
 
 class Room:
     def __init__(self, name: str, minWidth: int, minHeight: int, expandable: bool) -> None:
@@ -15,6 +16,10 @@ class Room:
         # Implement neighbour validation
         self.neighbours.add(neighbour.name)
         neighbour.neighbours.add(self.name)
+
+    def getRectRef(self, reverse = False) -> Rect:
+        return Rect(Point.zero(), self.minWidth, self.minHeight) if not reverse\
+            else Rect(Point.zero(), self.minHeight, self.minWidth)
 
     def __str__(self):
         return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \

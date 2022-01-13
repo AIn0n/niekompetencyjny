@@ -7,6 +7,12 @@ class Chromosome:
     def randGene(self):
         pass
     
+    def __getitem__(self, key):
+        return self.genes[key]
+
+    def __len__(self):
+        return len(self.genes)
+
     def randomize(self) -> None:
         self.genes = map(self.randGene(), self.genes)
     
