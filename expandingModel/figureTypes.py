@@ -1,7 +1,5 @@
 from dataclasses import dataclass
-import dataclasses
 from typing import Iterable
-
 
 @dataclass(frozen=True, order=True)
 class Point:
@@ -11,6 +9,9 @@ class Point:
     def __str__(self) -> str:
         return f'({self.x}, {self.y})'
 
+    @staticmethod
+    def zero():
+        return Point(0, 0)
 
 class Vec:
     start: Point
