@@ -1,6 +1,7 @@
 import random
 import pygame
 from RoomTemplate import RoomTemplate
+from JsonIO import JsonIO
 from genAlgorithm import *
 
 class PrintAlg:
@@ -39,17 +40,10 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 
-smth = tuple([
-    RoomTemplate("kitchen", 4, 6, True),
-    RoomTemplate("toilet", 2, 4, False),
-    RoomTemplate("bedroom0", 8, 4, True),
-    RoomTemplate("bedroom1", 8, 6, True),
-    RoomTemplate("bedroom2", 4, 10, True),
-    RoomTemplate("hall", 2, 2, True)
-])
+smth = JsonIO.read('expandingModel/curr.json')
 
 for s in smth[:-1]:
-    smth[-1].addNeighbour(s)
+    smth[-1].addNeighbour(s.name)
 
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 

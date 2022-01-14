@@ -12,14 +12,26 @@ class RoomTemplate:
         # Replace with a dict?
         self.neighbours = set()
 
-    def addNeighbour(self, neighbour):
+    def addNeighbour(self, neighbour) -> None:
         # todo: Implement neighbour validation
         self.neighbours.add(neighbour.name)
         neighbour.neighbours.add(self.name)
 
+    def addNeighbour(self, neighbour: str) -> None:
+        self.neighbours.add(neighbour)
+
     def getRectRef(self, reverse = False) -> Rect:
         return Rect(Point.zero(), self.minWidth, self.minHeight) if not reverse\
             else Rect(Point.zero(), self.minHeight, self.minWidth)
+
+    def __eq__(self, __o: object) -> bool:
+        if(type(__o)==type(self)):
+            return  self.name       == __o.name         and\
+                    self.minHeight  == __o.minHeight    and\
+                    self.minWidth   == __o.minWidth     and\
+                    self.expandable == __o.expandable   and\
+                    self.neighbours == __o.neighbours
+        return False
 
     def __str__(self):
         return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
