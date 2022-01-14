@@ -3,6 +3,7 @@
         "name": "hall",
         "minSize": [2, 2],
         "expandable": true,
+        "exit": true,
         "neighbors": ["kitchen", "elevator"]
     },
     {

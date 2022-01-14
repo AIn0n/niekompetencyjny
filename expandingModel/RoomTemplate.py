@@ -9,6 +9,7 @@ class RoomTemplate:
         self.minWidth = minWidth
         self.minHeight = minHeight
         self.expandable = expandable
+        self.exit = False
         # Replace with a dict?
         self.neighbours = set()
 

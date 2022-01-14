@@ -20,6 +20,10 @@ class JsonIOTests(unittest.TestCase):
         expected[2].addNeighbour('hall')
         for elem in result:
             self.assertTrue(elem in expected)
+            if elem.name == 'hall':
+                self.assertTrue(elem.exit)
+            else:
+                self.assertFalse(elem.exit)
         self.assertEqual(len(result), len(expected))
 
 if __name__ == '__main__':
