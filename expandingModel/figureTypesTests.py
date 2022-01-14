@@ -168,6 +168,11 @@ class TestRectClass(unittest.TestCase):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 0), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
+    
+    def testNeighboursInner(self):
+        inner = Rect(Point(1, 0), 2, 2)
+        outer = Rect(Point.zero(), 4, 4)
+        self.assertTrue(inner.neighbours(outer))
 
 
 

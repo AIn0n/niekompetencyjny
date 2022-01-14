@@ -138,15 +138,15 @@ class Rect:
 
     # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
     # applies and the appropriate vector is at the same x/y
-    def neighbours(self, rect) -> bool:
-        if rect.isAbove(self):
-            return self.horUp.collidesSameOrient(rect.horDown)
-        if rect.isBelow(self):
-            return self.horDown.collidesSameOrient(rect.horUp)
-        if rect.isToLeftOf(self):
-            return self.verLeft.collidesSameOrient(rect.verRight)
-        if rect.isToRightOf(self):
-            return self.verRight.collidesSameOrient(rect.verLeft)
+    def neighbours(self, other) -> bool:
+        for s in self.getHorVecs():
+            for o in other.getHorVecs():
+                if s.collidesSameOrient(o):
+                    return True
+        for s in self.getVerVecs():
+            for o in other.getVerVecs():
+                if s.collidesSameOrient(o):
+                    return True
         return False
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
