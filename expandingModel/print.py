@@ -1,6 +1,6 @@
 import random
 import pygame
-from Room import Room
+from RoomTemplate import RoomTemplate
 from genAlgorithm import *
 
 class PrintAlg:
@@ -40,12 +40,12 @@ class PrintAlg:
 area = Rect(Point(0, 0), 80, 80)
 
 smth = tuple([
-    Room("kitchen", 4, 6, True),
-    Room("toilet", 2, 4, False),
-    Room("bedroom0", 8, 4, True),
-    Room("bedroom1", 8, 6, True),
-    Room("bedroom2", 4, 10, True),
-    Room("hall", 2, 2, True)
+    RoomTemplate("kitchen", 4, 6, True),
+    RoomTemplate("toilet", 2, 4, False),
+    RoomTemplate("bedroom0", 8, 4, True),
+    RoomTemplate("bedroom1", 8, 6, True),
+    RoomTemplate("bedroom2", 4, 10, True),
+    RoomTemplate("hall", 2, 2, True)
 ])
 
 for s in smth[:-1]:

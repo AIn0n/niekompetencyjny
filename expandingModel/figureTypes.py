@@ -1,3 +1,4 @@
+import math
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -5,6 +6,10 @@ from typing import Iterable
 class Point:
     x: int
     y: int
+
+    #todo: Test this method
+    def distance(self, other):
+        return math.sqrt(pow(abs(self.x - other.x), 2) + pow(abs(self.y - other.y), 2))
 
     def __str__(self) -> str:
         return f'({self.x}, {self.y})'

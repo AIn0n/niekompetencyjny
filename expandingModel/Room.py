@@ -1,54 +1,48 @@
-import random
-from random import randint
+from expandingModel import PathFinding
+from expandingModel.Path import Path
+from expandingModel.RoomTemplate import RoomTemplate
+from expandingModel.Door import Door
+from expandingModel.figureTypes import Rect, Point
 
-from figureTypes import Point, Rect
 
 class Room:
-    def __init__(self, name: str, minWidth: int, minHeight: int, expandable: bool) -> None:
-        self.name = name
-        self.minWidth = minWidth
-        self.minHeight = minHeight
-        self.expandable = expandable
-        # Replace with a dict?
-        self.neighbours = set()
+    def __init__(self, template: RoomTemplate, rect: Rect):
+        self.template = template
+        self.rect = rect
+        self.doors = set()
+        self.name = self.template.name
+        # todo: Implement data validation
 
-    def addNeighbour(self, neighbour):
-        # Implement neighbour validation
-        self.neighbours.add(neighbour.name)
-        neighbour.neighbours.add(self.name)
-
-    def getRectRef(self, reverse = False) -> Rect:
-        return Rect(Point.zero(), self.minWidth, self.minHeight) if not reverse\
-            else Rect(Point.zero(), self.minHeight, self.minWidth)
+    def addDoor(self, door: Door):
+        # todo: Add a method that checks if a point lies on a Rect's border
+        self.doors.add(door)
+        # Adds the door to the room it's supposed to lead to
+        if not door.leadsTo.doors.__contains__(door):
+            door.leadsTo.addDoor(Door(door.coords, self))
 
     def __str__(self):
-        return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
-               f" neighbours: {self.neighbours}"
+        return self.name
 
-    ######### RANDOM ROOM GENERATION #########
-    @staticmethod
-    def generateName():
-        return ''.join(random.choice([chr(i) for i in range(ord('a'), ord('z'))]) for _ in range(randint(6, 12)))
 
-    @staticmethod
-    def generateRoomNoConnections():
-        return Room(Room.generateName(), randint(2, 20), randint(2, 20), random.choice([True, False]))
 
-    @staticmethod
-    def generateRooms(count):
-        rooms = list()
-        for i in range(count):
-            # Implement something to counter duplicates
-            rooms.append(Room.generateRoomNoConnections())
+templates = RoomTemplate.generateRooms(4)
+roomA = Room(templates[0], Rect(Point(5, 5), 10, 10))
+roomB = Room(templates[1], Rect(Point(15, 5), 10, 10))
+roomC = Room(templates[2], Rect(Point(10, -5), 10, 10))
+roomD = Room(templates[3], Rect(Point(25, 5), 10, 10))
 
-        for room in rooms:
-            # Pool of unique non-self rooms
-            otherRooms = rooms.copy()
-            otherRooms.remove(room)
+roomA.name = "A"
+roomB.name = "B"
+roomC.name = "C"
+roomD.name = "D"
 
-            for i in range(randint(0, 2)):
-                # Selecting a random valid neighbour
-                randomRoom = random.choice(otherRooms)
-                otherRooms.remove(randomRoom)
-                room.addNeighbour(randomRoom)
-        return rooms
+roomA.addDoor(Door(Point(10, 9), roomB))
+roomA.addDoor(Door(Point(6, 0), roomC))
+roomC.addDoor(Door(Point(12, 0), roomB))
+roomB.addDoor(Door(Point(20, 5), roomD))
+
+
+path = PathFinding.propagatePath(Point(10, -5), roomC, roomD, Path(0, set()))
+print("Found path's flag:", path.flag)
+print("Found path:", path)
+

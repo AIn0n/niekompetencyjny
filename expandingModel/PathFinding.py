@@ -5,45 +5,59 @@ import threading
 from expandingModel.Path import Path
 
 
-class PathFinding:
-    def propagatePath(self, current_point, current_room, target, path):
-        ##### Pseudocode below #####
+def propagatePath(current_point, current_room, target, path):
+    print("\n#######START", current_room, "#######")
+    ##### Pseudocode below #####
+    print("Current point:", current_point)
+    print("Current room:", current_room)
+    print("Target room:", target)
+    print("Path: ", path.__str__())
 
-        # Target found!
-        if current_room.equals(target):
-            return path.length
 
-        # Invalid data, current_point must be within current_room.
-        if not current_room.contains(current_point):
-            # Perhaps use an exception instead?
-            return -1
-        # No possible further paths, target not found.
-        if current_room.available_doors.difference(path.passed_doors).length == 0:
-            # Perhaps use an exception instead?
-            return -2
-        threads = list()
 
-        # For each door out
-        for door in room.doors:
-            if not door in path.passed_doors:
-                # Add new thread to the list
-                threads.append(threading.Thread(target=PathFinding.propagatePath(),
-                                                args=[door.point, door.room, target,
-                                                      Path(path.length + current_point.distance(door),
-                                                           path.passed_doors + door)
-                                                      ]))
 
-        for thread in threads:
-            thread.start()
+    # Target found!
+    if current_room == target:
+        print("TARGET REACHED, TRAVELED DISTANCE: ", path.length)
+        path.flag = 1
+        return path
 
-        results = list()
+    # Invalid data, current_point must be within current_room.
+    #if not current_room.Rect.contains(current_point):
+    # Perhaps use an exception instead?
+    #    return -1
+    # No possible further paths, target not found.
+    available_doors = current_room.doors.difference(path.passed_doors)
+    print("Available doors:", end=" ")
+    for door in available_doors:
+        print(door, end=", ")
+    print()
 
-        for thread in threads:
-            thread.join()
-            # todo: No such method exists. Figure out a way to obtain return these return values
-            # todo: Something to do with threadPools?
-            value = thread.return_value
-            if value >= 0:
-                results.append(value)
+    if len(available_doors) == 0:
+        # Perhaps use an exception instead?
+        print("NO PATHS AVAILABLE, TERMINATE")
+        path.flag = -2
+        return path
 
-        return min(results)
+    results = list()
+
+    tempPassed = set()
+    # For each door out
+    for door in available_doors:
+        # The path starting from this door
+        tempPassed = path.passed_doors.copy()
+        tempPassed.add(door)
+        # Returns the minimal path starting from this door
+        result = propagatePath(door.coords, door.leadsTo, target,
+                               Path(path.length + current_point.distance(door.coords),
+                                    tempPassed))
+        if result.flag >= 0:
+            results.append(result)
+
+    print("#######END", current_room, "#######")
+
+    # No paths were found
+    if len(results) == 0:
+        path.flag = -2
+        return path
+    return min(results)
