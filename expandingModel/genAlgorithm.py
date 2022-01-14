@@ -1,6 +1,6 @@
 from figureTypes import *
-from LocationChromosome import LocationChromosome
-from BinaryChromosome import BinaryChromosome
+from chromosomes.LocationChromosome import LocationChromosome
+from chromosomes.BinaryChromosome import BinaryChromosome
 from random import choice, choices
 import copy
 

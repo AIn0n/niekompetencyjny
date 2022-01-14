@@ -48,8 +48,8 @@ for s in smth[:-1]:
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(100, 0.3, 0.1, fitCls)
-genAlg.repeat(1000)
+genAlg = GeneticAlgorithm(150, 0.3, 0.1, fitCls)
+genAlg.repeat(2000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)
 
