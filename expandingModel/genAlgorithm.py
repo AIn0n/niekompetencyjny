@@ -46,6 +46,8 @@ class FitnessClass:
                 if self.rooms[n].name in self.rooms[i].neighbours and \
                    not rectangles[n].neighbours(rectangles[i]):
                     return False
+                if self.rooms[n].exit and not rectangles[n].neighbours(self.area):
+                    return False
         return True
 
     def countFitness(self, s: Specimen) -> None:

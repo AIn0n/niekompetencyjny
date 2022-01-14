@@ -32,6 +32,7 @@
     {
         "name": "hall",
         "minSize": [2, 2],
+        "exit": true,
         "expandable": true,
         "neighbors": ["kitchen", "toilet", "bedrom0", "bedroom1", "bedroom2"]
     }

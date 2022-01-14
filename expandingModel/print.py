@@ -71,8 +71,9 @@ for i in range(len(squares)):
 
 expandRects(rooms, area, bestSpecimen.chrsoms['expansion'])
 
-for rect in rooms:
-    printer.printRect(rect, tuple(random.randint(0, 255) for n in range(3)))
+colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rooms]
+for idx, rect in enumerate(rooms):
+    printer.printRect(rect, colors[idx])
 
 printer.printAll()
 
