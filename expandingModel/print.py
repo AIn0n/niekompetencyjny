@@ -74,6 +74,8 @@ expandRects(rooms, area, bestSpecimen.chrsoms['expansion'])
 colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rooms]
 for idx, rect in enumerate(rooms):
     printer.printRect(rect, colors[idx])
+    renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
+    printer.plot_display.blit(renderedFront, (600, 30 * idx))
 
 printer.printAll()
 
