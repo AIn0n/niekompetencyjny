@@ -177,6 +177,22 @@ class TestRectClass(unittest.TestCase):
         outer = Rect(Point.zero(), 4, 4)
         self.assertTrue(inner.neighbours(outer))
 
+    def testExpand(self):
+        rB = Rect(Point(50, 50), 100, 100)
+        r = Rect(Point(5, 5), 4, 4)
+        r2 = Rect(Point(0, 0), 2, 8)
+        r3 = Rect(Point(10, 0), 2, 8)
+        r4 = Rect(Point(3, 8), 8, 2)
+        print(
+            f"BORDER = {rB}, {r.isAlignedUp(rB)}\n"
+            f"r = {r}, \n"
+            f"r2 = {r2}, {r.isAlignedUp(r2)}, \n"
+            f"r3 = {r3}, {r.isAlignedUp(r3)}, \n"
+            f"r4 = {r4}, {r.isAlignedUp(r4)}"
+        )
+        r.expandUp([r2, r3, r4], rB)
+        print(f"Expanded r: {r}")
+
 
 class TestPointClass(unittest.TestCase):
     def test_str(self):

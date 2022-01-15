@@ -250,21 +250,3 @@ class Rect:
         self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y - new_y)
         self.calcEverything()
-
-
-# TODO: move this into unit tests
-if __name__ == "__main__":
-    rB = Rect(Point(50, 50), 100, 100)
-    r = Rect(Point(5, 5), 4, 4)
-    r2 = Rect(Point(0, 0), 2, 8)
-    r3 = Rect(Point(10, 0), 2, 8)
-    r4 = Rect(Point(3, 8), 8, 2)
-    print(
-        f"BORDER = {rB}, {r.isAlignedUp(rB)}\n"
-        f"r = {r}, \n"
-        f"r2 = {r2}, {r.isAlignedUp(r2)}, \n"
-        f"r3 = {r3}, {r.isAlignedUp(r3)}, \n"
-        f"r4 = {r4}, {r.isAlignedUp(r4)}"
-    )
-    r.expandUp([r2, r3, r4], rB)
-    print(f"Expanded r: {r}")
