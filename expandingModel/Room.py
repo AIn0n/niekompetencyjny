@@ -24,7 +24,6 @@ class Room:
         return self.name
 
 
-
 templates = RoomTemplate.generateRooms(4)
 roomA = Room(templates[0], Rect(Point(5, 5), 10, 10))
 roomB = Room(templates[1], Rect(Point(15, 5), 10, 10))
@@ -45,4 +44,3 @@ roomB.addDoor(Door(Point(20, 5), roomD))
 path = PathFinding.propagatePath(Point(10, -5), roomC, roomD, Path(0, set()))
 print("Found path's flag:", path.flag)
 print("Found path:", path)
-

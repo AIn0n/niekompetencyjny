@@ -13,9 +13,6 @@ def propagatePath(current_point, current_room, target, path):
     print("Target room:", target)
     print("Path: ", path.__str__())
 
-
-
-
     # Target found!
     if current_room == target:
         print("TARGET REACHED, TRAVELED DISTANCE: ", path.length)
@@ -23,7 +20,7 @@ def propagatePath(current_point, current_room, target, path):
         return path
 
     # Invalid data, current_point must be within current_room.
-    #if not current_room.Rect.contains(current_point):
+    # if not current_room.Rect.contains(current_point):
     # Perhaps use an exception instead?
     #    return -1
     # No possible further paths, target not found.
@@ -48,9 +45,12 @@ def propagatePath(current_point, current_room, target, path):
         tempPassed = path.passed_doors.copy()
         tempPassed.add(door)
         # Returns the minimal path starting from this door
-        result = propagatePath(door.coords, door.leadsTo, target,
-                               Path(path.length + current_point.distance(door.coords),
-                                    tempPassed))
+        result = propagatePath(
+            door.coords,
+            door.leadsTo,
+            target,
+            Path(path.length + current_point.distance(door.coords), tempPassed),
+        )
         if result.flag >= 0:
             results.append(result)
 

@@ -3,8 +3,11 @@ from random import randint
 
 from figureTypes import Point, Rect
 
+
 class RoomTemplate:
-    def __init__(self, name: str, minWidth: int, minHeight: int, expandable: bool) -> None:
+    def __init__(
+        self, name: str, minWidth: int, minHeight: int, expandable: bool
+    ) -> None:
         self.name = name
         self.minWidth = minWidth
         self.minHeight = minHeight
@@ -21,31 +24,46 @@ class RoomTemplate:
     def addNeighbour(self, neighbour: str) -> None:
         self.neighbours.add(neighbour)
 
-    def getRectRef(self, reverse = False) -> Rect:
-        return Rect(Point.zero(), self.minWidth, self.minHeight) if not reverse\
+    def getRectRef(self, reverse=False) -> Rect:
+        return (
+            Rect(Point.zero(), self.minWidth, self.minHeight)
+            if not reverse
             else Rect(Point.zero(), self.minHeight, self.minWidth)
+        )
 
     def __eq__(self, __o: object) -> bool:
-        if(type(__o)==type(self)):
-            return  self.name       == __o.name         and\
-                    self.minHeight  == __o.minHeight    and\
-                    self.minWidth   == __o.minWidth     and\
-                    self.expandable == __o.expandable   and\
-                    self.neighbours == __o.neighbours
+        if type(__o) == type(self):
+            return (
+                self.name == __o.name
+                and self.minHeight == __o.minHeight
+                and self.minWidth == __o.minWidth
+                and self.expandable == __o.expandable
+                and self.neighbours == __o.neighbours
+            )
         return False
 
     def __str__(self):
-        return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
-               f" neighbours: {self.neighbours}"
+        return (
+            f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable},"
+            f" neighbours: {self.neighbours}"
+        )
 
     ######### RANDOM ROOM GENERATION #########
     @staticmethod
     def generateName():
-        return ''.join(random.choice([chr(i) for i in range(ord('a'), ord('z'))]) for _ in range(randint(6, 12)))
+        return "".join(
+            random.choice([chr(i) for i in range(ord("a"), ord("z"))])
+            for _ in range(randint(6, 12))
+        )
 
     @staticmethod
     def generateRoomNoConnections():
-        return RoomTemplate(RoomTemplate.generateName(), randint(2, 20), randint(2, 20), random.choice([True, False]))
+        return RoomTemplate(
+            RoomTemplate.generateName(),
+            randint(2, 20),
+            randint(2, 20),
+            random.choice([True, False]),
+        )
 
     @staticmethod
     def generateRooms(count):
