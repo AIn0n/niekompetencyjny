@@ -1,4 +1,4 @@
-from abstracts.Chromosome import Chromosome
+from chromosomes.Chromosome import Chromosome
 from random import uniform
 
 

@@ -1,6 +1,7 @@
 import random
 import pygame
-from Room import Room
+from RoomTemplate import RoomTemplate
+from JsonIO import JsonIO
 from genAlgorithm import *
 
 
@@ -49,25 +50,16 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 
-smth = tuple(
-    [
-        Room("kitchen", 4, 6, True),
-        Room("toilet", 2, 4, False),
-        Room("bedroom0", 8, 4, True),
-        Room("bedroom1", 8, 6, True),
-        Room("bedroom2", 4, 10, True),
-        Room("hall", 2, 2, True),
-    ]
-)
+smth = JsonIO.read("expandingModel/curr.json")
 
 for s in smth[:-1]:
-    smth[-1].addNeighbour(s)
+    smth[-1].addNeighbour(s.name)
 
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(200, 0.3, 0.1, fitCls)
-genAlg.repeat(4000)
+genAlg = GeneticAlgorithm(150, 0.3, 0.1, fitCls)
+genAlg.repeat(2000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)
 
@@ -75,11 +67,10 @@ printer = PrintAlg(80, 80)
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-print(bestSpecimen.chrsoms["location"].genes)
 rooms = []
 for i in range(len(squares)):
     r = 0
-    if bestSpecimen.chrsoms["rotation"].genes[i]:
+    if bestSpecimen.chrsoms["rotation"][i]:
         r = Rect(
             Point(0, 0),
             squares[i].height_d + squares[i].height_u,
@@ -87,19 +78,15 @@ for i in range(len(squares)):
         )
     else:
         r = squares[i]
-    rooms.append(r.cloneOffset(bestSpecimen.chrsoms["location"].genes[i]))
-for i in range(len(squares)):
-    r = rooms.pop(0)
-    if bestSpecimen.chrsoms["expansion"].genes[i * 4]:
-        r.expandLeft(rooms, area)
-    if bestSpecimen.chrsoms["expansion"].genes[i * 4 + 1]:
-        r.expandRight(rooms, area)
-    if bestSpecimen.chrsoms["expansion"].genes[i * 4 + 2]:
-        r.expandUp(rooms, area)
-    if bestSpecimen.chrsoms["expansion"].genes[i * 4 + 3]:
-        r.expandDown(rooms, area)
-    printer.printRect(r, tuple(random.randint(0, 255) for n in range(3)))
-    rooms.append(r)
+    rooms.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
+
+expandRects(rooms, area, bestSpecimen.chrsoms["expansion"])
+
+colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rooms]
+for idx, rect in enumerate(rooms):
+    printer.printRect(rect, colors[idx])
+    renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
+    printer.plot_display.blit(renderedFront, (600, 30 * idx))
 
 printer.printAll()
 
