@@ -1,0 +1,39 @@
+[
+    {
+        "name": "kitchen",
+        "minSize": [4, 6],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "toilet",
+        "minSize": [2, 4],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "bedroom0",
+        "minSize": [8, 4],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "bedroom1",
+        "minSize": [8, 6],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "bedroom2",
+        "minSize": [4, 10],
+        "expandable": true,
+        "neighbors": ["hall"]
+    },
+    {
+        "name": "hall",
+        "minSize": [2, 2],
+        "exit": true,
+        "expandable": true,
+        "neighbors": ["kitchen", "toilet", "bedrom0", "bedroom1", "bedroom2"]
+    }
+]

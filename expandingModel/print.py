@@ -1,6 +1,7 @@
 import random
 import pygame
 from RoomTemplate import RoomTemplate
+from JsonIO import JsonIO
 from genAlgorithm import *
 
 
@@ -49,6 +50,7 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 
+<<<<<<< HEAD
 smth = tuple(
     [
         RoomTemplate("kitchen", 4, 6, True),
@@ -59,15 +61,18 @@ smth = tuple(
         RoomTemplate("hall", 2, 2, True),
     ]
 )
+=======
+smth = JsonIO.read("expandingModel/curr.json")
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 
 for s in smth[:-1]:
-    smth[-1].addNeighbour(s)
+    smth[-1].addNeighbour(s.name)
 
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(100, 0.3, 0.1, fitCls)
-genAlg.repeat(1000)
+genAlg = GeneticAlgorithm(150, 0.3, 0.1, fitCls)
+genAlg.repeat(2000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)
 
@@ -90,8 +95,11 @@ for i in range(len(squares)):
 
 expandRects(rooms, area, bestSpecimen.chrsoms["expansion"])
 
-for rect in rooms:
-    printer.printRect(rect, tuple(random.randint(0, 255) for n in range(3)))
+colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rooms]
+for idx, rect in enumerate(rooms):
+    printer.printRect(rect, colors[idx])
+    renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
+    printer.plot_display.blit(renderedFront, (600, 30 * idx))
 
 printer.printAll()
 

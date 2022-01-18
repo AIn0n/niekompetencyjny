@@ -1,6 +1,6 @@
 from figureTypes import *
-from LocationChromosome import LocationChromosome
-from BinaryChromosome import BinaryChromosome
+from chromosomes.LocationChromosome import LocationChromosome
+from chromosomes.BinaryChromosome import BinaryChromosome
 from random import choice, choices
 import copy
 
@@ -40,9 +40,14 @@ class FitnessClass:
             chrsoms2[k].genes = p2.chrsoms[k][:p] + p1.chrsoms[k][p:]
             chrsoms1[k].mutate(mut)
             chrsoms2[k].mutate(mut)
+<<<<<<< HEAD
         return (
             p1.getChild(chrsoms1, self.rX, self.rY),
             p1.getChild(chrsoms2, self.rX, self.rY),
+=======
+        return p1.getChild(chrsoms1, self.rX, self.rY), p1.getChild(
+            chrsoms2, self.rX, self.rY
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
         )
 
     def validNeighbors(self, rectangles: list) -> bool:
@@ -51,6 +56,13 @@ class FitnessClass:
                 if self.rooms[n].name in self.rooms[
                     i
                 ].neighbours and not rectangles[n].neighbours(rectangles[i]):
+<<<<<<< HEAD
+=======
+                    return False
+                if self.rooms[n].exit and not rectangles[n].neighbours(
+                    self.area
+                ):
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
                     return False
         return True
 

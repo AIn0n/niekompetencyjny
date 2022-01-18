@@ -12,20 +12,41 @@ class RoomTemplate:
         self.minWidth = minWidth
         self.minHeight = minHeight
         self.expandable = expandable
+        self.exit = False
         # Replace with a dict?
         self.neighbours = set()
 
-    def addNeighbour(self, neighbour):
+    def addNeighbour(self, neighbour) -> None:
         # todo: Implement neighbour validation
         self.neighbours.add(neighbour.name)
         neighbour.neighbours.add(self.name)
 
+<<<<<<< HEAD
+=======
+    def addNeighbour(self, neighbour: str) -> None:
+        self.neighbours.add(neighbour)
+
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
     def getRectRef(self, reverse=False) -> Rect:
         return (
             Rect(Point.zero(), self.minWidth, self.minHeight)
             if not reverse
             else Rect(Point.zero(), self.minHeight, self.minWidth)
         )
+<<<<<<< HEAD
+=======
+
+    def __eq__(self, __o: object) -> bool:
+        if type(__o) == type(self):
+            return (
+                self.name == __o.name
+                and self.minHeight == __o.minHeight
+                and self.minWidth == __o.minWidth
+                and self.expandable == __o.expandable
+                and self.neighbours == __o.neighbours
+            )
+        return False
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 
     def __str__(self):
         return (

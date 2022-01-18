@@ -160,7 +160,8 @@ class TestRectClass(unittest.TestCase):
     def testNeighbours1(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 2), 2, 2)
-        self.assertTrue(rect1.neighbours(rect2))
+        expected = Vec(Point(1, 1), Point(1, 3))
+        self.assertEqual(rect1.neighbours(rect2), expected)
 
     def testNeighbours2(self):
         rect1 = Rect(Point(2, 2), 2, 2)
@@ -172,12 +173,45 @@ class TestRectClass(unittest.TestCase):
         rect2 = Rect(Point(0, 0), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
 
+<<<<<<< HEAD
     def testCommonPartX1(self):
         y = randint(-100, 100)
+=======
+    def testNeighboursInner(self):
+        inner = Rect(Point(1, 0), 2, 2)
+        outer = Rect(Point.zero(), 4, 4)
+        expected = set([Vec(Point(2, -1), Point(2, 1))])
+        self.assertEqual(inner.neighbours(outer), expected)
+
+    def testNeighboursEdgeCase(self):
+        rect1 = Rect(Point.zero(), 4, 4)
+        rect2 = Rect(Point(1, 1), 2, 2)
+        expected = set(
+            [Vec(Point.zero(), Point(2, 0)), Vec(Point(0, 2), Point(2, 2))]
+        )
+        self.assertEqual(set(rect1.neighbours(rect2)), expected)
+
+    def testExpand(self):
+        rB = Rect(Point(50, 50), 100, 100)
+        r = Rect(Point(5, 5), 4, 4)
+        r2 = Rect(Point(0, 0), 2, 8)
+        r3 = Rect(Point(10, 0), 2, 8)
+        r4 = Rect(Point(3, 8), 8, 2)
+        print(
+            f"BORDER = {rB}, {r.isAlignedUp(rB)}\n"
+            f"r = {r}, \n"
+            f"r2 = {r2}, {r.isAlignedUp(r2)}, \n"
+            f"r3 = {r3}, {r.isAlignedUp(r3)}, \n"
+            f"r4 = {r4}, {r.isAlignedUp(r4)}"
+        )
+        r.expandUp([r2, r3, r4], rB)
+        print(f"Expanded r: {r}")
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 
         start1 = Point(randint(-100, -50), y)
         end1 = Point(randint(0, 50), y)
 
+<<<<<<< HEAD
         start2 = Point(randint(-50, 0), y)
         end2 = Point(randint(50, 100), y)
 
@@ -236,6 +270,8 @@ class TestRectClass(unittest.TestCase):
         self.assertEqual(result, Vec(start2, end1))
 
 
+=======
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 class TestPointClass(unittest.TestCase):
     def test_str(self):
         x, y = randint(0, 255), randint(0, 255)

@@ -109,19 +109,36 @@ class Rect:
         self.calcEverything()
 
     def calcCoords(self) -> None:
+<<<<<<< HEAD
         """ d-------c
             |       |
             a-------b   """
+=======
+        """
+        d-------c
+        |       |
+        a-------b
+        """
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
         self.a = Point(self.p.x - self.width_l, self.p.y - self.height_d)
         self.b = Point(self.p.x + self.width_r, self.p.y - self.height_d)
         self.c = Point(self.p.x + self.width_r, self.p.y + self.height_u)
         self.d = Point(self.p.x - self.width_l, self.p.y + self.height_u)
 
     def calcVecs(self) -> None:
+<<<<<<< HEAD
         """ end
             ^
             |
             start-->end   """
+=======
+        """
+        end
+        ^
+        |
+        start-->end
+        """
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
         self.horUp = Vec(self.d, self.c)
         self.horDown = Vec(self.a, self.b)
         self.verLeft = Vec(self.a, self.d)
@@ -183,15 +200,15 @@ class Rect:
 
     # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
     # applies and the appropriate vector is at the same x/y
-    def neighbours(self, rect) -> bool:
-        if rect.isAbove(self):
-            return self.horUp.collidesSameOrient(rect.horDown)
-        if rect.isBelow(self):
-            return self.horDown.collidesSameOrient(rect.horUp)
-        if rect.isToLeftOf(self):
-            return self.verLeft.collidesSameOrient(rect.verRight)
-        if rect.isToRightOf(self):
-            return self.verRight.collidesSameOrient(rect.verLeft)
+    def neighbours(self, other) -> bool:
+        for s in self.getHorVecs():
+            for o in other.getHorVecs():
+                if s.collidesSameOrient(o):
+                    return s
+        for s in self.getVerVecs():
+            for o in other.getVerVecs():
+                if s.collidesSameOrient(o):
+                    return s
         return False
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
@@ -260,6 +277,7 @@ class Rect:
         self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y - new_y)
         self.calcEverything()
+<<<<<<< HEAD
 
 
 # TODO: move this into unit tests
@@ -278,3 +296,5 @@ if __name__ == "__main__":
     )
     r.expandUp([r2, r3, r4], rB)
     print(f"Expanded r: {r}")
+=======
+>>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
