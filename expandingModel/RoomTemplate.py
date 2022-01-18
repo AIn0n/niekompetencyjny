@@ -30,7 +30,6 @@ class RoomTemplate:
             if not reverse
             else Rect(Point.zero(), self.minHeight, self.minWidth)
         )
-
     def __eq__(self, __o: object) -> bool:
         if type(__o) == type(self):
             return (
@@ -47,6 +46,9 @@ class RoomTemplate:
             f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable},"
             f" neighbours: {self.neighbours}"
         )
+
+    def __hash__(self):
+        return hash(str(self))
 
     ######### RANDOM ROOM GENERATION #########
     @staticmethod

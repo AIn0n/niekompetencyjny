@@ -168,6 +168,71 @@ class TestRectClass(unittest.TestCase):
         rect2 = Rect(Point(-1, 2), 2, 2)
         self.assertEqual(rect1.neighbours(rect2), [])
 
+    def testCommonPartX1(self):
+        y = randint(-100, 100)
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result1 = vec1.commonPart(vec2)
+        result2 = vec2.commonPart(vec1)
+        self.assertEqual(result1, result2)
+
+
+    def testCommonPartX2(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, Vec(vec2.start, vec1.end))
+
+
+    def testCommonPartX3(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(50, 100), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(0, 50), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        self.assertEqual(result, Vec(vec2.start, vec2.end))
+
+
+    def testCommonPartX4(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, Vec(start2, end1))
+
     def testNeighbours3(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 0), 2, 2)
@@ -217,7 +282,6 @@ class TestRectClass(unittest.TestCase):
         self.assertTrue(vec2.getDoorPoint(0) == Point(0, 1))
         self.assertTrue(vec2.getDoorPoint(0.3) == Point(0, 3))
         self.assertTrue(vec2.getDoorPoint(0.35) == Point(0, 4))
-
 
 class TestPointClass(unittest.TestCase):
     def test_str(self):

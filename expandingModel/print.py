@@ -50,7 +50,7 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 
-smth = JsonIO.read("expandingModel/curr.json")
+smth = JsonIO.read("curr.json")
 
 for s in smth[:-1]:
     smth[-1].addNeighbour(s.name)
