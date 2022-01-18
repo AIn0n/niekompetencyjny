@@ -168,15 +168,76 @@ class TestRectClass(unittest.TestCase):
         rect2 = Rect(Point(-1, 2), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
 
+    def testCommonPartX1(self):
+        y = randint(-100, 100)
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result1 = vec1.commonPart(vec2)
+        result2 = vec2.commonPart(vec1)
+        self.assertEqual(result1, result2)
+
+
+    def testCommonPartX2(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, Vec(vec2.start, vec1.end))
+
+
+    def testCommonPartX3(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(50, 100), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(0, 50), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        self.assertEqual(result, Vec(vec2.start, vec2.end))
+
+
+    def testCommonPartX4(self):
+        y = randint(-100, 100)
+
+        start1 = Point(randint(-100, -50), y)
+        end1 = Point(randint(0, 50), y)
+
+        start2 = Point(randint(-50, 0), y)
+        end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, Vec(start2, end1))
+
     def testNeighbours3(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 0), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
 
-<<<<<<< HEAD
-    def testCommonPartX1(self):
-        y = randint(-100, 100)
-=======
     def testNeighboursInner(self):
         inner = Rect(Point(1, 0), 2, 2)
         outer = Rect(Point.zero(), 4, 4)
@@ -206,72 +267,7 @@ class TestRectClass(unittest.TestCase):
         )
         r.expandUp([r2, r3, r4], rB)
         print(f"Expanded r: {r}")
->>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 
-        start1 = Point(randint(-100, -50), y)
-        end1 = Point(randint(0, 50), y)
-
-<<<<<<< HEAD
-        start2 = Point(randint(-50, 0), y)
-        end2 = Point(randint(50, 100), y)
-
-        vec1 = Vec(start1, end1)
-        vec2 = Vec(start2, end2)
-
-        result1 = vec1.commonPart(vec2)
-        result2 = vec2.commonPart(vec1)
-        self.assertEqual(result1, result2)
-
-    def testCommonPartX2(self):
-        y = randint(-100, 100)
-
-        start1 = Point(randint(-100, -50), y)
-        end1 = Point(randint(0, 50), y)
-
-        start2 = Point(randint(-50, 0), y)
-        end2 = Point(randint(50, 100), y)
-
-        vec1 = Vec(start1, end1)
-        vec2 = Vec(start2, end2)
-
-        result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
-        self.assertEqual(result, Vec(vec2.start, vec1.end))
-
-    def testCommonPartX3(self):
-        y = randint(-100, 100)
-
-        start1 = Point(randint(-100, -50), y)
-        end1 = Point(randint(50, 100), y)
-
-        start2 = Point(randint(-50, 0), y)
-        end2 = Point(randint(0, 50), y)
-
-        vec1 = Vec(start1, end1)
-        vec2 = Vec(start2, end2)
-
-        result = vec1.commonPart(vec2)
-        self.assertEqual(result, Vec(vec2.start, vec2.end))
-
-    def testCommonPartX4(self):
-        y = randint(-100, 100)
-
-        start1 = Point(randint(-100, -50), y)
-        end1 = Point(randint(0, 50), y)
-
-        start2 = Point(randint(-50, 0), y)
-        end2 = Point(randint(50, 100), y)
-
-        vec1 = Vec(start1, end1)
-        vec2 = Vec(start2, end2)
-
-        result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
-        self.assertEqual(result, Vec(start2, end1))
-
-
-=======
->>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
 class TestPointClass(unittest.TestCase):
     def test_str(self):
         x, y = randint(0, 255), randint(0, 255)
