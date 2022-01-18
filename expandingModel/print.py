@@ -50,20 +50,7 @@ class PrintAlg:
 
 area = Rect(Point(0, 0), 80, 80)
 
-<<<<<<< HEAD
-smth = tuple(
-    [
-        RoomTemplate("kitchen", 4, 6, True),
-        RoomTemplate("toilet", 2, 4, False),
-        RoomTemplate("bedroom0", 8, 4, True),
-        RoomTemplate("bedroom1", 8, 6, True),
-        RoomTemplate("bedroom2", 4, 10, True),
-        RoomTemplate("hall", 2, 2, True),
-    ]
-)
-=======
-smth = JsonIO.read("expandingModel/curr.json")
->>>>>>> 31809d65af0bb77f19d8ac1ea50a3004388c73dd
+smth = JsonIO.read("curr.json")
 
 for s in smth[:-1]:
     smth[-1].addNeighbour(s.name)
