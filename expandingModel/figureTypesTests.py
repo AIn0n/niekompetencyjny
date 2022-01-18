@@ -1,25 +1,27 @@
 import unittest
 from random import randint
-from figureTypes import *
+
+# from figureTypes import *
+from expandingModel.figureTypes import *
 import math
 from unittest.case import skip
 
-class TestRectClass(unittest.TestCase):
 
+class TestRectClass(unittest.TestCase):
     def testConctructorVariables(self):
         w, h = randint(1, 127) * 2, randint(1, 127) * 2
         p = Point(0, 0)
         r = Rect(p, w, h)
         self.assertTrue(r.p == p)
-        self.assertTrue(r.width_l == w//2)
-        self.assertTrue(r.width_r == w//2)
-        self.assertTrue(r.height_u == h//2)
-        self.assertTrue(r.height_d == h//2)
-        self.assertTrue(r.field == w*h)
-        self.assertTrue(r.a == Point(p.x - w/2, p.y - h/2))
-        self.assertTrue(r.b == Point(p.x + w/2, p.y - h/2))
-        self.assertTrue(r.c == Point(p.x + w/2, p.y + h/2))
-        self.assertTrue(r.d == Point(p.x - w/2, p.y + h/2))
+        self.assertTrue(r.width_l == w // 2)
+        self.assertTrue(r.width_r == w // 2)
+        self.assertTrue(r.height_u == h // 2)
+        self.assertTrue(r.height_d == h // 2)
+        self.assertTrue(r.field == w * h)
+        self.assertTrue(r.a == Point(p.x - w / 2, p.y - h / 2))
+        self.assertTrue(r.b == Point(p.x + w / 2, p.y - h / 2))
+        self.assertTrue(r.c == Point(p.x + w / 2, p.y + h / 2))
+        self.assertTrue(r.d == Point(p.x - w / 2, p.y + h / 2))
 
     def testCollidesWithInnerRect(self):
         w1, h1 = randint(16, 127) * 2, randint(16, 127) * 2
@@ -70,17 +72,17 @@ class TestRectClass(unittest.TestCase):
         self.assertEqual(new.width_l, r.width_l)
 
     def testGetHorizontalVectors(self):
-        r = Rect(Point(0, 0),randint(1, 16) * 2, randint(1, 16) * 2)
+        r = Rect(Point(0, 0), randint(1, 16) * 2, randint(1, 16) * 2)
         (vec1, vec2) = r.getHorVecs()
         self.assertEqual(r.getHorVecs(), [Vec(r.a, r.b), Vec(r.d, r.c)])
-    
+
     def testGetVerticalVectors(self):
-        r = Rect(Point(0, 0),randint(1, 16) * 2, randint(1, 16) * 2)
+        r = Rect(Point(0, 0), randint(1, 16) * 2, randint(1, 16) * 2)
         self.assertEqual(r.getVerVecs(), [Vec(r.a, r.d), Vec(r.b, r.c)])
 
     def testExpandRightSameX(self):
         area = Rect(Point(0, 0), 100, 100)
-        r1, r2 = Rect(Point(0,0), 2, 8), Rect(Point(10,0), 2, 8)
+        r1, r2 = Rect(Point(0, 0), 2, 8), Rect(Point(10, 0), 2, 8)
         r1.expandRight([r2], area)
         self.assertEqual(r1.b.x, 9)
         self.assertEqual(r1.c.x, 9)
@@ -89,7 +91,7 @@ class TestRectClass(unittest.TestCase):
 
     def testExpandRightLilAbove(self):
         area = Rect(Point(0, 0), 100, 100)
-        r1, r2 = Rect(Point(0,0), 2, 8), Rect(Point(10,8), 2, 8)
+        r1, r2 = Rect(Point(0, 0), 2, 8), Rect(Point(10, 8), 2, 8)
         r1.expandRight([r2], area)
         self.assertEqual(r1.b.x, area.width_r)
         self.assertEqual(r1.c.x, area.width_r)
@@ -114,14 +116,18 @@ class TestRectClass(unittest.TestCase):
         width = randint(1, 50) * 2
         height = randint(1, 50) * 2
         rectangle = Rect(Point(0, 0), width, height)
-        #print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
-        #print(f"{rectangle}, width = {rectangle.getWidth()}")
+        # print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
+        # print(f"{rectangle}, width = {rectangle.getWidth()}")
         rectangle.expandLeft([], area)
         rectangle.expandRight([], area)
-        #print(f"{rectangle}, width = {rectangle.getWidth()}")
+        # print(f"{rectangle}, width = {rectangle.getWidth()}")
         self.assertEqual(rectangle.getWidth(), area.getWidth())
-        self.assertEqual(rectangle.getWidth(), rectangle.width_l + rectangle.width_r)
-        self.assertEqual(rectangle.getHeight(), rectangle.height_d + rectangle.height_u)
+        self.assertEqual(
+            rectangle.getWidth(), rectangle.width_l + rectangle.width_r
+        )
+        self.assertEqual(
+            rectangle.getHeight(), rectangle.height_d + rectangle.height_u
+        )
 
     def testCollidesSameOrient1(self):
         vec1 = Vec(Point(0, 0), Point(0, randint(5, 10)))
@@ -163,20 +169,32 @@ class TestRectClass(unittest.TestCase):
         rect2 = Rect(Point(-1, 2), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
 
-
     def testNeighbours3(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 0), 2, 2)
         self.assertFalse(rect1.neighbours(rect2))
 
+    def testgetDoorPoint(self):
+        vec1 = Vec(Point(0, 0), Point(10, 0))
+        self.assertTrue(vec1.getDoorPoint(0.5) == Point(5, 0))
+        self.assertTrue(vec1.getDoorPoint(1) == Point(9, 0))
+        self.assertTrue(vec1.getDoorPoint(0) == Point(1, 0))
+        self.assertTrue(vec1.getDoorPoint(0.3) == Point(3, 0))
+        self.assertTrue(vec1.getDoorPoint(0.35) == Point(4, 0))
+        vec2 = Vec(Point(0, 0), Point(0, 10))
+        self.assertTrue(vec2.getDoorPoint(0.5) == Point(0, 5))
+        self.assertTrue(vec2.getDoorPoint(1) == Point(0, 9))
+        self.assertTrue(vec2.getDoorPoint(0) == Point(0, 1))
+        self.assertTrue(vec2.getDoorPoint(0.3) == Point(0, 3))
+        self.assertTrue(vec2.getDoorPoint(0.35) == Point(0, 4))
 
 
 class TestPointClass(unittest.TestCase):
-
     def test_str(self):
         x, y = randint(0, 255), randint(0, 255)
         p = Point(x=x, y=y)
-        self.assertEqual(f'({x}, {y})', str(p))
+        self.assertEqual(f"({x}, {y})", str(p))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

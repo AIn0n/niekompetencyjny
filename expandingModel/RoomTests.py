@@ -17,11 +17,5 @@ class TestLocationChromosome(unittest.TestCase):
         self.assertEquals(self.size, len(self.rooms))
 
 
-
-
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

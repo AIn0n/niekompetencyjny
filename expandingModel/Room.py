@@ -3,7 +3,9 @@ from random import randint
 
 
 class Room:
-    def __init__(self, name: str, minWidth: int, minHeight: int, expandable: bool) -> None:
+    def __init__(
+        self, name: str, minWidth: int, minHeight: int, expandable: bool
+    ) -> None:
         self.name = name
         self.minWidth = minWidth
         self.minHeight = minHeight
@@ -16,17 +18,27 @@ class Room:
         neighbour.neighbours.add(self.name)
 
     def __str__(self):
-        return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
-               f" neighbours: {self.neighbours}"
+        return (
+            f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable},"
+            f" neighbours: {self.neighbours}"
+        )
 
     ######### RANDOM ROOM GENERATION #########
     @staticmethod
     def generateName():
-        return ''.join(random.choice([chr(i) for i in range(ord('a'), ord('z'))]) for _ in range(randint(6, 12)))
+        return "".join(
+            random.choice([chr(i) for i in range(ord("a"), ord("z"))])
+            for _ in range(randint(6, 12))
+        )
 
     @staticmethod
     def generateRoomNoConnections():
-        return Room(Room.generateName(), randint(2, 20), randint(2, 20), random.choice([True, False]))
+        return Room(
+            Room.generateName(),
+            randint(2, 20),
+            randint(2, 20),
+            random.choice([True, False]),
+        )
 
     @staticmethod
     def generateRooms(count):
