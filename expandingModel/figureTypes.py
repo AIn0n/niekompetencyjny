@@ -82,6 +82,7 @@ class Vec:
             )
         return False
 
+
     def commonPart(self, other):
         if self.collidesSameOrient(other):
             if self.isVertical():
@@ -94,7 +95,25 @@ class Vec:
                     Point(max(self.start.x, other.start.x), self.start.y),
                     Point(min(self.end.x, other.end.x), self.end.y),
                 )
-        return
+
+    def getDoorPoint(self, value):
+        point = self.getLength() * value
+        point = round(point)
+        if self.isHorizontal():
+            door_X = self.start.x + point
+            if door_X == self.start.x:
+                door_X += 1
+            if door_X == self.end.x:
+                door_X -= 1
+            door_Y = self.start.y
+        else:
+            door_Y = self.start.y + point
+            if door_Y == self.start.y:
+                door_Y += 1
+            if door_Y == self.end.y:
+                door_Y -= 1
+            door_X = self.start.x
+        return Point(door_X, door_Y)
 
 
 class Rect:
@@ -188,15 +207,16 @@ class Rect:
     # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
     # applies and the appropriate vector is at the same x/y
     def neighbours(self, other) -> bool:
+        result = []
         for s in self.getHorVecs():
             for o in other.getHorVecs():
                 if s.collidesSameOrient(o):
-                    return s
+                    result.append(s)
         for s in self.getVerVecs():
             for o in other.getVerVecs():
                 if s.collidesSameOrient(o):
-                    return s
-        return False
+                    result.append(s)
+        return result
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
