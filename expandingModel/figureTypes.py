@@ -82,19 +82,18 @@ class Vec:
             )
         return False
 
-
     def commonPart(self, other):
-        if self.collidesSameOrient(other):
-            if self.isVertical():
-                return Vec(
-                    Point(self.start.x, max(self.start.y, other.start.y)),
-                    Point(self.end.x, min(self.end.y, other.end.y)),
-                )
-            if self.isHorizontal():
-                return Vec(
-                    Point(max(self.start.x, other.start.x), self.start.y),
-                    Point(min(self.end.x, other.end.x), self.end.y),
-                )
+        assert(self.collidesSameOrient(other))
+        if self.isVertical():
+            return Vec(
+                Point(self.start.x, max(self.start.y, other.start.y)),
+                Point(self.end.x, min(self.end.y, other.end.y)),
+            )
+        if self.isHorizontal():
+            return Vec(
+                Point(max(self.start.x, other.start.x), self.start.y),
+                Point(min(self.end.x, other.end.x), self.end.y),
+            )
 
     def getDoorPoint(self, value):
         point = self.getLength() * value
