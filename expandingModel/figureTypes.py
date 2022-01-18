@@ -174,15 +174,16 @@ class Rect:
     # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
     # applies and the appropriate vector is at the same x/y
     def neighbours(self, other) -> bool:
+        result = []
         for s in self.getHorVecs():
             for o in other.getHorVecs():
                 if s.collidesSameOrient(o):
-                    return s
+                    result.append(s)
         for s in self.getVerVecs():
             for o in other.getVerVecs():
                 if s.collidesSameOrient(o):
-                    return s
-        return False
+                    result.append(s)
+        return result
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
