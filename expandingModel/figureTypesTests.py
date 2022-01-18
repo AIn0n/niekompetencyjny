@@ -160,7 +160,8 @@ class TestRectClass(unittest.TestCase):
     def testNeighbours1(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 2), 2, 2)
-        self.assertTrue(rect1.neighbours(rect2))
+        expected = Vec(Point(1, 1), Point(1, 3))
+        self.assertEqual(rect1.neighbours(rect2), expected)
 
     def testNeighbours2(self):
         rect1 = Rect(Point(2, 2), 2, 2)
@@ -175,7 +176,16 @@ class TestRectClass(unittest.TestCase):
     def testNeighboursInner(self):
         inner = Rect(Point(1, 0), 2, 2)
         outer = Rect(Point.zero(), 4, 4)
-        self.assertTrue(inner.neighbours(outer))
+        expected = set([Vec(Point(2, -1), Point(2, 1))])
+        self.assertEqual(inner.neighbours(outer), expected)
+
+    def testNeighboursEdgeCase(self):
+        rect1 = Rect(Point.zero(), 4, 4)
+        rect2 = Rect(Point(1, 1), 2, 2)
+        expected = set(
+            [Vec(Point.zero(), Point(2, 0)), Vec(Point(0, 2), Point(2, 2))]
+        )
+        self.assertEqual(set(rect1.neighbours(rect2)), expected)
 
     def testExpand(self):
         rB = Rect(Point(50, 50), 100, 100)

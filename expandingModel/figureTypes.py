@@ -177,11 +177,11 @@ class Rect:
         for s in self.getHorVecs():
             for o in other.getHorVecs():
                 if s.collidesSameOrient(o):
-                    return True
+                    return s
         for s in self.getVerVecs():
             for o in other.getVerVecs():
                 if s.collidesSameOrient(o):
-                    return True
+                    return s
         return False
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
