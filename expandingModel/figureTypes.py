@@ -82,6 +82,25 @@ class Vec:
             )
         return False
 
+    def getDoorPoint(self, value):
+        point = self.getLength() * value
+        point = round(point)
+        if self.isHorizontal():
+            door_X = self.start.x + point
+            if door_X == self.start.x:
+                door_X += 1
+            if door_X == self.end.x:
+                door_X -= 1
+            door_Y = self.start.y
+        else:
+            door_Y = self.start.y + point
+            if door_Y == self.start.y:
+                door_Y += 1
+            if door_Y == self.end.y:
+                door_Y -= 1
+            door_X = self.start.x
+        return Point(door_X, door_Y)
+
 
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
