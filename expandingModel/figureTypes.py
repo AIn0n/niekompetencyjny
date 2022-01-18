@@ -89,7 +89,6 @@ class Vec:
             if door_Y == self.end.y:
                 door_Y -= 1
             door_X = self.start.x
-            smiec = 1
         return Point(door_X, door_Y)
 
 
