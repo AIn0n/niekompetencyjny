@@ -2,6 +2,7 @@ from abstracts.Chromosome import Chromosome
 from figureTypes import Point
 from random import randint
 
+
 class LocationChromosome(Chromosome):
     def __init__(self, size, rY, rX):
         self.rX, self.rY = rX, rY

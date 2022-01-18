@@ -2,21 +2,25 @@ import math
 from dataclasses import dataclass
 from typing import Iterable
 
+
 @dataclass(frozen=True, order=True)
 class Point:
     x: int
     y: int
 
-    #todo: Test this method
+    # todo: Test this method
     def distance(self, other):
-        return math.sqrt(pow(abs(self.x - other.x), 2) + pow(abs(self.y - other.y), 2))
+        return math.sqrt(
+            pow(abs(self.x - other.x), 2) + pow(abs(self.y - other.y), 2)
+        )
 
     def __str__(self) -> str:
-        return f'({self.x}, {self.y})'
+        return f"({self.x}, {self.y})"
 
     @staticmethod
     def zero():
         return Point(0, 0)
+
 
 class Vec:
     start: Point
@@ -49,25 +53,54 @@ class Vec:
 
     def containsPoint(self, point) -> bool:
         if self.isHorizontal():
-            return point.y == self.start.y and self.start.x <= point.x <= self.end.x
+            return (
+                point.y == self.start.y
+                and self.start.x <= point.x <= self.end.x
+            )
         if self.isVertical():
-            return point.x == self.start.x and self.start.y <= point.y <= self.end.y
+            return (
+                point.x == self.start.x
+                and self.start.y <= point.y <= self.end.y
+            )
 
     def sameOrientation(self, other):
-        return (self.isVertical() and other.isVertical()) or (self.isHorizontal() and other.isHorizontal)
+        return (self.isVertical() and other.isVertical()) or (
+            self.isHorizontal() and other.isHorizontal
+        )
 
     def collidesSameOrient(self, other) -> bool:
         if self.sameOrientation(other):
-            return (self.containsPoint(other.start) or self.containsPoint(other.end)
-                    or other.containsPoint(self.start) or other.containsPoint(self.end)) \
-                   and self.start != other.end and self.end != other.start
+            return (
+                (
+                    self.containsPoint(other.start)
+                    or self.containsPoint(other.end)
+                    or other.containsPoint(self.start)
+                    or other.containsPoint(self.end)
+                )
+                and self.start != other.end
+                and self.end != other.start
+            )
         return False
+
+    def commonPart(self, other):
+        if self.collidesSameOrient(other):
+            if self.isVertical():
+                return Vec(
+                    Point(self.start.x, max(self.start.y, other.start.y)),
+                    Point(self.end.x, min(self.end.y, other.end.y)),
+                )
+            if self.isHorizontal():
+                return Vec(
+                    Point(max(self.start.x, other.start.x), self.start.y),
+                    Point(min(self.end.x, other.end.x), self.end.y),
+                )
+        return
 
 
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
         if height % 2 or width % 2 or not height or not width:
-            raise ValueError('every dim should be divisible by two')
+            raise ValueError("every dim should be divisible by two")
         self.width_l = width // 2
         self.width_r = width // 2
         self.height_u = height // 2
@@ -76,26 +109,28 @@ class Rect:
         self.calcEverything()
 
     def calcCoords(self) -> None:
-        ''' d-------c
+        """ d-------c
             |       |
-            a-------b   '''
+            a-------b   """
         self.a = Point(self.p.x - self.width_l, self.p.y - self.height_d)
         self.b = Point(self.p.x + self.width_r, self.p.y - self.height_d)
         self.c = Point(self.p.x + self.width_r, self.p.y + self.height_u)
         self.d = Point(self.p.x - self.width_l, self.p.y + self.height_u)
 
     def calcVecs(self) -> None:
-        ''' end
+        """ end
             ^
             |
-            start-->end   '''
+            start-->end   """
         self.horUp = Vec(self.d, self.c)
         self.horDown = Vec(self.a, self.b)
         self.verLeft = Vec(self.a, self.d)
         self.verRight = Vec(self.b, self.c)
 
     def calcField(self) -> None:
-        self.field = (self.width_l + self.width_r) * (self.height_u + self.height_d)
+        self.field = (self.width_l + self.width_r) * (
+            self.height_u + self.height_d
+        )
 
     def getHeight(self) -> int:
         return self.verLeft.getLength()
@@ -104,19 +139,29 @@ class Rect:
         return self.horUp.getLength()
 
     def collides(self, other) -> bool:
-        return (self.a.x < other.c.x) and (self.c.x > other.a.x) and \
-               (self.a.y < other.c.y) and (self.c.y > other.a.y)
+        return (
+            (self.a.x < other.c.x)
+            and (self.c.x > other.a.x)
+            and (self.a.y < other.c.y)
+            and (self.c.y > other.a.y)
+        )
 
     def containsRectangle(self, other) -> bool:
-        return (other.a.x >= self.a.x) and (other.a.y >= self.a.y) and \
-               (other.c.x <= self.c.x) and (other.c.y <= self.c.y)
+        return (
+            (other.a.x >= self.a.x)
+            and (other.a.y >= self.a.y)
+            and (other.c.x <= self.c.x)
+            and (other.c.y <= self.c.y)
+        )
 
     def __str__(self) -> str:
-        return f'A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}'
+        return f"A - {self.a}, B - {self.b}, C - {self.c}, D = {self.d}"
 
     def cloneOffset(self, offset: Point):
         p = Point(self.p.x + offset.x, self.p.y + offset.y)
-        return Rect(p, self.width_l + self.width_r, self.height_u + self.height_d)
+        return Rect(
+            p, self.width_l + self.width_r, self.height_u + self.height_d
+        )
 
     def getVerVecs(self) -> Iterable:
         return [self.verLeft, self.verRight]
@@ -151,23 +196,31 @@ class Rect:
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedDown(self, rect):
-        return self.isAbove(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
-                                       or (rect.a.x <= self.b.x <= rect.b.x))
+        return self.isAbove(rect) and (
+            (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+            or (rect.a.x <= self.b.x <= rect.b.x)
+        )
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
     def isAlignedUp(self, rect):
-        return self.isBelow(rect) and ((self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
-                                       or (rect.a.x <= self.b.x <= rect.b.x))
+        return self.isBelow(rect) and (
+            (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+            or (rect.a.x <= self.b.x <= rect.b.x)
+        )
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
     def isAlignedLeft(self, rect):
-        return self.isToRightOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
-                                           or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
+        return self.isToRightOf(rect) and (
+            (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
+        )
 
     # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
     def isAlignedRight(self, rect):
-        return self.isToLeftOf(rect) and ((self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
-                                          or (rect.a.y <= self.b.y and rect.d.y >= self.c.y))
+        return self.isToLeftOf(rect) and (
+            (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
+        )
 
     def calcEverything(self):
         self.calcCoords()
@@ -175,14 +228,18 @@ class Rect:
         self.calcVecs()
 
     def expandLeft(self, rects, area) -> None:
-        new_x = max([r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x])
+        new_x = max(
+            [r.b.x for r in rects if self.isAlignedLeft(r)] + [area.a.x]
+        )
         self.a = Point(new_x, self.a.y)
         self.d = Point(new_x, self.d.y)
         self.width_l = abs(self.p.x - new_x)
         self.calcEverything()
 
     def expandRight(self, rects, area) -> None:
-        new_x = min([r.a.x for r in rects if self.isAlignedRight(r)] + [area.b.x])
+        new_x = min(
+            [r.a.x for r in rects if self.isAlignedRight(r)] + [area.b.x]
+        )
         self.b = Point(new_x, self.b.y)
         self.c = Point(new_x, self.c.y)
         self.width_r = abs(new_x - self.p.x)
@@ -196,7 +253,9 @@ class Rect:
         self.calcEverything()
 
     def expandDown(self, rects, area) -> None:
-        new_y = max([r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y])
+        new_y = max(
+            [r.d.y for r in rects if self.isAlignedDown(r)] + [area.a.y]
+        )
         self.a = Point(self.a.x, new_y)
         self.b = Point(self.b.x, new_y)
         self.height_d = abs(self.p.y - new_y)
@@ -204,7 +263,7 @@ class Rect:
 
 
 # TODO: move this into unit tests
-if __name__ == '__main__':
+if __name__ == "__main__":
     rB = Rect(Point(50, 50), 100, 100)
     r = Rect(Point(5, 5), 4, 4)
     r2 = Rect(Point(0, 0), 2, 8)
@@ -215,6 +274,7 @@ if __name__ == '__main__':
         f"r = {r}, \n"
         f"r2 = {r2}, {r.isAlignedUp(r2)}, \n"
         f"r3 = {r3}, {r.isAlignedUp(r3)}, \n"
-        f"r4 = {r4}, {r.isAlignedUp(r4)}")
+        f"r4 = {r4}, {r.isAlignedUp(r4)}"
+    )
     r.expandUp([r2, r3, r4], rB)
     print(f"Expanded r: {r}")

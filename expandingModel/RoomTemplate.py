@@ -3,8 +3,11 @@ from random import randint
 
 from figureTypes import Point, Rect
 
+
 class RoomTemplate:
-    def __init__(self, name: str, minWidth: int, minHeight: int, expandable: bool) -> None:
+    def __init__(
+        self, name: str, minWidth: int, minHeight: int, expandable: bool
+    ) -> None:
         self.name = name
         self.minWidth = minWidth
         self.minHeight = minHeight
@@ -17,22 +20,35 @@ class RoomTemplate:
         self.neighbours.add(neighbour.name)
         neighbour.neighbours.add(self.name)
 
-    def getRectRef(self, reverse = False) -> Rect:
-        return Rect(Point.zero(), self.minWidth, self.minHeight) if not reverse\
+    def getRectRef(self, reverse=False) -> Rect:
+        return (
+            Rect(Point.zero(), self.minWidth, self.minHeight)
+            if not reverse
             else Rect(Point.zero(), self.minHeight, self.minWidth)
+        )
 
     def __str__(self):
-        return f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable}," \
-               f" neighbours: {self.neighbours}"
+        return (
+            f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable},"
+            f" neighbours: {self.neighbours}"
+        )
 
     ######### RANDOM ROOM GENERATION #########
     @staticmethod
     def generateName():
-        return ''.join(random.choice([chr(i) for i in range(ord('a'), ord('z'))]) for _ in range(randint(6, 12)))
+        return "".join(
+            random.choice([chr(i) for i in range(ord("a"), ord("z"))])
+            for _ in range(randint(6, 12))
+        )
 
     @staticmethod
     def generateRoomNoConnections():
-        return RoomTemplate(RoomTemplate.generateName(), randint(2, 20), randint(2, 20), random.choice([True, False]))
+        return RoomTemplate(
+            RoomTemplate.generateName(),
+            randint(2, 20),
+            randint(2, 20),
+            random.choice([True, False]),
+        )
 
     @staticmethod
     def generateRooms(count):

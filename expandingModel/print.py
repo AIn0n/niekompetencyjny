@@ -3,6 +3,7 @@ import pygame
 from RoomTemplate import RoomTemplate
 from genAlgorithm import *
 
+
 class PrintAlg:
     display_width = 720
     display_height = 480
@@ -11,22 +12,29 @@ class PrintAlg:
     def __init__(self, fieldWidth, fieldHeight) -> None:
         pygame.init()
         pygame.font.init()
-        self.font = pygame.font.SysFont('Comic Sans MS', 30)
-        self.plot_display = pygame.display.set_mode((self.display_width, self.display_height))
+        self.font = pygame.font.SysFont("Comic Sans MS", 30)
+        self.plot_display = pygame.display.set_mode(
+            (self.display_width, self.display_height)
+        )
         self.plot_display.fill(self.white)
 
         self.inter_display = pygame.Surface((fieldWidth, fieldHeight))
-        self.inter_display.blit(pygame.transform.flip(self.inter_display, False, True), (0, 0))
+        self.inter_display.blit(
+            pygame.transform.flip(self.inter_display, False, True), (0, 0)
+        )
 
-        self.offX = self.offY = fieldHeight/2
+        self.offX = self.offY = fieldHeight / 2
 
     def getCords(self, x, y):
         return x + self.offX, y + self.offY
 
     def printRect(self, r: Rect, color: tuple) -> None:
         x, y = self.getCords(r.a.x, r.a.y)
-        pygame.draw.rect(self.inter_display, color,
-            (x, y, r.width_l + r.width_r, r.height_u + r.height_d))
+        pygame.draw.rect(
+            self.inter_display,
+            color,
+            (x, y, r.width_l + r.width_r, r.height_u + r.height_d),
+        )
 
     def printAll(self) -> None:
         self.scaleSurface()
@@ -34,19 +42,23 @@ class PrintAlg:
         pygame.display.flip()
 
     def scaleSurface(self) -> None:
-        self.inter_display = pygame.transform.scale(self.inter_display, (self.display_height, self.display_height))
+        self.inter_display = pygame.transform.scale(
+            self.inter_display, (self.display_height, self.display_height)
+        )
 
 
 area = Rect(Point(0, 0), 80, 80)
 
-smth = tuple([
-    RoomTemplate("kitchen", 4, 6, True),
-    RoomTemplate("toilet", 2, 4, False),
-    RoomTemplate("bedroom0", 8, 4, True),
-    RoomTemplate("bedroom1", 8, 6, True),
-    RoomTemplate("bedroom2", 4, 10, True),
-    RoomTemplate("hall", 2, 2, True)
-])
+smth = tuple(
+    [
+        RoomTemplate("kitchen", 4, 6, True),
+        RoomTemplate("toilet", 2, 4, False),
+        RoomTemplate("bedroom0", 8, 4, True),
+        RoomTemplate("bedroom1", 8, 6, True),
+        RoomTemplate("bedroom2", 4, 10, True),
+        RoomTemplate("hall", 2, 2, True),
+    ]
+)
 
 for s in smth[:-1]:
     smth[-1].addNeighbour(s)
@@ -66,16 +78,17 @@ printer.printRect(area, black)
 rooms = []
 for i in range(len(squares)):
     r = 0
-    if  bestSpecimen.chrsoms['rotation'][i]:
+    if bestSpecimen.chrsoms["rotation"][i]:
         r = Rect(
-         Point(0,0),
-         squares[i].height_d + squares[i].height_u, 
-         squares[i].width_r + squares[i].width_l)
+            Point(0, 0),
+            squares[i].height_d + squares[i].height_u,
+            squares[i].width_r + squares[i].width_l,
+        )
     else:
         r = squares[i]
-    rooms.append(r.cloneOffset(bestSpecimen.chrsoms['location'][i]))
+    rooms.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
 
-expandRects(rooms, area, bestSpecimen.chrsoms['expansion'])
+expandRects(rooms, area, bestSpecimen.chrsoms["expansion"])
 
 for rect in rooms:
     printer.printRect(rect, tuple(random.randint(0, 255) for n in range(3)))
