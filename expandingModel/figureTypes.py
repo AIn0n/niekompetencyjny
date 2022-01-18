@@ -91,7 +91,6 @@ class Vec:
             door_X = self.start.x
         return Point(door_X, door_Y)
 
-
 class Rect:
     def __init__(self, p: Point, width: int, height: int) -> None:
         if height % 2 or width % 2 or not height or not width:
