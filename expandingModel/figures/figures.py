@@ -73,6 +73,8 @@ class Vec:
         )
 
     def collidesSameOrient(self, other) -> bool:
+        if self == other:
+            return True
         if self.sameOrientation(other):
             return (
                 (
