@@ -12,7 +12,7 @@ class Specimen:
             "location": LocationChromosome(size, rY, rX),
             "rotation": BinaryChromosome(size),
             "expansion": BinaryChromosome(size * 4),
-            "doors": FloatChromosome(size)
+            "doors": FloatChromosome(size),
         }
         self.fitness = 0
 
@@ -77,7 +77,7 @@ class FitnessClass:
                 return None
             rcts.append(rect)
         # expansion section
-        expandRects(rcts, self.area, s.chrsoms["expansion"])  
+        expandRects(rcts, self.area, s.chrsoms["expansion"])
         s.fitness = (
             sum(x.field for x in rcts) if self.validNeighbors(rcts) else 0
         )
