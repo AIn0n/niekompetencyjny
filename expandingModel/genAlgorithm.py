@@ -1,4 +1,4 @@
-from figureTypes import *
+from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome
 from random import choice, choices

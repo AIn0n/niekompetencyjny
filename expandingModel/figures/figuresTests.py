@@ -1,6 +1,6 @@
 import unittest
 from random import randint
-from expandingModel.figureTypes import *
+from figures import *
 
 
 class TestFigureTypesClass(unittest.TestCase):

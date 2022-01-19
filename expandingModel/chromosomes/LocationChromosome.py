@@ -1,5 +1,5 @@
 from chromosomes.Chromosome import Chromosome
-from figureTypes import Point
+from figures.figures import Point
 from random import randint
 
 

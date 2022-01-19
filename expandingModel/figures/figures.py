@@ -138,6 +138,13 @@ class Rect:
         self.p = p
         self.calcEverything()
 
+    def __eq__(self, __o: object) -> bool:
+        return (
+            self.getHeight() == __o.getHeight()
+            and self.getWidth() == __o.getWidth()
+            and self.p == __o.p
+        )
+
     def calcCoords(self) -> None:
         """
         d-------c
