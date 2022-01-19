@@ -95,6 +95,16 @@ class Vec:
                 Point(min(self.end.x, other.end.x), self.end.y),
             )
 
+    def toPointsNoBorders(self):
+        points = list()
+        if self.isVertical():
+            for y in range(self.start.y+1, self.end.y-1):
+                points.append(Point(self.start.x, y))
+        if self.isHorizontal():
+            for x in range(self.start.x+1, self.end.x-1):
+                points.append(Point(x, self.start.y))
+        return points
+
     def getDoorPoint(self, value):
         point = self.getLength() * value
         point = round(point)
