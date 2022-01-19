@@ -1,3 +1,4 @@
+from expandingModel.chromosomes import FloatChromosome
 from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome
@@ -11,6 +12,7 @@ class Specimen:
             "location": LocationChromosome(size, rY, rX),
             "rotation": BinaryChromosome(size),
             "expansion": BinaryChromosome(size * 4),
+            "doors": FloatChromosome(size)
         }
         self.fitness = 0
 
@@ -74,9 +76,8 @@ class FitnessClass:
                 s.fitness = 0
                 return None
             rcts.append(rect)
-        expandRects(
-            rcts, self.area, s.chrsoms["expansion"]
-        )  # expansion section
+        # expansion section
+        expandRects(rcts, self.area, s.chrsoms["expansion"])  
         s.fitness = (
             sum(x.field for x in rcts) if self.validNeighbors(rcts) else 0
         )
