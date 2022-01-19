@@ -1,6 +1,6 @@
 import json
 from RoomTemplate import RoomTemplate
-from figureTypes import Point, Rect
+from figures.figures import Point, Rect
 
 
 class JsonIO:

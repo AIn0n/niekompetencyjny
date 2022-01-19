@@ -10,14 +10,14 @@
         {
             "name": "toilet",
             "minSize": [2, 4],
-            "expandable": true,
+            "expandable": false,
             "neighbors": ["hall"]
         },
         {
             "name": "bedroom0",
             "minSize": [8, 4],
             "expandable": true,
-            "neighbors": ["hall"]
+            "neighbors": ["hall", "walk-in closet"]
         },
         {
             "name": "bedroom1",
@@ -30,6 +30,12 @@
             "minSize": [4, 10],
             "expandable": true,
             "neighbors": ["hall"]
+        },
+        {
+            "name": "walk-in closet",
+            "minSize": [6,2],
+            "expandable": false,
+            "neighbors": ["bedroom0"]
         },
         {
             "name": "hall",

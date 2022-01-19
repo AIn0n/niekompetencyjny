@@ -1,7 +1,7 @@
 import random
 from random import randint
 
-from figureTypes import Point, Rect
+from figures.figures import Point, Rect
 
 
 class RoomTemplate:

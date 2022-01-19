@@ -1,9 +1,9 @@
+import pickle
 import random
 import pygame
-from RoomTemplate import RoomTemplate
 from JsonIO import JsonIO
 from genAlgorithm import *
-
+from figures.figures import *
 
 class PrintAlg:
     display_width = 720
@@ -49,19 +49,10 @@ class PrintAlg:
 
 
 area, smth = JsonIO.read("expandingModel/input_data/curr.json")
-
-for s in smth[:-1]:
-    smth[-1].addNeighbour(s.name)
-
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
+printer = PrintAlg(area.getWidth(), area.getHeight())
 
-fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(200, 0.3, 0.1, fitCls)
-genAlg.repeat(2000)
-bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
-print(bestSpecimen.fitness)
-
-printer = PrintAlg(80, 80)
+bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin","rb"))
 
 black = (0, 0, 0)
 printer.printRect(area, black)
