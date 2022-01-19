@@ -83,7 +83,7 @@ class Vec:
         return False
 
     def commonPart(self, other):
-        assert(self.collidesSameOrient(other))
+        assert self.collidesSameOrient(other)
         if self.isVertical():
             return Vec(
                 Point(self.start.x, max(self.start.y, other.start.y)),
@@ -98,10 +98,10 @@ class Vec:
     def toPointsNoBorders(self):
         points = list()
         if self.isVertical():
-            for y in range(self.start.y+1, self.end.y-1):
+            for y in range(self.start.y + 1, self.end.y - 1):
                 points.append(Point(self.start.x, y))
         if self.isHorizontal():
-            for x in range(self.start.x+1, self.end.x-1):
+            for x in range(self.start.x + 1, self.end.x - 1):
                 points.append(Point(x, self.start.y))
         return points
 

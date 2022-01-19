@@ -41,8 +41,9 @@ class FitnessClass:
             chrsoms1[k].mutate(mut)
             chrsoms2[k].mutate(mut)
 
-        return p1.getChild(chrsoms1, self.rX, self.rY), p1.getChild(
-            chrsoms2, self.rX, self.rY
+        return (
+            p1.getChild(chrsoms1, self.rX, self.rY),
+            p1.getChild(chrsoms2, self.rX, self.rY),
         )
 
     def validNeighbors(self, rectangles: list) -> bool:
