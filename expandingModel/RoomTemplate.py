@@ -30,6 +30,7 @@ class RoomTemplate:
             if not reverse
             else Rect(Point.zero(), self.minHeight, self.minWidth)
         )
+
     def __eq__(self, __o: object) -> bool:
         if type(__o) == type(self):
             return (
