@@ -3,7 +3,7 @@ from random import randint
 from expandingModel.figureTypes import *
 
 
-class TestRectClass(unittest.TestCase):
+class TestFigureTypesClass(unittest.TestCase):
     def testConctructorVariables(self):
         w, h = randint(1, 127) * 2, randint(1, 127) * 2
         p = Point(0, 0)
@@ -158,7 +158,7 @@ class TestRectClass(unittest.TestCase):
     def testNeighbours1(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 2), 2, 2)
-        expected = set([Vec(Point(1, 1), Point(1, 3))])
+        expected = {Vec(Point(1, 1), Point(1, 3))}
         result = rect1.neighbours(rect2)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0], expected)
@@ -183,7 +183,6 @@ class TestRectClass(unittest.TestCase):
         result2 = vec2.commonPart(vec1)
         self.assertEqual(result1, result2)
 
-
     def testCommonPartX2(self):
         y = randint(-100, 100)
 
@@ -200,7 +199,6 @@ class TestRectClass(unittest.TestCase):
         print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, Vec(vec2.start, vec1.end))
 
-
     def testCommonPartX3(self):
         y = randint(-100, 100)
 
@@ -215,7 +213,6 @@ class TestRectClass(unittest.TestCase):
 
         result = vec1.commonPart(vec2)
         self.assertEqual(result, Vec(vec2.start, vec2.end))
-
 
     def testCommonPartX4(self):
         y = randint(-100, 100)
@@ -269,7 +266,7 @@ class TestRectClass(unittest.TestCase):
         r4 = Rect(Point(3, 8), 8, 2)
         r.expandUp([r2, r3, r4], rB)
 
-    def testgetDoorPoint(self):
+    def testGetDoorPoint(self):
         vec1 = Vec(Point(0, 0), Point(10, 0))
         self.assertTrue(vec1.getDoorPoint(0.5) == Point(5, 0))
         self.assertTrue(vec1.getDoorPoint(1) == Point(9, 0))
@@ -282,6 +279,26 @@ class TestRectClass(unittest.TestCase):
         self.assertTrue(vec2.getDoorPoint(0) == Point(0, 1))
         self.assertTrue(vec2.getDoorPoint(0.3) == Point(0, 3))
         self.assertTrue(vec2.getDoorPoint(0.35) == Point(0, 4))
+
+    def testToPointsNoBordersX(self):
+        y = randint(-100, 100)
+        xVals = range(randint(-50, 50), randint(50, 100))
+        points = list()
+        for x in xVals:
+            points.append(Point(x, y))
+        vector = Vec(points[0], points[-1])
+        self.assertEqual(vector.toPointsNoBorders(), points[1:-2])
+
+    def testToPointsNoBordersY(self):
+        x = randint(-100, 100)
+        yVals = range(randint(-50, 50), randint(50, 100))
+        points = list()
+        for y in yVals:
+            points.append(Point(y, x))
+        vector = Vec(points[0], points[-1])
+        print(points[0], points[-1])
+        self.assertEqual(vector.toPointsNoBorders(), points[1:-2])
+
 
 class TestPointClass(unittest.TestCase):
     def test_str(self):
