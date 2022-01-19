@@ -183,7 +183,7 @@ class TestFigureTypesClass(unittest.TestCase):
         result2 = vec2.commonPart(vec1)
         self.assertEqual(result1, result2)
 
-    def testCommonPartX2(self):
+    def testCommonPartX1(self):
         y = randint(-100, 100)
 
         start1 = Point(randint(-100, -50), y)
@@ -197,9 +197,10 @@ class TestFigureTypesClass(unittest.TestCase):
 
         result = vec1.commonPart(vec2)
         print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(vec2.start, vec1.end))
 
-    def testCommonPartX3(self):
+    def testCommonPartX2(self):
         y = randint(-100, 100)
 
         start1 = Point(randint(-100, -50), y)
@@ -212,9 +213,10 @@ class TestFigureTypesClass(unittest.TestCase):
         vec2 = Vec(start2, end2)
 
         result = vec1.commonPart(vec2)
+        self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(vec2.start, vec2.end))
 
-    def testCommonPartX4(self):
+    def testCommonPartX3(self):
         y = randint(-100, 100)
 
         start1 = Point(randint(-100, -50), y)
@@ -222,6 +224,56 @@ class TestFigureTypesClass(unittest.TestCase):
 
         start2 = Point(randint(-50, 0), y)
         end2 = Point(randint(50, 100), y)
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, vec2.commonPart(vec1))
+        self.assertEqual(result, Vec(start2, end1))
+
+    def testCommonPartY1(self):
+        x = randint(-100, 100)
+
+        start1 = Point(x, randint(-100, -50))
+        end1 = Point(x, randint(0, 50))
+
+        start2 = Point(x, randint(-50, 0))
+        end2 = Point(x, randint(50, 100))
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, vec2.commonPart(vec1))
+        self.assertEqual(result, Vec(vec2.start, vec1.end))
+
+    def testCommonPartY2(self):
+        x = randint(-100, 100)
+
+        start1 = Point(x, randint(-100, -50))
+        end1 = Point(x, randint(50, 100))
+
+        start2 = Point(x, randint(-50, 0))
+        end2 = Point(x, randint(0, 50))
+
+        vec1 = Vec(start1, end1)
+        vec2 = Vec(start2, end2)
+
+        result = vec1.commonPart(vec2)
+        self.assertEqual(result, vec2.commonPart(vec1))
+        self.assertEqual(result, Vec(vec2.start, vec2.end))
+
+    def testCommonPartY3(self):
+        x = randint(-100, 100)
+
+        start1 = Point(x, randint(-100, -50))
+        end1 = Point(x, randint(0, 50))
+
+        start2 = Point(x, randint(-50, 0))
+        end2 = Point(x, randint(50, 100))
 
         vec1 = Vec(start1, end1)
         vec2 = Vec(start2, end2)
