@@ -48,9 +48,7 @@ class PrintAlg:
         )
 
 
-area = Rect(Point(0, 0), 80, 80)
-
-smth = JsonIO.read("curr.json")
+area, smth = JsonIO.read("expandingModel/input_data/curr.json")
 
 for s in smth[:-1]:
     smth[-1].addNeighbour(s.name)
@@ -58,7 +56,7 @@ for s in smth[:-1]:
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(150, 0.3, 0.1, fitCls)
+genAlg = GeneticAlgorithm(200, 0.3, 0.1, fitCls)
 genAlg.repeat(2000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)

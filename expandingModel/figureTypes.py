@@ -82,7 +82,6 @@ class Vec:
             )
         return False
 
-
     def commonPart(self, other):
         if self.collidesSameOrient(other):
             if self.isVertical():
@@ -126,6 +125,13 @@ class Rect:
         self.height_d = height // 2
         self.p = p
         self.calcEverything()
+
+    def __eq__(self, __o: object) -> bool:
+        return (
+            self.getHeight() == __o.getHeight()
+            and self.getWidth() == __o.getWidth()
+            and self.p == __o.p
+        )
 
     def calcCoords(self) -> None:
         """

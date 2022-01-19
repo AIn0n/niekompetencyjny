@@ -1,14 +1,15 @@
 import json
-
 from RoomTemplate import RoomTemplate
-from genAlgorithm import Specimen
+from figureTypes import Point, Rect
 
 
 class JsonIO:
     def read(filepath: str) -> list:
-        result = []
+        assert len(filepath)
+        rooms = []
         with open(filepath, "r") as f:
-            for v in json.load(f):
+            loaded = json.load(f)
+            for v in loaded["rooms"]:
                 room = RoomTemplate(
                     v["name"], v["minSize"][0], v["minSize"][1], v["expandable"]
                 )
@@ -16,5 +17,6 @@ class JsonIO:
                     room.addNeighbour(neighbour)
                 if v.get("exit"):
                     room.exit = v["exit"]
-                result.append(room)
-        return result
+                rooms.append(room)
+            area = Rect(Point.zero(), loaded["area"][0], loaded["area"][1])
+            return area, rooms

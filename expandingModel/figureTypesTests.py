@@ -183,7 +183,6 @@ class TestRectClass(unittest.TestCase):
         result2 = vec2.commonPart(vec1)
         self.assertEqual(result1, result2)
 
-
     def testCommonPartX2(self):
         y = randint(-100, 100)
 
@@ -200,7 +199,6 @@ class TestRectClass(unittest.TestCase):
         print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, Vec(vec2.start, vec1.end))
 
-
     def testCommonPartX3(self):
         y = randint(-100, 100)
 
@@ -215,7 +213,6 @@ class TestRectClass(unittest.TestCase):
 
         result = vec1.commonPart(vec2)
         self.assertEqual(result, Vec(vec2.start, vec2.end))
-
 
     def testCommonPartX4(self):
         y = randint(-100, 100)
@@ -282,6 +279,7 @@ class TestRectClass(unittest.TestCase):
         self.assertTrue(vec2.getDoorPoint(0) == Point(0, 1))
         self.assertTrue(vec2.getDoorPoint(0.3) == Point(0, 3))
         self.assertTrue(vec2.getDoorPoint(0.35) == Point(0, 4))
+
 
 class TestPointClass(unittest.TestCase):
     def test_str(self):
