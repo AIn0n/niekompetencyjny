@@ -170,21 +170,6 @@ class TestFigureTypesClass(unittest.TestCase):
 
     def testCommonPartX1(self):
         y = randint(-100, 100)
-        start1 = Point(randint(-100, -50), y)
-        end1 = Point(randint(0, 50), y)
-
-        start2 = Point(randint(-50, 0), y)
-        end2 = Point(randint(50, 100), y)
-
-        vec1 = Vec(start1, end1)
-        vec2 = Vec(start2, end2)
-
-        result1 = vec1.commonPart(vec2)
-        result2 = vec2.commonPart(vec1)
-        self.assertEqual(result1, result2)
-
-    def testCommonPartX1(self):
-        y = randint(-100, 100)
 
         start1 = Point(randint(-100, -50), y)
         end1 = Point(randint(0, 50), y)
@@ -280,6 +265,7 @@ class TestFigureTypesClass(unittest.TestCase):
 
         result = vec1.commonPart(vec2)
         print(vec1, vec2, result, sep="\n")
+        self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(start2, end1))
 
     def testNeighbours3(self):
