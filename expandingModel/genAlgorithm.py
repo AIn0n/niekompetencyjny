@@ -3,7 +3,7 @@ from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome
 from random import choice, choices
-import copy
+import copy, itertools
 
 
 class Specimen:
@@ -48,19 +48,30 @@ class FitnessClass:
             p1.getChild(chrsoms2, self.rX, self.rY),
         )
 
-    def validNeighbors(self, rectangles: list) -> bool:
+    def validNeighborsAndGetDoors(
+        self, rectangles: list, doorsParams: FloatChromosome
+    ) -> bool:
+        result = []
         for i in range(len(self.rooms)):
+            tmp = []
             for n in range(len(self.rooms)):
-                if (
-                    self.rooms[n].name in self.rooms[i].neighbours
-                    and not rectangles[n].neighbours(rectangles[i])
-                    or (
-                        self.rooms[n].exit
-                        and not rectangles[n].neighbours(self.area)
-                    )
+                if self.rooms[n].name in self.rooms[i].neighbours or (
+                    self.rooms[n].exit
+                    and not rectangles[n].neighbours(self.area)
                 ):
-                    return False
-        return True
+                    commVecs = rectangles[n].neighbours(rectangles[i])
+                    if len(commVecs) < 1:
+                        return False
+                    allVecs = list(
+                        itertools.chain.from_iterable(
+                            [x.toPointsNoBorders() for x in commVecs]
+                        )
+                    )
+                    if len(allVecs) < 1:
+                        return False
+                    tmp.append(Point.getDoorPlacement(allVecs, doorsParams[n]))
+            result.append(tmp)
+        return result
 
     def countFitness(self, s: Specimen) -> None:
         rcts = []
@@ -79,9 +90,14 @@ class FitnessClass:
             rcts.append(rect)
         # expansion section
         expandRects(rcts, self.area, s.chrsoms["expansion"])
-        s.fitness = (
-            sum(x.field for x in rcts) if self.validNeighbors(rcts) else 0
-        )
+
+        # doors section
+        doors = self.validNeighborsAndGetDoors(rcts, s.chrsoms["doors"])
+        if doors == False:
+            s.fitness = 0
+            return None
+        sumOfDist = sumAllDoorDist(doors)
+        s.fitness = sum(x.field for x in rcts) * 1.0 / sumOfDist
 
 
 def expandRects(rects: list, area: Rect, expansion) -> None:
@@ -92,6 +108,16 @@ def expandRects(rects: list, area: Rect, expansion) -> None:
             if expansion[n * 4 + i]:
                 func(rects, area)
         rects.append(r)
+
+
+def sumAllDoorDist(doors: list):
+    result = 0
+    for room in doors:
+        if len(room) > 1:
+            for i in range(len(room)):
+                for j in range(i + 1, len(room)):
+                    result += room[i].distance(room[j])
+    return result
 
 
 class GeneticAlgorithm:

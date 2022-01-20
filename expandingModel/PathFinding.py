@@ -2,10 +2,12 @@
 # Should this belong to a Rectangle or Room?
 import threading
 
-from expandingModel.Path import Path
+from Path import Path
+from Room import Room
+from figures.figures import Point
 
 
-def propagatePath(current_point, current_room, target, path):
+def propagatePath(current_point: Point, current_room: Room, target, path):
     print("\n#######START", current_room, "#######")
     ##### Pseudocode below #####
     print("Current point:", current_point)
