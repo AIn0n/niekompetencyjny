@@ -1,4 +1,4 @@
-from expandingModel.chromosomes import FloatChromosome
+from chromosomes.FloatChromosome import FloatChromosome
 from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome
@@ -51,12 +51,13 @@ class FitnessClass:
     def validNeighbors(self, rectangles: list) -> bool:
         for i in range(len(self.rooms)):
             for n in range(len(self.rooms)):
-                if self.rooms[n].name in self.rooms[
-                    i
-                ].neighbours and not rectangles[n].neighbours(rectangles[i]):
-                    return False
-                if self.rooms[n].exit and not rectangles[n].neighbours(
-                    self.area
+                if (
+                    self.rooms[n].name in self.rooms[i].neighbours
+                    and not rectangles[n].neighbours(rectangles[i])
+                    or (
+                        self.rooms[n].exit
+                        and not rectangles[n].neighbours(self.area)
+                    )
                 ):
                     return False
         return True

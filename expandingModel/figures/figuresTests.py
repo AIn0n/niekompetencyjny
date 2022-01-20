@@ -112,11 +112,8 @@ class TestFigureTypesClass(unittest.TestCase):
         width = randint(1, 50) * 2
         height = randint(1, 50) * 2
         rectangle = Rect(Point(0, 0), width, height)
-        # print(f"{area}, width = {area.getWidth()}, width_r = {area.width_r}")
-        # print(f"{rectangle}, width = {rectangle.getWidth()}")
         rectangle.expandLeft([], area)
         rectangle.expandRight([], area)
-        # print(f"{rectangle}, width = {rectangle.getWidth()}")
         self.assertEqual(rectangle.getWidth(), area.getWidth())
         self.assertEqual(
             rectangle.getWidth(), rectangle.width_l + rectangle.width_r
@@ -181,7 +178,6 @@ class TestFigureTypesClass(unittest.TestCase):
         vec2 = Vec(start2, end2)
 
         result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(vec2.start, vec1.end))
 
@@ -214,7 +210,6 @@ class TestFigureTypesClass(unittest.TestCase):
         vec2 = Vec(start2, end2)
 
         result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(start2, end1))
 
@@ -231,7 +226,6 @@ class TestFigureTypesClass(unittest.TestCase):
         vec2 = Vec(start2, end2)
 
         result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(vec2.start, vec1.end))
 
@@ -264,7 +258,6 @@ class TestFigureTypesClass(unittest.TestCase):
         vec2 = Vec(start2, end2)
 
         result = vec1.commonPart(vec2)
-        print(vec1, vec2, result, sep="\n")
         self.assertEqual(result, vec2.commonPart(vec1))
         self.assertEqual(result, Vec(start2, end1))
 
@@ -287,7 +280,7 @@ class TestFigureTypesClass(unittest.TestCase):
         rect1 = Rect(Point.zero(), 4, 4)
         rect2 = Rect(Point(1, 1), 2, 2)
         expected = [
-            Vec(Point.zero(), Point(2, 0)),
+            Vec(Point(2, 0), Point(2, 2)),
             Vec(Point(0, 2), Point(2, 2)),
         ]
         result = rect1.neighbours(rect2)
@@ -334,7 +327,6 @@ class TestFigureTypesClass(unittest.TestCase):
         for y in yVals:
             points.append(Point(y, x))
         vector = Vec(points[0], points[-1])
-        print(points[0], points[-1])
         self.assertEqual(vector.toPointsNoBorders(), points[1:-2])
 
 
