@@ -61,24 +61,26 @@ class PrintAlg:
 
 
 area, smth = JsonIO.read("expandingModel/input_data/curr.json")
-squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
+fitCls = FitnessClass(area, smth)
+rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
+
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
 bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
-
+doors = fitCls.validNeighborsAndGetDoors(rcts, bestSpecimen.chrsoms['doors'])
 black = (0, 0, 0)
 printer.printRect(area, black)
 rects = []
-for i in range(len(squares)):
+for i in range(len(rcts)):
     r = 0
     if bestSpecimen.chrsoms["rotation"][i]:
         r = Rect(
             Point(0, 0),
-            squares[i].height_d + squares[i].height_u,
-            squares[i].width_r + squares[i].width_l,
+            rcts[i].height_d + rcts[i].height_u,
+            rcts[i].width_r + rcts[i].width_l,
         )
     else:
-        r = squares[i]
+        r = rcts[i]
     rects.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
 
 expandRects(rects, area, bestSpecimen.chrsoms["expansion"])
