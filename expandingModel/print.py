@@ -2,6 +2,7 @@ import pickle
 import random
 import pygame
 from JsonIO import JsonIO
+from expandingModel.Door import Door
 from genAlgorithm import *
 from figures.figures import *
 
@@ -36,6 +37,27 @@ class PrintAlg:
             color,
             (x, y, r.width_l + r.width_r, r.height_u + r.height_d),
         )
+
+    def printDoor(self, door: Door, color: tuple) -> None:
+        # Adjusting by offset
+        x, y = self.getCords(door.coords.x, door.coords.y)
+        pygame.draw.circle(
+            self.inter_display,
+            color,
+            (x,y),
+            radius=5
+        )
+
+    def printCircle(self, coords: Point, color: tuple) -> None:
+        # Adjusting by offset
+        x, y = self.getCords(coords.x, coords.y)
+        pygame.draw.circle(
+            self.inter_display,
+            color,
+            (x, y),
+            radius=5
+        )
+
 
     def printAll(self) -> None:
         self.scaleSurface()
