@@ -49,7 +49,7 @@ class PrintAlg:
         pygame.draw.circle(
             self.inter_display,
             color,
-            (coords.x, coords.y),
+            (x, y),
             radius=1
         )
 
@@ -93,6 +93,7 @@ for idx, rect in enumerate(rooms):
     printer.printRect(rect, colors[idx])
     renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
     printer.plot_display.blit(renderedFront, (600, 30 * idx))
+
 
 printer.printAll()
 
