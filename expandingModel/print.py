@@ -42,17 +42,12 @@ class PrintAlg:
     def printDoor(self, door: Door, color: tuple) -> None:
         self.printCircle(door.coords, color)
 
-
     def printCircle(self, coords: Point, color: tuple) -> None:
         # Adjusting by offset
         x, y = self.getCords(coords.x, coords.y)
         pygame.draw.circle(
-            self.inter_display,
-            color,
-            (coords.x, coords.y),
-            radius=1
+            self.inter_display, color, (coords.x, coords.y), radius=1
         )
-
 
     def printAll(self) -> None:
         self.scaleSurface()
@@ -73,7 +68,7 @@ bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
 
 black = (0, 0, 0)
 printer.printRect(area, black)
-rooms = []
+rects = []
 for i in range(len(squares)):
     r = 0
     if bestSpecimen.chrsoms["rotation"][i]:
@@ -84,12 +79,12 @@ for i in range(len(squares)):
         )
     else:
         r = squares[i]
-    rooms.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
+    rects.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
 
-expandRects(rooms, area, bestSpecimen.chrsoms["expansion"])
+expandRects(rects, area, bestSpecimen.chrsoms["expansion"])
 
-colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rooms]
-for idx, rect in enumerate(rooms):
+colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rects]
+for idx, rect in enumerate(rects):
     printer.printRect(rect, colors[idx])
     renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
     printer.plot_display.blit(renderedFront, (600, 30 * idx))

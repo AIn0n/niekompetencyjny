@@ -5,7 +5,7 @@ import pickle
 
 area, smth = JsonIO.read("expandingModel/input_data/curr.json")
 fitCls = FitnessClass(area, smth)
-genAlg = GeneticAlgorithm(350, 0.3, 0.1, fitCls)
+genAlg = GeneticAlgorithm(500, 0.3, 0.1, fitCls)
 genAlg.repeat(1000)
 bestSpecimen = max(genAlg.generation, key=lambda x: x.fitness)
 print(bestSpecimen.fitness)

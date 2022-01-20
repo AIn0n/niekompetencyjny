@@ -1,5 +1,5 @@
 {
-    "area" : [80, 80],
+    "area" : [50, 50],
     "rooms" : [
         {
             "name": "kitchen",
@@ -17,7 +17,7 @@
             "name": "bedroom0",
             "minSize": [8, 4],
             "expandable": true,
-            "neighbors": ["hall", "walk-in closet"]
+            "neighbors": ["hall"]
         },
         {
             "name": "bedroom1",
@@ -32,14 +32,8 @@
             "neighbors": ["hall"]
         },
         {
-            "name": "walk-in closet",
-            "minSize": [6,2],
-            "expandable": false,
-            "neighbors": ["bedroom0"]
-        },
-        {
             "name": "hall",
-            "minSize": [2, 2],
+            "minSize": [4, 4],
             "exit": true,
             "expandable": true,
             "neighbors": ["kitchen", "toilet", "bedrom0", "bedroom1", "bedroom2"]
