@@ -1,4 +1,4 @@
-from expandingModel.chromosomes import FloatChromosome
+from chromosomes import FloatChromosome
 from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome

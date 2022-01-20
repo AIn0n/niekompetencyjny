@@ -1,4 +1,4 @@
-from expandingModel.figureTypes import Point
+from figures.figures import Point
 
 
 class Door:
