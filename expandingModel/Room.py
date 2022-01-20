@@ -1,8 +1,8 @@
-from expandingModel import PathFinding
-from expandingModel.Path import Path
-from expandingModel.RoomTemplate import RoomTemplate
-from expandingModel.Door import Door
-from expandingModel.figureTypes import Rect, Point
+import PathFinding
+from Path import Path
+from RoomTemplate import RoomTemplate
+from Door import Door
+from figures.figures import Rect, Point
 
 
 class Room:

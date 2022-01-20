@@ -2,6 +2,7 @@ import pickle
 import random
 import pygame
 from JsonIO import JsonIO
+from Door import Door
 from genAlgorithm import *
 from figures.figures import *
 
@@ -37,6 +38,21 @@ class PrintAlg:
             color,
             (x, y, r.width_l + r.width_r, r.height_u + r.height_d),
         )
+
+    def printDoor(self, door: Door, color: tuple) -> None:
+        self.printCircle(door.coords, color)
+
+
+    def printCircle(self, coords: Point, color: tuple) -> None:
+        # Adjusting by offset
+        x, y = self.getCords(coords.x, coords.y)
+        pygame.draw.circle(
+            self.inter_display,
+            color,
+            (coords.x, coords.y),
+            radius=1
+        )
+
 
     def printAll(self) -> None:
         self.scaleSurface()
