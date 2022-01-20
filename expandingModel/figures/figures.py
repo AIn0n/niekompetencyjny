@@ -21,6 +21,10 @@ class Point:
     def zero():
         return Point(0, 0)
 
+    @staticmethod
+    def getDoorPlacement(l: list, v: float):
+        return l[int(len(l) * v)]
+
 
 class Vec:
     start: Point

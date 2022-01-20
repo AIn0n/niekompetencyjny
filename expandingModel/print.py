@@ -6,6 +6,7 @@ from expandingModel.Door import Door
 from genAlgorithm import *
 from figures.figures import *
 
+
 class PrintAlg:
     display_width = 720
     display_height = 480
@@ -74,7 +75,7 @@ area, smth = JsonIO.read("expandingModel/input_data/curr.json")
 squares = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
-bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin","rb"))
+bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
 
 black = (0, 0, 0)
 printer.printRect(area, black)

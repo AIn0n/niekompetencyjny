@@ -158,7 +158,7 @@ class TestFigureTypesClass(unittest.TestCase):
     def testNeighbours1(self):
         rect1 = Rect(Point(2, 2), 2, 2)
         rect2 = Rect(Point(0, 2), 2, 2)
-        expected = {Vec(Point(1, 1), Point(1, 3))}
+        expected = Vec(Point(1, 1), Point(1, 3))
         result = rect1.neighbours(rect2)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0], expected)
@@ -343,6 +343,10 @@ class TestPointClass(unittest.TestCase):
         x, y = randint(0, 255), randint(0, 255)
         p = Point(x=x, y=y)
         self.assertEqual(f"({x}, {y})", str(p))
+
+    def testgetDoorPlacement(self):
+        l = [Point(0, 1), Point(0, 2), Point(0, 3), Point(2, 0), Point(1, 0)]
+        self.assertEqual(Point(0, 3), Point.getDoorPlacement(l, 0.5))
 
 
 if __name__ == "__main__":
