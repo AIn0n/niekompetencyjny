@@ -45,9 +45,7 @@ class PrintAlg:
     def printCircle(self, coords: Point, color: tuple) -> None:
         # Adjusting by offset
         x, y = self.getCords(coords.x, coords.y)
-        pygame.draw.circle(
-            self.inter_display, color, (coords.x, coords.y), radius=1
-        )
+        pygame.draw.circle(self.inter_display, color, (x, y), radius=1)
 
     def printAll(self) -> None:
         self.scaleSurface()
@@ -67,7 +65,8 @@ rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
 bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
-doors = fitCls.validNeighborsAndGetDoors(rcts, bestSpecimen.chrsoms['doors'])
+
+
 black = (0, 0, 0)
 printer.printRect(area, black)
 rects = []
@@ -84,6 +83,7 @@ for i in range(len(rcts)):
     rects.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
 
 expandRects(rects, area, bestSpecimen.chrsoms["expansion"])
+doors = fitCls.validNeighborsAndGetDoors(rects, bestSpecimen.chrsoms["doors"])
 
 colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rects]
 for idx, rect in enumerate(rects):
@@ -91,6 +91,17 @@ for idx, rect in enumerate(rects):
     renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
     printer.plot_display.blit(renderedFront, (600, 30 * idx))
 
+
+printer.printCircle(Point(0, 0), (255, 0, 0))
+
+flatDoors = set()
+for room in doors:
+    for door in room:
+        flatDoors.add(door)
+
+for door in flatDoors:
+    printer.printCircle(door, (255, 255, 255))
+print(f"#############DOORS = {flatDoors}##################")
 printer.printAll()
 
 while True:
