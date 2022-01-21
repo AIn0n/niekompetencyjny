@@ -50,7 +50,7 @@ class FitnessClass:
 
     def validNeighborsAndGetDoors(
         self, rectangles: list, doorsParams: FloatChromosome
-    ) -> bool:
+    ):
         result = []
         for i in range(len(self.rooms)):
             tmp = []
