@@ -40,7 +40,9 @@ class FitnessClass:
         return result
 
     def getRndSpecimen(self):
-        return Specimen(len(self.rooms), self.rX, self.rY, len(self.connections))
+        return Specimen(
+            len(self.rooms), self.rX, self.rY, len(self.connections)
+        )
 
     def getChildren(self, p1: Specimen, p2: Specimen, mut: float) -> list:
         chrsoms1, chrsoms2 = {}, {}
