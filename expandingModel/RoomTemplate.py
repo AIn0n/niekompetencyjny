@@ -16,6 +16,14 @@ class RoomTemplate:
         # Replace with a dict?
         self.neighbours = set()
 
+    # EXTERNALLY ACTIVATED, REMEMBER TO USE
+    def validate(self, field: Rect):
+        return (
+            len(self.name) > 0
+            and 0 < self.minWidth <= field.getWidth()
+            and 0 < self.minHeight <= field.getHeight()
+        )
+
     def addNeighbour(self, neighbour) -> None:
         # todo: Implement neighbour validation
         self.neighbours.add(neighbour.name)
@@ -33,13 +41,7 @@ class RoomTemplate:
 
     def __eq__(self, __o: object) -> bool:
         if type(__o) == type(self):
-            return (
-                self.name == __o.name
-                and self.minHeight == __o.minHeight
-                and self.minWidth == __o.minWidth
-                and self.expandable == __o.expandable
-                and self.neighbours == __o.neighbours
-            )
+            return self.name == __o.name
         return False
 
     def __str__(self):
@@ -51,7 +53,7 @@ class RoomTemplate:
     def __hash__(self):
         return hash(str(self))
 
-    ######### RANDOM ROOM GENERATION #########
+    ######### RANDOM ROOM GENERATION, FOR TESTING PURPOSES #########
     @staticmethod
     def generateName():
         return "".join(

@@ -13,6 +13,7 @@ class Room:
         self.name = self.template.name
         # todo: Implement data validation
 
+    # SOON TO BE REPLACED BY NEW DOOR PLACEMENT METHOD
     def addDoor(self, door: Door):
         # todo: Add a method that checks if a point lies on a Rect's border
         self.doors.add(door)
