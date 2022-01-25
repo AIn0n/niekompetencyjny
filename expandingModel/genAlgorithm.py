@@ -6,6 +6,31 @@ from random import choice, choices
 import copy, itertools
 
 
+class Door:
+    def __init__(self, r1: str, r2: str, p=Point.zero()) -> None:
+        self.pair = frozenset([r1, r2])
+        self.point = p
+
+    def copyAndSetPoint(self, p: Point):
+        tmp = list(self.pair)
+        tmp = Door(tmp[0], tmp[1])
+        tmp.point = p
+        return tmp
+
+    def __hash__(self) -> int:
+        return hash(self.pair)
+
+    def __eq__(self, __o: object) -> bool:
+        return self.pair == __o.pair
+
+    def __str__(self) -> str:
+        tmp = list(self.pair)
+        return f"rooms = {tmp[0]}, {tmp[1]}: point = {self.point}"
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
 class Specimen:
     def __init__(
         self, size: int, rX: tuple, rY: tuple, connections: int
@@ -28,7 +53,7 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
-        self.connections = self.buildNeighbourList()
+        self.doors = self.buildNeighbourList()
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
 
@@ -36,11 +61,11 @@ class FitnessClass:
         result = set()
         for room in self.rooms:
             for neighbour in room.neighbours:
-                result.add(frozenset([neighbour, room.name]))
+                result.add(Door(room.name, neighbour))
         return result
 
     def getRndSpecimen(self):
-        return Specimen(len(self.rooms), self.rX, self.rY, len(self.connections))
+        return Specimen(len(self.rooms), self.rX, self.rY, len(self.doors))
 
     def getChildren(self, p1: Specimen, p2: Specimen, mut: float) -> list:
         chrsoms1, chrsoms2 = {}, {}
@@ -54,26 +79,22 @@ class FitnessClass:
             chrsoms2[k].mutate(mut)
 
         return (
-            p1.getChild(chrsoms1, self.rX, self.rY, len(self.connections)),
-            p1.getChild(chrsoms2, self.rX, self.rY, len(self.connections)),
+            p1.getChild(chrsoms1, self.rX, self.rY, len(self.doors)),
+            p1.getChild(chrsoms2, self.rX, self.rY, len(self.doors)),
         )
 
     def validNeighborsAndGetDoors(
         self, rectangles: list, doorsParams: FloatChromosome
     ):
-        connections = []
         result = []
         for i in range(len(self.rooms)):
-            tmp = []
             for n in range(len(self.rooms)):
-                pair = frozenset([self.rooms[n].name, self.rooms[i].name])
-                if (
-                    self.rooms[n].name in self.rooms[i].neighbours
-                    or (
-                        self.rooms[n].exit
-                        and not rectangles[n].neighbours(self.area)
-                    )
-                ) and not pair in connections:
+                door = Door(self.rooms[n].name, self.rooms[i].name)
+                if self.rooms[n].exit and not rectangles[n].neighbours(
+                    self.area
+                ):
+                    return False
+                if door in self.doors and not door in result:
                     commVecs = rectangles[n].neighbours(rectangles[i])
                     if len(commVecs) < 1:
                         return False
@@ -84,12 +105,10 @@ class FitnessClass:
                     )
                     if len(allVecs) < 1:
                         return False
-                    tmp.append(
-                        Point.getDoorPlacement(
-                            allVecs, doorsParams[len(connections)]
-                        )
+                    door.point = Point.getDoorPlacement(
+                        allVecs, doorsParams[len(result)]
                     )
-            result.append(tmp)
+                    result.append(door)
         return result
 
     def countFitness(self, s: Specimen) -> None:
@@ -115,8 +134,18 @@ class FitnessClass:
         if doors == False:
             s.fitness = 0
             return None
-        sumOfDist = sumAllDoorDist(doors)
+        sumOfDist = self.sumAllDoorDist(doors)
         s.fitness = sum(x.field for x in rcts) * 1.0 / sumOfDist
+
+    def sumAllDoorDist(self, doors: list):
+        result = 0
+        for d1 in doors:
+            for d2 in doors:
+                pair1 = list(d1.pair)
+                pair2 = list(d2.pair)
+                if any(map(lambda x: x in pair2, pair1)):
+                    result += d1.point.distance(d2.point)
+        return result
 
 
 def expandRects(rects: list, area: Rect, expansion) -> None:
@@ -127,16 +156,6 @@ def expandRects(rects: list, area: Rect, expansion) -> None:
             if expansion[n * 4 + i]:
                 func(rects, area)
         rects.append(r)
-
-
-def sumAllDoorDist(doors: list):
-    result = 0
-    for room in doors:
-        if len(room) > 1:
-            for i in range(len(room)):
-                for j in range(i + 1, len(room)):
-                    result += room[i].distance(room[j])
-    return result
 
 
 class GeneticAlgorithm:
@@ -175,7 +194,7 @@ class GeneticAlgorithm:
                 new.extend(
                     self.fitnessClass.getChildren(
                         *choices(self.generation, weights=fitnessArr, k=2),
-                        self.mutProb
+                        self.mutProb,
                     )
                 )
         self.generation = new

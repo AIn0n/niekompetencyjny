@@ -94,14 +94,8 @@ for idx, rect in enumerate(rects):
 
 printer.printCircle(Point(0, 0), (255, 0, 0))
 
-flatDoors = set()
-for room in doors:
-    for door in room:
-        flatDoors.add(door)
-
-for door in flatDoors:
-    printer.printCircle(door, (255, 255, 255))
-print(f"#############DOORS = {flatDoors}##################")
+for door in doors:
+    printer.printCircle(door.point, (255, 255, 255))
 printer.printAll()
 
 while True:

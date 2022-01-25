@@ -36,7 +36,7 @@
             "minSize": [4, 4],
             "exit": true,
             "expandable": true,
-            "neighbors": ["kitchen", "toilet", "bedrom0", "bedroom1", "bedroom2"]
+            "neighbors": ["kitchen", "toilet", "bedroom0", "bedroom1", "bedroom2"]
         }
     ]
 }
