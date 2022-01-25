@@ -75,6 +75,17 @@ class TestTemplatesJson(unittest.TestCase):
                 invalidCount += 1
         self.assertEqual(1, invalidCount)
 
+    def testName(self):
+        altered = random.choice(self.templates)
+        # Make a random name blank
+        altered.name = ""
+
+        invalidCount = 0
+        for template in self.templates:
+            if not template.validate(self.field):
+                invalidCount += 1
+        self.assertEqual(1, invalidCount)
+
 
 if __name__ == "__main__":
     unittest.main()
