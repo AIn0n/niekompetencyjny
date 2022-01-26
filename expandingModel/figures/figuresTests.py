@@ -297,20 +297,6 @@ class TestFigureTypesClass(unittest.TestCase):
         r4 = Rect(Point(3, 8), 8, 2)
         r.expandUp([r2, r3, r4], rB)
 
-    def testGetDoorPoint(self):
-        vec1 = Vec(Point(0, 0), Point(10, 0))
-        self.assertTrue(vec1.getDoorPoint(0.5) == Point(5, 0))
-        self.assertTrue(vec1.getDoorPoint(1) == Point(9, 0))
-        self.assertTrue(vec1.getDoorPoint(0) == Point(1, 0))
-        self.assertTrue(vec1.getDoorPoint(0.3) == Point(3, 0))
-        self.assertTrue(vec1.getDoorPoint(0.35) == Point(4, 0))
-        vec2 = Vec(Point(0, 0), Point(0, 10))
-        self.assertTrue(vec2.getDoorPoint(0.5) == Point(0, 5))
-        self.assertTrue(vec2.getDoorPoint(1) == Point(0, 9))
-        self.assertTrue(vec2.getDoorPoint(0) == Point(0, 1))
-        self.assertTrue(vec2.getDoorPoint(0.3) == Point(0, 3))
-        self.assertTrue(vec2.getDoorPoint(0.35) == Point(0, 4))
-
     def testToPointsNoBordersX(self):
         y = randint(-100, 100)
         xVals = range(randint(-50, 50), randint(50, 100))
