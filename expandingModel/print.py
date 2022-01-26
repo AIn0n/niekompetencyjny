@@ -29,7 +29,7 @@ class PrintAlg:
         self.offX = self.offY = fieldHeight / 2
 
     def getCords(self, x, y, areaOffset):
-        print(f"x = {x}, y = {y}")
+        # print(f"x = {x}, y = {y}")
         # if x < y:
         #     print(f"Subtracting {y}-{x}/2 = {(y-x) / 2}")
         #     return x + self.offX - (y-x) / 2, y + self.offY
@@ -54,8 +54,8 @@ class PrintAlg:
         # Adjusting by offset
         x, y = self.getCords(coords.x, coords.y, areaOffset)
         ##############FOR TESTING PURPOSESONLY ##############
-        if color != (255, 255, 255):
-            print(f"Circle coord: {x}, {y}")
+        # if color != (255, 255, 255):
+        #     print(f"Circle coord: {x}, {y}")
         pygame.draw.circle(self.inter_display, color, (x, y), radius=1)
 
     def printAll(self) -> None:
