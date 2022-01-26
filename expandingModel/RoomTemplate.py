@@ -1,5 +1,4 @@
-import random
-from random import randint
+from random import randint, choice
 
 from figures.figures import Point, Rect
 
@@ -29,7 +28,7 @@ class RoomTemplate:
         self.neighbours.add(neighbour.name)
         neighbour.neighbours.add(self.name)
 
-    def addNeighbour(self, neighbour: str) -> None:
+    def addNeighbourString(self, neighbour: str) -> None:
         self.neighbours.add(neighbour)
 
     def getRectRef(self, reverse=False) -> Rect:
@@ -57,7 +56,7 @@ class RoomTemplate:
     @staticmethod
     def generateName():
         return "".join(
-            random.choice([chr(i) for i in range(ord("a"), ord("z"))])
+            choice([chr(i) for i in range(ord("a"), ord("z"))])
             for _ in range(randint(6, 12))
         )
 
@@ -67,7 +66,7 @@ class RoomTemplate:
             RoomTemplate.generateName(),
             randint(2, 20),
             randint(2, 20),
-            random.choice([True, False]),
+            choice([True, False]),
         )
 
     @staticmethod
@@ -84,7 +83,7 @@ class RoomTemplate:
 
             for i in range(randint(0, 2)):
                 # Selecting a random valid neighbour
-                randomRoom = random.choice(otherRooms)
+                randomRoom = choice(otherRooms)
                 otherRooms.remove(randomRoom)
                 room.addNeighbour(randomRoom)
         return rooms

@@ -1,6 +1,5 @@
-import random
 import unittest
-from random import randint
+from random import randint, choice
 
 from expandingModel.JsonIO import JsonIO
 from expandingModel.RoomTemplate import *
@@ -28,7 +27,7 @@ class TestTemplatesJson(unittest.TestCase):
             self.assertTrue(template.validate(self.field))
 
     def testValidateTooNarrow(self):
-        altered = random.choice(self.templates)
+        altered = choice(self.templates)
         # Make a random minWidth negative
         altered.minWidth *= -1
         # ...including zeros
@@ -41,7 +40,7 @@ class TestTemplatesJson(unittest.TestCase):
         self.assertEqual(invalidCount, 1)
 
     def testValidateTooShort(self):
-        altered = random.choice(self.templates)
+        altered = choice(self.templates)
         # Make a random minWidth negative
         altered.minHeight *= -1
         # ...including zeros
@@ -54,7 +53,7 @@ class TestTemplatesJson(unittest.TestCase):
         self.assertEqual(invalidCount, 1)
 
     def testValidateTooWide(self):
-        altered = random.choice(self.templates)
+        altered = choice(self.templates)
         # Make a random minWidth exceed the field's width
         altered.minWidth = self.field.getWidth() + 1
 
@@ -65,7 +64,7 @@ class TestTemplatesJson(unittest.TestCase):
         self.assertEqual(invalidCount, 1)
 
     def testValidateTooHigh(self):
-        altered = random.choice(self.templates)
+        altered = choice(self.templates)
         # Make a random minHeight exceed the field's width
         altered.minHeight = self.field.getHeight() + 1
 
@@ -76,7 +75,7 @@ class TestTemplatesJson(unittest.TestCase):
         self.assertEqual(1, invalidCount)
 
     def testName(self):
-        altered = random.choice(self.templates)
+        altered = choice(self.templates)
         # Make a random name blank
         altered.name = ""
 

@@ -4,6 +4,7 @@ from figures.figures import Point, Rect
 
 
 class JsonIO:
+    @staticmethod
     def read(filepath: str) -> list:
         assert len(filepath)
         rooms = []
@@ -14,7 +15,7 @@ class JsonIO:
                     v["name"], v["minSize"][0], v["minSize"][1], v["expandable"]
                 )
                 for neighbour in v["neighbors"]:
-                    room.addNeighbour(neighbour)
+                    room.addNeighbourString(neighbour)
                 if v.get("exit"):
                     room.exit = v["exit"]
                 rooms.append(room)

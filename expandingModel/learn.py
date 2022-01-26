@@ -1,7 +1,6 @@
 import pickle
 from JsonIO import JsonIO
 from genAlgorithm import *
-import pickle
 
 area, smth = JsonIO.read("expandingModel/input_data/curr.json")
 fitCls = FitnessClass(area, smth)
