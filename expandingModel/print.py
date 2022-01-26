@@ -28,11 +28,19 @@ class PrintAlg:
 
         self.offX = self.offY = fieldHeight / 2
 
-    def getCords(self, x, y):
-        return x + self.offX, y + self.offY
+    def getCords(self, x, y, areaOffset):
+        print(f"x = {x}, y = {y}")
+        # if x < y:
+        #     print(f"Subtracting {y}-{x}/2 = {(y-x) / 2}")
+        #     return x + self.offX - (y-x) / 2, y + self.offY
+        # if x > y:
+        #     print(f"Subtracting {y}-{x}/2 = {(x - y) / 2}")
+        #     return x + self.offX - (x-y) / 2, y + self.offY
+        return x + self.offX + areaOffset, y + self.offY
+        # 50/100: -25   50/150: -50     50/200: -75    50/250: -100
 
     def printRect(self, r: Rect, color: tuple) -> None:
-        x, y = self.getCords(r.a.x, r.a.y)
+        x, y = self.getCords(r.a.x, r.a.y, areaOffset)
         pygame.draw.rect(
             self.inter_display,
             color,
@@ -44,7 +52,10 @@ class PrintAlg:
 
     def printCircle(self, coords: Point, color: tuple) -> None:
         # Adjusting by offset
-        x, y = self.getCords(coords.x, coords.y)
+        x, y = self.getCords(coords.x, coords.y, areaOffset)
+        ##############FOR TESTING PURPOSESONLY ##############
+        if color != (255, 255, 255):
+            print(f"Circle coord: {x}, {y}")
         pygame.draw.circle(self.inter_display, color, (x, y), radius=1)
 
     def printAll(self) -> None:
@@ -58,16 +69,20 @@ class PrintAlg:
         )
 
 
-area, smth = JsonIO.read("expandingModel/input_data/curr.json")
+area, smth = JsonIO.read("input_data/curr.json")
+# todo: Replace this clunky band-ain solution with a proper one
+areaOffset = abs(area.getWidth() - area.getHeight()) / -2
+
 fitCls = FitnessClass(area, smth)
 rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
-bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
+bestSpecimen = pickle.load(open("output_data/out.bin", "rb"))
 
 
 black = (0, 0, 0)
+white = (255, 255, 255)
 printer.printRect(area, black)
 rects = []
 for i in range(len(rcts)):
@@ -95,7 +110,7 @@ for idx, rect in enumerate(rects):
 printer.printCircle(Point(0, 0), (255, 0, 0))
 
 for door in doors:
-    printer.printCircle(door.point, (255, 255, 255))
+    printer.printCircle(door.point, white)
 printer.printAll()
 
 while True:
