@@ -1,4 +1,5 @@
 from chromosomes.FloatChromosome import FloatChromosome
+from chromosomes.Chromosome import ChromMask
 from figures.figures import *
 from chromosomes.LocationChromosome import LocationChromosome
 from chromosomes.BinaryChromosome import BinaryChromosome
@@ -33,12 +34,17 @@ class Door:
 
 class Specimen:
     def __init__(
-        self, size: int, rX: tuple, rY: tuple, connections: int
+        self,
+        size: int,
+        rX: tuple,
+        rY: tuple,
+        connections: int,
+        expandMask: ChromMask,
     ) -> None:
         self.chrsoms = {
             "location": LocationChromosome(size, rY, rX),
             "rotation": BinaryChromosome(size),
-            "expansion": BinaryChromosome(size * 4),
+            "expansion": BinaryChromosome(size * 4, expandMask),
             "doors": FloatChromosome(connections),
         }
         self.fitness = 0
@@ -53,6 +59,8 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
+        maskValues = [[not r.expandable] for r in rooms]
+        self.expandMask = ChromMask(maskValues, 0)
         self.doors = self.buildNeighbourList()
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
@@ -65,7 +73,9 @@ class FitnessClass:
         return result
 
     def getRndSpecimen(self):
-        return Specimen(len(self.rooms), self.rX, self.rY, len(self.doors))
+        return Specimen(
+            len(self.rooms), self.rX, self.rY, len(self.doors), self.expandMask
+        )
 
     def getChildren(self, p1: Specimen, p2: Specimen, mut: float) -> list:
         chrsoms1, chrsoms2 = {}, {}
