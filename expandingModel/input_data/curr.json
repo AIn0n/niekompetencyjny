@@ -1,5 +1,5 @@
 {
-    "area" : [50, 50],
+    "area" : [100, 100],
     "rooms" : [
         {
             "name": "kitchen",
