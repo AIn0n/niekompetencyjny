@@ -44,24 +44,21 @@ class Chromosome:
         self.genes = map(self.randGene(), self.genes)
         self.checkMaskAll()
 
-    def swap(self) -> None:
+    def __swap(self) -> None:
         (i1, i2) = random.choices(range(len(self.genes)), k=2)
         self.genes[i1], self.genes[i2] = self.genes[i2], self.genes[i1]
-        self.checkMask(i1)
-        self.checkMask(i2)
 
-    def replace(self) -> None:
+    def __replace(self) -> None:
         n = random.choice(range(len(self.genes)))
         self.setGene(n, self.randGene())
-        self.checkMask(n)
 
-    def inverse(self) -> None:
+    def __inverse(self) -> None:
         (minI, maxI) = sorted(random.choices(range(len(self.genes)), k=2))
         self.genes = (
             self.genes[:minI] + self.genes[minI:maxI][::-1] + self.genes[maxI:]
         )
-        self.checkMaskAll()
 
     def mutate(self, p) -> None:
         if random.uniform(0, 1) < p:
-            random.choice([self.swap, self.replace, self.inverse])()
+            random.choice([self.__swap, self.__replace, self.__inverse])()
+            self.checkMaskAll()

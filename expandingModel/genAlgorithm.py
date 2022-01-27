@@ -50,7 +50,13 @@ class Specimen:
         self.fitness = 0
 
     def getChild(self, chrsom: dict, rX: tuple, rY: tuple, connections: int):
-        result = Specimen(len(self.chrsoms["location"]), rX, rY, connections)
+        result = Specimen(
+            len(self.chrsoms["location"]),
+            rX,
+            rY,
+            connections,
+            self.chrsoms["expansion"].mask,
+        )
         result.chrsoms = chrsom
         return result
 
@@ -59,8 +65,12 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
-        maskValues = [[not r.expandable] for r in rooms]
-        self.expandMask = ChromMask(maskValues, 0)
+        maskValues = list(
+            itertools.chain.from_iterable([not r.expandable] * 4 for r in rooms)
+        )
+        self.expandMask = ChromMask(
+            maskValues, [0 for _ in range(len(maskValues))]
+        )
         self.doors = self.buildNeighbourList()
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
@@ -83,8 +93,8 @@ class FitnessClass:
             p = choice(range(len(p1.chrsoms[k])))
             chrsoms1[k] = copy.copy(p1.chrsoms[k])
             chrsoms2[k] = copy.copy(p2.chrsoms[k])
-            chrsoms1[k].genes = p1.chrsoms[k][:p] + p2.chrsoms[k][p:]
-            chrsoms2[k].genes = p2.chrsoms[k][:p] + p1.chrsoms[k][p:]
+            chrsoms1[k].setGenes(p1.chrsoms[k][:p] + p2.chrsoms[k][p:])
+            chrsoms2[k].setGenes(p2.chrsoms[k][:p] + p1.chrsoms[k][p:])
             chrsoms1[k].mutate(mut)
             chrsoms2[k].mutate(mut)
 
