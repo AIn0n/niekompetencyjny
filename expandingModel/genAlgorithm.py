@@ -81,7 +81,7 @@ class FitnessClass:
             for neighbour in room.neighbours:
                 result.add(Door(room.name, neighbour))
             if room.exit:
-                result.add(Door(room.name, 'area'))
+                result.add(Door(room.name, "area"))
         return result
 
     def getRndSpecimen(self):
@@ -108,7 +108,7 @@ class FitnessClass:
     def validNeighborsAndGetDoors(
         self, rectangles: list, doorsParams: FloatChromosome
     ):
-    # TODO: make area a proper rectangle with some special properties
+        # TODO: make area a proper rectangle with some special properties
         result = []
         for i in range(len(self.rooms)):
             for n in range(len(self.rooms)):
