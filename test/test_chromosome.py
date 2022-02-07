@@ -1,7 +1,7 @@
 import unittest
 from random import randint
-from LocationChromosome import LocationChromosome as lChrsom
-from BinaryChromosome import BinaryChromosome as BinChrsom
+from src.chromosomes.LocationChromosome import LocationChromosome as lChrsom
+from src.chromosomes.BinaryChromosome import BinaryChromosome as BinChrsom
 
 
 class TestLocationChromosome(unittest.TestCase):

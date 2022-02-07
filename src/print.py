@@ -2,9 +2,8 @@ import pickle
 import random
 import pygame
 from JsonIO import JsonIO
-from Door import Door
 from genAlgorithm import *
-from figures.figures import *
+from figures import *
 
 
 class PrintAlg:
@@ -69,7 +68,7 @@ class PrintAlg:
         )
 
 
-area, smth = JsonIO.read("expandingModel/input_data/curr.json")
+area, smth = JsonIO.read("input_data/curr.json")
 # todo: Replace this clunky band-ain solution with a proper one
 areaOffset = abs(area.getWidth() - area.getHeight()) / -2
 
@@ -78,7 +77,7 @@ rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
-bestSpecimen = pickle.load(open("expandingModel/output_data/out.bin", "rb"))
+bestSpecimen = pickle.load(open("output_data/out.bin", "rb"))
 
 
 black = (0, 0, 0)

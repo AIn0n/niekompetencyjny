@@ -1,8 +1,8 @@
 import unittest
 from random import randint, choice
 
-from expandingModel.JsonIO import JsonIO
-from expandingModel.RoomTemplate import *
+from JsonIO import JsonIO
+from RoomTemplate import *
 
 
 class TestTemplatesRandom(unittest.TestCase):

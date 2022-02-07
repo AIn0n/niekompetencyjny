@@ -1,4 +1,4 @@
-from expandingModel.figures.figures import Rect
+from figures import Rect
 
 
 class TemplateValidator:

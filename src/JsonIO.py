@@ -1,6 +1,6 @@
 import json
 from RoomTemplate import RoomTemplate
-from figures.figures import Point, Rect
+from figures import Point, Rect
 
 
 class JsonIO:
@@ -16,8 +16,7 @@ class JsonIO:
                 )
                 for neighbour in v["neighbors"]:
                     room.addNeighbourString(neighbour)
-                if v.get("exit"):
-                    room.exit = v["exit"]
+                room.exit = v["exit"] if v.get("exit") else False
                 rooms.append(room)
             area = Rect(Point.zero(), loaded["area"][0], loaded["area"][1])
             return area, rooms

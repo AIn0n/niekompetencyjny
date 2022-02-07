@@ -1,6 +1,6 @@
 from random import randint, choice
 
-from figures.figures import Point, Rect
+from figures import Point, Rect
 
 
 class RoomTemplate:
