@@ -21,7 +21,8 @@ class Vec:
         return self.start == other.start and self.end == other.end
 
     def getLength(self):
-        # A Vec object can only be vertical or horizontal, therefore one of these is always 0
+        # A Vec object can only be vertical or horizontal, therefore one of
+        # these is always 0
         return abs(self.start.x - self.end.x) or abs(self.start.y - self.end.y)
 
     def isVertical(self):

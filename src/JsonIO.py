@@ -7,7 +7,7 @@ from geometry.Point import Point
 
 class JsonIO:
     @staticmethod
-    def read(filepath: str) -> list:
+    def read(filepath: str) -> tuple:
         assert len(filepath)
         rooms = []
         with open(filepath, "r") as f:
