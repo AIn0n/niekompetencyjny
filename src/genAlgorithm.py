@@ -178,24 +178,19 @@ class GeneticAlgorithm:
             self.fitnessClass.countFitness(elem)
         # elitarism
         self.generation.sort(key=lambda x: x.fitness, reverse=True)
-        new = [
-            x
-            for x in self.generation[
-                : int(len(self.generation) * self.elitarism)
-            ]
-            if x.fitness > 0
-        ]
+        new = []
+        for x in self.generation[: int(len(self.generation) * self.elitarism)]:
+            if x.fitness > 0:
+                new.append(x)
         if len(new) < 2:
             while len(new) < len(self.generation):
                 new.append(self.fitnessClass.getRndSpecimen())
         else:
             fitnessArr = [x.fitness for x in self.generation]
             while len(new) < len(self.generation):
-                new.extend(
-                    self.fitnessClass.getChildren(
-                        *choices(self.generation, weights=fitnessArr, k=2),
-                        self.mutProb,
-                    )
+                new += self.fitnessClass.getChildren(
+                    *choices(self.generation, weights=fitnessArr, k=2),
+                    self.mutProb,
                 )
         self.generation = new
 
