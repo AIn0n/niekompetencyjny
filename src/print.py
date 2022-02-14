@@ -87,7 +87,11 @@ if area.getWidth() < area.getHeight():
     areaOff *= -1
 
 fitCls = FitnessClass(area, smth)
-rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
+rcts = []
+allowList = []
+for x in smth:
+    rcts.append(Rect(Point(0, 0), x.minWidth, x.minHeight))
+    allowList.append(x.expandable)
 
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
@@ -109,7 +113,7 @@ for i in range(len(rcts)):
         r = rcts[i]
     rects.append(r.cloneOffset(bestSpecimen.chrsoms["location"][i]))
 
-expandRects(rects, area, bestSpecimen.chrsoms["expansion"])
+expandRects(rects, area, bestSpecimen.chrsoms["expansion"], allowList)
 doors = fitCls.validNeighborsAndGetDoors(rects, bestSpecimen.chrsoms["doors"])
 
 colors = [tuple(random.randint(0, 255) for n in range(3)) for _ in rects]

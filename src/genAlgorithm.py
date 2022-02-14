@@ -1,5 +1,4 @@
 from chromosomes.FloatChromosome import FloatChromosome
-from chromosomes.Chromosome import ChromMask
 from geometry.Point import Point
 from geometry.Rectangle import Rect
 from chromosomes.LocationChromosome import LocationChromosome
@@ -16,12 +15,11 @@ class Specimen:
         rX: tuple,
         rY: tuple,
         connections: int,
-        expandMask: ChromMask,
     ) -> None:
         self.chrsoms = {
             "location": LocationChromosome(size, rY, rX),
             "rotation": BinaryChromosome(size),
-            "expansion": BinaryChromosome(size * 4, expandMask),
+            "expansion": BinaryChromosome(size * 4),
             "doors": FloatChromosome(connections),
         }
         self.fitness = 0
@@ -32,7 +30,6 @@ class Specimen:
             rX,
             rY,
             connections,
-            self.chrsoms["expansion"].mask,
         )
         result.chrsoms = chrsom
         return result
@@ -42,12 +39,9 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
-        maskValues = list(
-            itertools.chain.from_iterable([not r.expandable] * 4 for r in rooms)
-        )
-        self.expandMask = ChromMask(
-            maskValues, [0 for _ in range(len(maskValues))]
-        )
+        self.allowList = {
+            "expandable" : [r.expandable for r in rooms]
+        }
         self.doors = self.buildNeighbourList()
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
@@ -62,9 +56,7 @@ class FitnessClass:
         return result
 
     def getRndSpecimen(self):
-        return Specimen(
-            len(self.rooms), self.rX, self.rY, len(self.doors), self.expandMask
-        )
+        return Specimen(len(self.rooms), self.rX, self.rY, len(self.doors))
 
     def getChildren(self, p1: Specimen, p2: Specimen, mut: float) -> list:
         chrsoms1, chrsoms2 = {}, {}
@@ -127,7 +119,7 @@ class FitnessClass:
                 return None
             rcts.append(rect)
         # expansion section
-        expandRects(rcts, self.area, s.chrsoms["expansion"])
+        expandRects(rcts, self.area, s.chrsoms["expansion"], self.allowList["expandable"])
 
         # doors section
         doors = self.validNeighborsAndGetDoors(rcts, s.chrsoms["doors"])
@@ -148,13 +140,14 @@ class FitnessClass:
         return result
 
 
-def expandRects(rects: list, area: Rect, expansion) -> None:
+def expandRects(rects: list, area: Rect, expansion, allowList) -> None:
     for n in range(len(rects)):
         r = rects.pop(0)
-        funcs = [r.expandLeft, r.expandRight, r.expandUp, r.expandDown]
-        for i, func in enumerate(funcs):
-            if expansion[n * 4 + i]:
-                func(rects, area)
+        if allowList[n]:
+            funcs = [r.expandLeft, r.expandRight, r.expandUp, r.expandDown]
+            for i, func in enumerate(funcs):
+                if expansion[n * 4 + i]:
+                    func(rects, area)
         rects.append(r)
 
 
@@ -167,7 +160,7 @@ class GeneticAlgorithm:
         fitnessClass: FitnessClass,
     ) -> None:
         self.generation = [
-            fitnessClass.getRndSpecimen() for x in range(generationSize)
+            fitnessClass.getRndSpecimen() for _ in range(generationSize)
         ]
         self.mutProb = mutProb
         self.elitarism = elitarism
