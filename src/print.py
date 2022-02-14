@@ -27,7 +27,7 @@ class PrintAlg:
 
         self.offX = self.offY = fieldHeight / 2
 
-    def getCords(self, x, y, areaOffset):
+    def getCords(self, x, y):
         # print(f"x = {x}, y = {y}")
         # if x < y:
         #     print(f"Subtracting {y}-{x}/2 = {(y-x) / 2}")
@@ -35,42 +35,55 @@ class PrintAlg:
         # if x > y:
         #     print(f"Subtracting {y}-{x}/2 = {(x - y) / 2}")
         #     return x + self.offX - (x-y) / 2, y + self.offY
-        return x + self.offX + areaOffset, y + self.offY
+        print(f"Adding {areaOff}")
+        return x + self.offX - areaOff, y + self.offY
         # 50/100: -25   50/150: -50     50/200: -75    50/250: -100
 
     def printRect(self, r: Rect, color: tuple) -> None:
-        x, y = self.getCords(r.a.x, r.a.y, areaOffset)
+        x, y = self.getCords(r.a.x, r.a.y)
         pygame.draw.rect(
             self.inter_display,
             color,
             (x, y, r.width_l + r.width_r, r.height_u + r.height_d),
         )
 
-    def printDoor(self, door: Door, color: tuple) -> None:
+    def printDoor(self, door, color: tuple) -> None:
         self.printCircle(door.coords, color)
 
     def printCircle(self, coords: Point, color: tuple) -> None:
         # Adjusting by offset
-        x, y = self.getCords(coords.x, coords.y, areaOffset)
+        x, y = self.getCords(coords.x, coords.y)
         ##############FOR TESTING PURPOSESONLY ##############
         # if color != (255, 255, 255):
         #     print(f"Circle coord: {x}, {y}")
         pygame.draw.circle(self.inter_display, color, (x, y), radius=1)
 
     def printAll(self) -> None:
+        print(f"Inter_display.size = {self.inter_display.get_size()}")
         self.scaleSurface()
+        print(f"Inter_display.size = {self.inter_display.get_size()}")
         self.plot_display.blit(self.inter_display, (0, 0))
         pygame.display.flip()
 
     def scaleSurface(self) -> None:
+        new_height = self.display_height
+        new_width = self.inter_display.get_width() * (
+            new_height / self.inter_display.get_height()
+        )
+        if new_width > self.display_width / 2:
+            old_width = new_width
+            new_width = self.display_width / 2
+            new_height *= new_width / old_width
         self.inter_display = pygame.transform.scale(
-            self.inter_display, (self.display_height, self.display_height)
+            self.inter_display, (new_width, new_height)
         )
 
 
 area, smth = JsonIO.read("input_data/curr.json")
 # todo: Replace this clunky band-ain solution with a proper one
-areaOffset = abs(area.getWidth() - area.getHeight()) / -2
+areaOff = abs(area.getWidth() - area.getHeight()) / -2
+if area.getWidth() < area.getHeight():
+    areaOff *= -1
 
 fitCls = FitnessClass(area, smth)
 rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
@@ -78,7 +91,6 @@ rcts = [Rect(Point(0, 0), x.minWidth, x.minHeight) for x in smth]
 printer = PrintAlg(area.getWidth(), area.getHeight())
 
 bestSpecimen = pickle.load(open("output_data/out.bin", "rb"))
-
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -104,7 +116,6 @@ for idx, rect in enumerate(rects):
     printer.printRect(rect, colors[idx])
     renderedFront = printer.font.render(smth[idx].name, False, colors[idx])
     printer.plot_display.blit(renderedFront, (600, 30 * idx))
-
 
 printer.printCircle(Point(0, 0), (255, 0, 0))
 

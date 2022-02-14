@@ -6,3 +6,6 @@ learn:
 
 print:
 	python3 src/print.py
+
+prepush:
+	black . -l 80
