@@ -71,7 +71,7 @@ class PrintAlg:
     def scaleSurface(self) -> None:
         new_height = self.display_height
         new_width = self.inter_display.get_width() * (
-                new_height / self.inter_display.get_height()
+            new_height / self.inter_display.get_height()
         )
         if new_width > self.display_width / 2:
             old_width = new_width
