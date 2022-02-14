@@ -16,9 +16,9 @@ class Rect:
 
     def __eq__(self, __o: object) -> bool:
         return (
-            self.getHeight() == __o.getHeight()
-            and self.getWidth() == __o.getWidth()
-            and self.p == __o.p
+                self.getHeight() == __o.getHeight()
+                and self.getWidth() == __o.getWidth()
+                and self.p == __o.p
         )
 
     def calcCoords(self) -> None:
@@ -44,10 +44,14 @@ class Rect:
         self.verLeft = Vec(self.a, self.d)
         self.verRight = Vec(self.b, self.c)
 
+    # todo: Remove all uses of calcField
     def calcField(self) -> None:
         self.field = (self.width_l + self.width_r) * (
-            self.height_u + self.height_d
+                self.height_u + self.height_d
         )
+
+    def getField(self) -> int:
+        return (self.width_l + self.width_r) * (self.height_u + self.height_d)
 
     def getHeight(self) -> int:
         return self.verLeft.getLength()
@@ -57,18 +61,18 @@ class Rect:
 
     def collides(self, other) -> bool:
         return (
-            (self.a.x < other.c.x)
-            and (self.c.x > other.a.x)
-            and (self.a.y < other.c.y)
-            and (self.c.y > other.a.y)
+                (self.a.x < other.c.x)
+                and (self.c.x > other.a.x)
+                and (self.a.y < other.c.y)
+                and (self.c.y > other.a.y)
         )
 
     def containsRectangle(self, other) -> bool:
         return (
-            (other.a.x >= self.a.x)
-            and (other.a.y >= self.a.y)
-            and (other.c.x <= self.c.x)
-            and (other.c.y <= self.c.y)
+                (other.a.x >= self.a.x)
+                and (other.a.y >= self.a.y)
+                and (other.c.x <= self.c.x)
+                and (other.c.y <= self.c.y)
         )
 
     def __str__(self) -> str:
@@ -117,32 +121,36 @@ class Rect:
     # to be expanded downwards?
     def isAlignedDown(self, rect):
         return self.isAbove(rect) and (
-            (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
-            or (rect.a.x <= self.b.x <= rect.b.x)
+                (
+                            self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+                or (rect.a.x <= self.b.x <= rect.b.x)
         )
 
     # Would the rectangle come into conflict with the given vector if it were
     # to be expanded upwards?
     def isAlignedUp(self, rect):
         return self.isBelow(rect) and (
-            (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
-            or (rect.a.x <= self.b.x <= rect.b.x)
+                (
+                            self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
+                or (rect.a.x <= self.b.x <= rect.b.x)
         )
 
     # Would the rectangle come into conflict with the given vector if it were
     # to be expanded to the left?
     def isAlignedLeft(self, rect):
         return self.isToRightOf(rect) and (
-            (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
-            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
+                (
+                            self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+                or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
         )
 
     # Would the rectangle come into conflict with the given vector if it were
     # to be expanded downwards?
     def isAlignedRight(self, rect):
         return self.isToLeftOf(rect) and (
-            (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
-            or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
+                (
+                            self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
+                or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
         )
 
     def calcEverything(self):
