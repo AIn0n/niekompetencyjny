@@ -45,7 +45,8 @@ class RoomTemplate:
 
     def __str__(self):
         return (
-            f"{self.name}, at least {self.minWidth}x{self.minHeight}, expandable = {self.expandable},"
+            f"{self.name}, at least {self.minWidth}x{self.minHeight}, "
+            f"expandable = {self.expandable}, "
             f" neighbours: {self.neighbours}"
         )
 

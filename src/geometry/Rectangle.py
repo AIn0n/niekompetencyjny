@@ -44,10 +44,14 @@ class Rect:
         self.verLeft = Vec(self.a, self.d)
         self.verRight = Vec(self.b, self.c)
 
+    # todo: Remove all uses of calcField
     def calcField(self) -> None:
         self.field = (self.width_l + self.width_r) * (
             self.height_u + self.height_d
         )
+
+    def getField(self) -> int:
+        return (self.width_l + self.width_r) * (self.height_u + self.height_d)
 
     def getHeight(self) -> int:
         return self.verLeft.getLength()
@@ -98,8 +102,9 @@ class Rect:
     def isAbove(self, rect):
         return rect.d.y <= self.a.y
 
-    # An alternative, potentially better solution would be checking if only one of isAbove, below, lefOf, rightOf
-    # applies and the appropriate vector is at the same x/y
+    # An alternative, potentially better solution would be checking if only
+    # one of isAbove, below, lefOf, rightOf applies and the appropriate
+    # vector is at the same x/y
     def neighbours(self, other) -> bool:
         result = []
         for s in self.getHorVecs():
@@ -112,28 +117,32 @@ class Rect:
                     result.append(s.commonPart(o))
         return result
 
-    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
+    # Would the rectangle come into conflict with the given vector if it were
+    # to be expanded downwards?
     def isAlignedDown(self, rect):
         return self.isAbove(rect) and (
             (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
             or (rect.a.x <= self.b.x <= rect.b.x)
         )
 
-    # Would the rectangle come into conflict with the given vector if it were to be expanded upwards?
+    # Would the rectangle come into conflict with the given vector if it were
+    # to be expanded upwards?
     def isAlignedUp(self, rect):
         return self.isBelow(rect) and (
             (self.a.x < rect.a.x < self.b.x or self.a.x < rect.b.x < self.b.x)
             or (rect.a.x <= self.b.x <= rect.b.x)
         )
 
-    # Would the rectangle come into conflict with the given vector if it were to be expanded to the left?
+    # Would the rectangle come into conflict with the given vector if it were
+    # to be expanded to the left?
     def isAlignedLeft(self, rect):
         return self.isToRightOf(rect) and (
             (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)
             or (rect.a.y <= self.b.y and rect.d.y >= self.c.y)
         )
 
-    # Would the rectangle come into conflict with the given vector if it were to be expanded downwards?
+    # Would the rectangle come into conflict with the given vector if it were
+    # to be expanded downwards?
     def isAlignedRight(self, rect):
         return self.isToLeftOf(rect) and (
             (self.b.y < rect.a.y < self.c.y or self.b.y < rect.d.y < self.c.y)

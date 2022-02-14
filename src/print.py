@@ -29,6 +29,8 @@ class PrintAlg:
         self.offX = self.offY = fieldHeight / 2
 
     def getCords(self, x, y):
+        # todo: Remove the following after assuring scaling is fully functional
+
         # print(f"x = {x}, y = {y}")
         # if x < y:
         #     print(f"Subtracting {y}-{x}/2 = {(y-x) / 2}")
