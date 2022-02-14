@@ -1,4 +1,4 @@
-from figures import Rect
+from geometry.Rectangle import Rect
 
 
 class TemplateValidator:

@@ -3,7 +3,8 @@ import random
 import pygame
 from JsonIO import JsonIO
 from genAlgorithm import *
-from figures import *
+from geometry.Rectangle import Rect
+from geometry.Point import Point
 
 
 class PrintAlg:

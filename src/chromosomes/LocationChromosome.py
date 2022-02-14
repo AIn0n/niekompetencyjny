@@ -1,5 +1,6 @@
+import imp
 from chromosomes.Chromosome import Chromosome
-from figures import Point
+from geometry.Point import Point
 from random import randint
 
 

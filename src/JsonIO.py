@@ -1,6 +1,8 @@
+import imp
 import json
 from RoomTemplate import RoomTemplate
-from figures import Point, Rect
+from geometry.Rectangle import Rect
+from geometry.Point import Point
 
 
 class JsonIO:
