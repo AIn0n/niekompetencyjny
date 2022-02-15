@@ -1,7 +1,7 @@
 import unittest
 from random import randint
-from src.figures import *
-
+from src.geometry.Point import *
+from src.geometry.Rectangle import *
 
 class TestFigureTypesClass(unittest.TestCase):
     def testConctructorVariables(self):
