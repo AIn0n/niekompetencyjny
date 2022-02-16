@@ -64,8 +64,8 @@ class FitnessClass:
             p = choice(range(len(p1.chrsoms[k])))
             chrsoms1[k] = copy.copy(p1.chrsoms[k])
             chrsoms2[k] = copy.copy(p2.chrsoms[k])
-            chrsoms1[k].setGenes(p1.chrsoms[k][:p] + p2.chrsoms[k][p:])
-            chrsoms2[k].setGenes(p2.chrsoms[k][:p] + p1.chrsoms[k][p:])
+            chrsoms1[k].genes = p1.chrsoms[k][:p] + p2.chrsoms[k][p:]
+            chrsoms2[k].genes = p2.chrsoms[k][:p] + p1.chrsoms[k][p:]
             chrsoms1[k].mutate(mut)
             chrsoms2[k].mutate(mut)
 

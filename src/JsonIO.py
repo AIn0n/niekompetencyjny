@@ -1,4 +1,3 @@
-import imp
 import json
 from RoomTemplate import RoomTemplate
 from geometry.Rectangle import Rect
