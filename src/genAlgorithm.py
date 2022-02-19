@@ -39,9 +39,7 @@ class FitnessClass:
     def __init__(self, area: Rect, rooms: tuple) -> None:
         self.area = area
         self.rooms = rooms
-        self.allowList = {
-            "expandable" : [r.expandable for r in rooms]
-        }
+        self.allowList = {"expandable": [r.expandable for r in rooms]}
         self.doors = self.buildNeighbourList()
         self.rX = (self.area.a.x, self.area.b.x)
         self.rY = (self.area.a.y, self.area.d.y)
@@ -119,7 +117,12 @@ class FitnessClass:
                 return None
             rcts.append(rect)
         # expansion section
-        expandRects(rcts, self.area, s.chrsoms["expansion"], self.allowList["expandable"])
+        expandRects(
+            rcts,
+            self.area,
+            s.chrsoms["expansion"],
+            self.allowList["expandable"],
+        )
 
         # doors section
         doors = self.validNeighborsAndGetDoors(rcts, s.chrsoms["doors"])

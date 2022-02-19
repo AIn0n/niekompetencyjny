@@ -3,6 +3,7 @@ from random import randint
 from src.geometry.Point import *
 from src.geometry.Rectangle import *
 
+
 class TestFigureTypesClass(unittest.TestCase):
     def testConctructorVariables(self):
         w, h = randint(1, 127) * 2, randint(1, 127) * 2
