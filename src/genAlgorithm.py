@@ -79,13 +79,16 @@ class FitnessClass:
         result = []
         for i in range(len(self.rooms)):
             for n in range(len(self.rooms)):
-                door = Door(self.rooms[n].name, self.rooms[i].name)
-                if self.rooms[n].exit and not rectangles[n].neighbours(
-                    self.area
-                ):
-                    return False
+                if self.rooms[n].exit:
+                    rect = self.area
+                    door = Door(self.rooms[n].name, "area")
+
+                else:
+                    rect = rectangles[i]
+                    door = Door(self.rooms[n].name, self.rooms[i].name)
+
                 if door in self.doors and not door in result:
-                    commVecs = rectangles[n].neighbours(rectangles[i])
+                    commVecs = rectangles[n].neighbours(rect)
                     if len(commVecs) < 1:
                         return False
                     allVecs = list(
