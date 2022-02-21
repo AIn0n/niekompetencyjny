@@ -133,7 +133,7 @@ class FitnessClass:
             s.fitness = 0
             return None
         sumOfDist = self.sumAllDoorDist(doors)
-        s.fitness = sum(x.field for x in rcts) * 1.0 / sumOfDist
+        s.fitness = float(sum(x.field for x in rcts)) * (1.0 / sumOfDist)
 
     def sumAllDoorDist(self, doors: list):
         result = 0
